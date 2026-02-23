@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SoundCraft — Audio de Alta Gama</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;600;700;800&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/styles.css"/>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <div class="nav-logo">Sound<span>Craft</span></div>
+  <ul class="nav-links">
+    <li><a href="#catalogo">Catálogo</a></li>
+    <li><a href="#sobre">Nosotros</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+  </ul>
+  <a href="#contacto" class="nav-cta">Cotizar</a>
+  <div class="nav-hamburger">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+
+  <div class="hero-content">
+    <div class="hero-badge">Audio Profesional</div>
+    <h1 class="hero-title">
+      Sonido que
+      <span class="accent">Impacta</span>
+    </h1>
+    <p class="hero-sub">
+      Equipos de audio de alta gama para cada espacio.
+      Desde parlantes portátiles hasta sistemas de cine en casa —
+      calidad que se siente.
+    </p>
+    <div class="hero-btns">
+      <a href="#catalogo" class="btn-primary">Ver Catálogo</a>
+      <a href="#contacto" class="btn-secondary">Cotizar Ahora</a>
+    </div>
+  </div>
+
+  <!-- Parlante decorativo -->
+  <div class="hero-visual">
+    <div class="sound-waves">
+      <div class="wave"></div>
+      <div class="wave"></div>
+      <div class="wave"></div>
+    </div>
+    <div class="speaker-icon">
+      <div class="speaker-body">
+        <div class="speaker-cone"></div>
+        <div class="speaker-grille">
+          <div class="grille-dot"></div>
+          <div class="grille-dot"></div>
+          <div class="grille-dot"></div>
+          <div class="grille-dot"></div>
+          <div class="grille-dot"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-stats">
+    <div class="stat-item">
+      <div class="stat-num">12<span>+</span></div>
+      <div class="stat-label">Años de exp.</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">500<span>+</span></div>
+      <div class="stat-label">Clientes</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">50<span>+</span></div>
+      <div class="stat-label">Modelos</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FILTROS ── -->
+<div class="filtros-wrap">
+  <div class="filtros-inner">
+    <button class="filtro-btn active" onclick="filtrar('todos', this)">Todos</button>
+    <button class="filtro-btn" onclick="filtrar('portable', this)">Portátiles</button>
+    <button class="filtro-btn" onclick="filtrar('torre', this)">Torre</button>
+    <button class="filtro-btn" onclick="filtrar('estudio', this)">Estudio</button>
+    <button class="filtro-btn" onclick="filtrar('cine', this)">Cine en Casa</button>
+    <button class="filtro-btn" onclick="filtrar('outdoor', this)">Outdoor</button>
+  </div>
+</div>
+
+<!-- ── CATÁLOGO ── -->
+<section id="catalogo">
+  <div class="section-header reveal">
+    <div>
+      <div class="section-label">— Nuestros Productos</div>
+      <h2 class="section-title">Catálogo Completo</h2>
+    </div>
+    <div class="section-count">Mostrando <span id="conteo">12</span> productos</div>
+  </div>
+  <div class="productos-grid" id="productosGrid"></div>
+</section>
+
+<!-- ── SOBRE NOSOTROS ── -->
+<section id="sobre">
+  <div class="sobre-visual reveal">
+    <div class="sobre-img">🔊</div>
+    <div class="sobre-frame"></div>
+    <div class="sobre-stat-card">
+      <div class="num">98%</div>
+      <div class="lbl">Satisfacción</div>
+    </div>
+  </div>
+
+  <div class="sobre-content reveal">
+    <div class="section-label">— Quiénes Somos</div>
+    <h2 class="sobre-titulo">
+      Expertos en<br/><span>Audio Premium</span>
+    </h2>
+    <p class="sobre-texto">
+      Somos una empresa con más de 12 años de experiencia en la distribución
+      de equipos de audio profesional. Trabajamos con las mejores marcas del
+      mercado para ofrecerte el sonido que mereces.
+    </p>
+    <p class="sobre-texto">
+      Nuestro equipo de técnicos especializados te acompaña desde la elección
+      del equipo hasta la instalación y configuración final.
+    </p>
+    <div class="sobre-features">
+      <div class="feature-item">
+        <div class="feature-icon">🛡️</div>
+        <div class="feature-text">
+          <h4>Garantía Extendida</h4>
+          <p>Todos nuestros equipos incluyen garantía de 2 años con soporte técnico.</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">🚚</div>
+        <div class="feature-text">
+          <h4>Envío a Todo el País</h4>
+          <p>Despachamos a cualquier ciudad con empaque especializado para audio.</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">🔧</div>
+        <div class="feature-text">
+          <h4>Instalación Incluida</h4>
+          <p>Contamos con técnicos para instalación profesional en tu hogar o negocio.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CONTACTO ── -->
+<section id="contacto">
+  <div class="contacto-inner">
+    <div class="contacto-info reveal">
+      <div class="section-label">— Contáctanos</div>
+      <h2 class="contacto-titulo">
+        Hablemos de<br/><span>Tu Proyecto</span>
+      </h2>
+      <p class="contacto-sub">
+        ¿Necesitas asesoría personalizada? Estamos disponibles para
+        ayudarte a elegir el equipo perfecto para tu espacio.
+      </p>
+      <div class="contacto-items">
+        <div class="contacto-item">
+          <div class="ci-icon">📞</div>
+          <div>
+            <div class="ci-label">Teléfono</div>
+            <div class="ci-value">+57 300 123 4567</div>
+          </div>
+        </div>
+        <div class="contacto-item">
+          <div class="ci-icon">📧</div>
+          <div>
+            <div class="ci-label">Email</div>
+            <div class="ci-value">ventas@soundcraft.com.co</div>
+          </div>
+        </div>
+        <div class="contacto-item">
+          <div class="ci-icon">📍</div>
+          <div>
+            <div class="ci-label">Dirección</div>
+            <div class="ci-value">Cra 15 #82-45, Bogotá</div>
+          </div>
+        </div>
+        <div class="contacto-item">
+          <div class="ci-icon">🕐</div>
+          <div>
+            <div class="ci-label">Horario</div>
+            <div class="ci-value">Lun – Sáb: 8am – 6pm</div>
+          </div>
+        </div>
+      </div>
+      <a href="https://wa.me/573001234567?text=Hola%2C%20me%20interesa%20cotizar%20un%20parlante" target="_blank" class="btn-whatsapp">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+        </svg>
+        Escribir por WhatsApp
+      </a>
+    </div>
+
+    <div class="contacto-form reveal">
+      <div class="form-titulo">Envíanos un mensaje</div>
+      <div id="formSuccess" class="form-success">
+        ✅ ¡Mensaje enviado! Te contactamos pronto.
+      </div>
+      <form id="contactForm" onsubmit="enviarForm(event)">
+        <div class="form-group">
+          <label class="form-label">Nombre completo</label>
+          <input class="form-input" type="text" placeholder="Juan Pérez" required/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Teléfono / WhatsApp</label>
+          <input class="form-input" type="tel" placeholder="+57 300 000 0000" required/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">¿Qué necesitas?</label>
+          <select class="form-select" required>
+            <option value="">Selecciona una opción</option>
+            <option>Parlante portátil</option>
+            <option>Sistema de torre</option>
+            <option>Monitor de estudio</option>
+            <option>Sistema cine en casa</option>
+            <option>Parlante outdoor</option>
+            <option>Asesoría personalizada</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Mensaje</label>
+          <textarea class="form-textarea" placeholder="Cuéntanos sobre tu proyecto o espacio..."></textarea>
+        </div>
+        <button type="submit" class="form-submit">Enviar Mensaje</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-logo">Sound<span>Craft</span></div>
+  <p>© 2026 SoundCraft. Todos los derechos reservados.</p>
+  <div class="footer-links">
+    <a href="#catalogo">Catálogo</a>
+    <a href="#sobre">Nosotros</a>
+    <a href="#contacto">Contacto</a>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>
