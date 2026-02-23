@@ -15,7 +15,8 @@ const productos = [
     cat: 'Line Array Activo',
     badge: 'Top',
     desc: 'Sistema line array activo bi-amplificado de 2 vías. 2200W totales, 1100W RMS, SPL 137dB, rango 50Hz–20kHz. DSP 32 bits integrado.',
-    imgs: ['img/hl30a-1.png', 'img/hl30a-2.png'],
+    imgs: ['img/hl30a-1.png'],
+    watermark: 'img/hl30a-watermark.png',
     specs: [
       ['Modelo',       'PA HL-30A'],
       ['Tipo',         'Módulo activo 2 vías, biamplificado'],
@@ -46,7 +47,8 @@ const productos = [
     cat: 'Line Array Activo',
     badge: 'Nuevo',
     desc: 'Sistema line array activo bi-amplificado de 2 vías para formato pequeño y mediano. 1400W pico, 700W RMS, SPL 133dB.',
-    imgs: ['img/hl10a-1.jpg', 'img/hl10a-2.png'],
+    imgs: ['img/hl10a-1.jpg'],
+    watermark: 'img/hl10a-2.png',
     specs: [
       ['Modelo',       'PA HL-10A'],
       ['Tipo',         'Módulo activo 2 vías, biamplificado'],
@@ -77,7 +79,8 @@ const productos = [
     cat: 'Parlante 10" Neodimio',
     badge: 'Pro',
     desc: 'Altavoz profesional de 10 pulgadas para Line Array, cajas turbo y car audio. 1000W programados, 500W RMS, sensibilidad 99dB.',
-    imgs: ['img/pa10n-1.jpg', 'img/pa10n-2.jpg'],
+    imgs: ['img/pa10n-1.jpg'],
+    watermark: 'img/pa10n-2.png',
     specs: [
       ['Modelo',             'PA10N-900'],
       ['Diámetro',           '255mm (10 pulgadas)'],
@@ -98,7 +101,8 @@ const productos = [
     cat: 'Woofer 18" Alto Rendimiento',
     badge: 'Pro',
     desc: 'Woofer profesional de 18". 1900W RMS, 3800W programados, carga magnética 180oz, bobina 4.5", rango 30Hz–1000Hz.',
-    imgs: ['img/lf18x-1.png', 'img/lf18x-2.png'],
+    imgs: ['img/lf18x-1.png'],
+    watermark: 'img/lf18x-2.png',
     specs: [
       ['Modelo',             'LF18X401+'],
       ['Diámetro',           '18 pulgadas (457 mm)'],
@@ -125,7 +129,8 @@ const productos = [
     cat: 'Woofer 18" Ferrita',
     badge: 'Pro',
     desc: 'Woofer profesional de 18" con imán de ferrita. 1300W RMS, 2600W programados, bobina 4", rango 30Hz–2500Hz.',
-    imgs: ['img/woof18lw-1.png', 'img/woof18lw-2.png'],
+    imgs: ['img/woof18lw-1.png'],
+    watermark: 'img/woof18lw-2.png',
     specs: [
       ['Modelo',             '18LW2420+'],
       ['Diámetro',           '18 pulgadas (457 mm)'],
@@ -172,6 +177,16 @@ function renderProductos() {
 function abrirModal(id) {
   const p = productos.find(x => x.id === id);
   if (!p) return;
+
+  const mb = document.getElementById('modalBody');
+  const oldWm = mb.querySelector('.modal-watermark');
+  if (oldWm) oldWm.remove();
+  if(p.watermark) {
+    const wm = document.createElement('img');
+    wm.src = p.watermark;
+    wm.className = 'modal-watermark';
+    mb.appendChild(wm);
+  }
 
   document.getElementById('modalTitulo').textContent = p.nombre;
   document.getElementById('modalImgMain').src = p.imgs[0];
