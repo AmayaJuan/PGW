@@ -1,246 +1,231 @@
 // ══════════════════════════════════════
-//   SOUNDCRAFT — main.js
+//   PA ACOUSTIC — main.js
 // ══════════════════════════════════════
 
-// ── DATOS DE PRODUCTOS ──
-// Para agregar un producto nuevo, copia uno de estos objetos y cambia los valores
+const WP = 'https://wa.me/573046272826';
+
+const WP_SVG = `<svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>`;
+
+// ── PRODUCTOS ──
+// Para agregar un producto: copia un objeto, cambia los datos e imágenes
 const productos = [
   {
-    id: 1,
-    nombre: 'BassX Pro 500',
-    cat: 'portable',
-    precio: 389000,
-    antes: 450000,       // null si no tiene precio anterior
-    watts: '40W',
-    desc: 'Potente parlante portátil resistente al agua IPX7 con 20h de batería.',
-    badge: 'nuevo'       // 'nuevo' | 'oferta' | 'popular' | 'agotado' | null
+    id: 'hl30a',
+    nombre: 'PA HL-30A',
+    cat: 'Line Array Activo',
+    badge: 'Top',
+    desc: 'Sistema line array activo bi-amplificado de 2 vías. 2200W totales, 1100W RMS, SPL 137dB, rango 50Hz–20kHz. DSP 32 bits integrado.',
+    imgs: ['img/hl30a-1.png', 'img/hl30a-2.png'],
+    specs: [
+      ['Modelo',       'PA HL-30A'],
+      ['Tipo',         'Módulo activo 2 vías, biamplificado'],
+      ['Amplificador', 'Clase D · DSP NET WORK'],
+      ['Potencia total','2200 W'],
+      ['Potencia RMS', '1100 W'],
+      ['Potencia LF',  '1600 W PGM / 800 W RMS'],
+      ['Potencia HF',  '600 W PGM / 300 W RMS'],
+      ['Frecuencia',   '50 Hz – 20 kHz'],
+      ['SPL máximo',   '137 dB'],
+      ['Impedancia',   '4 ohms'],
+      ['Cobertura H',  '100°'],
+      ['Cobertura V',  '15°'],
+      ['Woofer',       '2 × 10″ Neodymium (bob. 65.5mm)'],
+      ['Driver',       '1.4mm Neodymium · Titanio · Bob. 4"'],
+      ['Entrada',      'XLR'],
+      ['Salida link',  'Powercom'],
+      ['Material',     'Polipropileno'],
+      ['Rigging',      'Sistema integrado con ajustes de ángulo'],
+      ['Dimensiones',  '294 × 707 × 508 mm'],
+    ],
+    apps: ['Conciertos en vivo','Teatros y auditorios','Espacios medianos y grandes','Instalaciones fijas','Espectáculos móviles','Iglesias y colegios','Eventos corporativos'],
+    tags: ['2200 W', '137 dB', '2×10"', 'Clase D DSP']
   },
   {
-    id: 2,
-    nombre: 'TowerMax T800',
-    cat: 'torre',
-    precio: 1250000,
-    antes: null,
-    watts: '200W',
-    desc: 'Sistema de torre de 2 vías con woofer de 12" y tweeter de titanio.',
-    badge: 'popular'
+    id: 'hl10a',
+    nombre: 'PA HL-10A',
+    cat: 'Line Array Activo',
+    badge: 'Nuevo',
+    desc: 'Sistema line array activo bi-amplificado de 2 vías para formato pequeño y mediano. 1400W pico, 700W RMS, SPL 133dB.',
+    imgs: ['img/hl10a-1.jpg', 'img/hl10a-2.png'],
+    specs: [
+      ['Modelo',       'PA HL-10A'],
+      ['Tipo',         'Módulo activo 2 vías, biamplificado'],
+      ['Potencia pico','1400 W'],
+      ['Potencia RMS', '700 W'],
+      ['Potencia LF',  '1000 W pico / 500 W RMS'],
+      ['Potencia HF',  '400 W pico / 200 W RMS'],
+      ['Frecuencia',   '65 Hz – 20 kHz'],
+      ['SPL máximo',   '133 dB'],
+      ['Cobertura H',  '100°'],
+      ['Cobertura V',  '15°'],
+      ['Transductores','2×8" Neodymium + Driver 2.5"'],
+      ['Entrada',      'XLR / TRS combo'],
+      ['Salida link',  'XLR'],
+      ['Crossover',    '800 Hz'],
+      ['Alimentación', 'powerCON IN/OUT'],
+      ['Material',     'Polipropileno'],
+      ['Rigging',      'Ángulos cada 2°'],
+      ['Dimensiones',  '294 × 569 × 434 mm'],
+      ['Peso',         '20.4 kg'],
+    ],
+    apps: ['Conciertos en vivo','Iglesias y colegios','Teatros y auditorios','Eventos corporativos','Conciertos al aire libre','Clubes y DJ','Centros de convenciones'],
+    tags: ['1400 W', '133 dB', '2×8"', 'Clase D']
   },
   {
-    id: 3,
-    nombre: 'StudioRef M65',
-    cat: 'estudio',
-    precio: 890000,
-    antes: 980000,
-    watts: '65W',
-    desc: 'Monitor de estudio plano de referencia para producción profesional.',
-    badge: 'oferta'
+    id: 'pa10n',
+    nombre: 'PA10N-900',
+    cat: 'Parlante 10" Neodimio',
+    badge: 'Pro',
+    desc: 'Altavoz profesional de 10 pulgadas para Line Array, cajas turbo y car audio. 1000W programados, 500W RMS, sensibilidad 99dB.',
+    imgs: ['img/pa10n-1.jpg', 'img/pa10n-2.jpg'],
+    specs: [
+      ['Modelo',             'PA10N-900'],
+      ['Diámetro',           '255mm (10 pulgadas)'],
+      ['Impedancia',         '8 ohmios'],
+      ['Potencia Programada','1000 W'],
+      ['Potencia RMS',       '500 W'],
+      ['Sensibilidad',       '99 dB'],
+      ['Frecuencia',         '50 Hz – 3500 Hz'],
+      ['Bobina',             '3 pulgadas'],
+      ['Capas',              '2 capas (IN - OUT)'],
+    ],
+    apps: ['Sistemas line array','Monitores de escenario','Cajas turbo','Sistema pickup','Car audio','Proyectos ligereza + potencia'],
+    tags: ['1000 W', '99 dB', '10"', 'Neodimio']
   },
   {
-    id: 4,
-    nombre: 'CineBar S200',
-    cat: 'cine',
-    precio: 2100000,
-    antes: null,
-    watts: '320W',
-    desc: 'Soundbar 3.1 con subwoofer inalámbrico y Dolby Atmos.',
-    badge: 'nuevo'
+    id: 'lf18x',
+    nombre: 'LF18X401+',
+    cat: 'Woofer 18" Alto Rendimiento',
+    badge: 'Pro',
+    desc: 'Woofer profesional de 18". 1900W RMS, 3800W programados, carga magnética 180oz, bobina 4.5", rango 30Hz–1000Hz.',
+    imgs: ['img/lf18x-1.png', 'img/lf18x-2.png'],
+    specs: [
+      ['Modelo',             'LF18X401+'],
+      ['Diámetro',           '18 pulgadas (457 mm)'],
+      ['Carga magnética',    '180 onzas'],
+      ['Impedancia',         '8 ohmios'],
+      ['Potencia Programada','3800 W'],
+      ['Potencia RMS',       '1900 W'],
+      ['Sensibilidad',       '98 dB'],
+      ['Frecuencia',         '30 Hz – 1000 Hz'],
+      ['Excursión máx.',     '54 mm (2.13 pulgadas)'],
+      ['Bobina',             '4.5 pulgadas (114 mm)'],
+      ['Material bobina',    'Til / Alambre Cobre'],
+      ['Capas',              '2 (Inside/Outside)'],
+      ['Cono',               'Cartón prensado con fibra de vidrio'],
+      ['Diámetro total',     '465 mm'],
+      ['Altura total',       '212 mm'],
+    ],
+    apps: ['Subwoofers de alta potencia','Sistemas de sonido profesional','Cajas bass réflex','Conciertos en vivo','Teatros y auditorios','Clubes nocturnos'],
+    tags: ['3800 W', '98 dB', '18"', '180oz']
   },
   {
-    id: 5,
-    nombre: 'TrailBlaze X',
-    cat: 'outdoor',
-    precio: 520000,
-    antes: null,
-    watts: '60W',
-    desc: 'Parlante outdoor con panel solar y batería de 30h para aventuras.',
-    badge: 'popular'
-  },
-  {
-    id: 6,
-    nombre: 'TowerMax T1200',
-    cat: 'torre',
-    precio: 2800000,
-    antes: 3100000,
-    watts: '400W',
-    desc: 'Torre flagship con amplificador clase D y respuesta 20Hz–20kHz.',
-    badge: 'oferta'
-  },
-  {
-    id: 7,
-    nombre: 'MiniPod BT',
-    cat: 'portable',
-    precio: 185000,
-    antes: null,
-    watts: '15W',
-    desc: 'Diseño compacto 360° con graves sorprendentes para su tamaño.',
-    badge: null
-  },
-  {
-    id: 8,
-    nombre: 'StudioRef M80',
-    cat: 'estudio',
-    precio: 1350000,
-    antes: null,
-    watts: '80W',
-    desc: 'Monitor de campo cercano con corrección de sala DSP integrada.',
-    badge: 'popular'
-  },
-  {
-    id: 9,
-    nombre: 'CineSub 12"',
-    cat: 'cine',
-    precio: 980000,
-    antes: null,
-    watts: '250W',
-    desc: 'Subwoofer de 12" con amplificador digital y ajuste de frecuencia de corte.',
-    badge: null
-  },
-  {
-    id: 10,
-    nombre: 'BoomField X3',
-    cat: 'outdoor',
-    precio: 750000,
-    antes: 820000,
-    watts: '100W',
-    desc: 'Sistema PA portátil con micrófono inalámbrico incluido.',
-    badge: 'oferta'
-  },
-  {
-    id: 11,
-    nombre: 'TowerMax T500',
-    cat: 'torre',
-    precio: 680000,
-    antes: null,
-    watts: '120W',
-    desc: 'Torre compacta ideal para salas medianas y ambientes corporativos.',
-    badge: null
-  },
-  {
-    id: 12,
-    nombre: 'CineBar Ultra 5.1',
-    cat: 'cine',
-    precio: 3500000,
-    antes: null,
-    watts: '500W',
-    desc: 'Sistema surround 5.1 completo con subwoofer activo y altavoces satélite.',
-    badge: 'nuevo'
-  },
+    id: 'woof18lw',
+    nombre: '18LW2420+',
+    cat: 'Woofer 18" Ferrita',
+    badge: 'Pro',
+    desc: 'Woofer profesional de 18" con imán de ferrita. 1300W RMS, 2600W programados, bobina 4", rango 30Hz–2500Hz.',
+    imgs: ['img/woof18lw-1.png', 'img/woof18lw-2.png'],
+    specs: [
+      ['Modelo',             '18LW2420+'],
+      ['Diámetro',           '18 pulgadas (457 mm)'],
+      ['Impedancia',         '8 ohmios'],
+      ['Potencia Programada','2600 W'],
+      ['Potencia RMS',       '1300 W'],
+      ['Sensibilidad',       '98 dB'],
+      ['Frecuencia',         '30 Hz – 2500 Hz'],
+      ['Bobina',             '4 pulgadas'],
+      ['Material bobina',    'Til / Alambre Cobre'],
+      ['Capas',              '2 (Inside/Outside)'],
+      ['Imán',               'Ferrita compacto'],
+      ['Ventilación',        'Sistema posterior'],
+      ['Chasis',             'Antimonio'],
+    ],
+    apps: ['Subwoofers de alta potencia','Sistemas de sonido profesional','Cajas bass réflex','Conciertos en vivo','Teatros y auditorios','Clubes nocturnos'],
+    tags: ['2600 W', '98 dB', '18"', 'Ferrita']
+  }
 ];
 
-// ── NÚMERO DE WHATSAPP ──
-// Cambia este número por el de tu empresa (formato internacional sin + ni espacios)
-const WHATSAPP = '573046272826';
-
-// ══════════════════════════════════════
-//   FUNCIONES
-// ══════════════════════════════════════
-
-// Genera el ícono SVG del parlante según la categoría
-function speakerSVG(cat) {
-  const colores = {
-    portable: '#3b82f6',
-    torre:    '#ff6b2b',
-    estudio:  '#22c55e',
-    cine:     '#eab308',
-    outdoor:  '#06b6d4'
-  };
-  const c = colores[cat] || '#ff6b2b';
-
-  return `
-    <svg class="spk-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="20" y="10" width="60" height="80" rx="10" fill="#1e2633" stroke="${c}" stroke-width="1.5"/>
-      <circle cx="50" cy="45" r="22" fill="#0f1218" stroke="${c}" stroke-width="2"/>
-      <circle cx="50" cy="45" r="14" fill="#161b24" stroke="${c}33" stroke-width="1"/>
-      <circle cx="50" cy="45" r="6" fill="${c}" opacity="0.9"/>
-      <circle cx="50" cy="72" r="5" fill="#0f1218" stroke="${c}" stroke-width="1.5"/>
-      <circle cx="50" cy="72" r="2" fill="${c}" opacity="0.7"/>
-      <rect x="32" y="20" width="8" height="3" rx="1.5" fill="${c}" opacity="0.4"/>
-      <rect x="43" y="20" width="8" height="3" rx="1.5" fill="${c}" opacity="0.4"/>
-      <rect x="54" y="20" width="8" height="3" rx="1.5" fill="${c}" opacity="0.4"/>
-    </svg>`;
-}
-
-// Formatea el precio en pesos colombianos
-function formatPrecio(n) {
-  return '$' + n.toLocaleString('es-CO');
-}
-
-// Dibuja las tarjetas de productos en el grid
-function renderProductos(lista) {
-  const grid = document.getElementById('productosGrid');
-  document.getElementById('conteo').textContent = lista.length;
-
-  grid.innerHTML = lista.map((p, i) => `
-    <div class="producto-card cat-${p.cat}" style="animation-delay:${i * 0.06}s">
-      <div class="card-img">
-        ${speakerSVG(p.cat)}
-        ${p.badge ? `<span class="card-badge badge-${p.badge}">${p.badge}</span>` : ''}
+// ── RENDER TARJETAS ──
+function renderProductos() {
+  document.getElementById('productosGrid').innerHTML = productos.map((p, i) => `
+    <div class="prod-card" style="opacity:0;animation:fadeUp .6s ease forwards ${i * 0.07}s" onclick="abrirModal('${p.id}')">
+      <div class="prod-img-wrap">
+        <img src="${p.imgs[0]}" alt="${p.nombre}"/>
+        <span class="prod-badge">${p.badge}</span>
       </div>
-      <div class="card-body">
-        <div class="card-cat">${p.cat.charAt(0).toUpperCase() + p.cat.slice(1)}</div>
-        <div class="card-name">${p.nombre}</div>
-        <div class="card-desc">${p.desc}</div>
-        <div class="card-specs">
-          <span class="spec-tag">${p.watts}</span>
-          <span class="spec-tag">Bluetooth</span>
-          <span class="spec-tag">Garantía 2Y</span>
-        </div>
-        <div class="card-footer">
-          <div>
-            ${p.antes ? `<span class="precio-antes">${formatPrecio(p.antes)}</span>` : ''}
-            <span class="card-precio">
-              <span class="moneda">COP</span>${formatPrecio(p.precio).replace('$', '')}
-            </span>
-          </div>
-          <button
-            class="card-btn"
-            ${p.badge === 'agotado' ? 'disabled' : ''}
-            onclick="cotizar('${p.nombre}')">
-            ${p.badge === 'agotado' ? 'Agotado' : 'Cotizar'}
-          </button>
+      <div class="prod-body">
+        <div class="prod-cat">${p.cat}</div>
+        <div class="prod-nombre">${p.nombre}</div>
+        <div class="prod-desc">${p.desc}</div>
+        <div class="prod-specs">${p.tags.map(t => `<span class="spec-tag">${t}</span>`).join('')}</div>
+        <div class="prod-footer">
+          <span style="font-size:0.65rem;color:var(--muted)">Click para ver ficha</span>
+          <button class="prod-btn">Ver más →</button>
         </div>
       </div>
     </div>
   `).join('');
 }
 
-// Filtra los productos por categoría
-function filtrar(cat, btn) {
-  // Quitar clase active de todos los botones
-  document.querySelectorAll('.filtro-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
+// ── MODAL ──
+function abrirModal(id) {
+  const p = productos.find(x => x.id === id);
+  if (!p) return;
 
-  const lista = cat === 'todos' ? productos : productos.filter(p => p.cat === cat);
-  renderProductos(lista);
+  document.getElementById('modalTitulo').textContent = p.nombre;
+  document.getElementById('modalImgMain').src = p.imgs[0];
+
+  document.getElementById('modalThumbs').innerHTML = p.imgs.map((img, i) => `
+    <div class="modal-thumb ${i === 0 ? 'active' : ''}" onclick="cambiarImg('${img}', this)">
+      <img src="${img}" alt=""/>
+    </div>
+  `).join('');
+
+  document.getElementById('modalInfo').innerHTML = `
+    <span class="modal-badge">${p.badge}</span>
+    <div class="modal-cat">${p.cat}</div>
+    <div class="modal-nombre">${p.nombre}</div>
+    <div class="modal-desc">${p.desc}</div>
+    <table class="modal-tabla">
+      ${p.specs.map(([k, v]) => `<tr><td>${k}</td><td>${v}</td></tr>`).join('')}
+    </table>
+    <div class="modal-apps">
+      <h4>Aplicaciones</h4>
+      <ul>${p.apps.map(a => `<li>${a}</li>`).join('')}</ul>
+    </div>
+    <a href="${WP}?text=${encodeURIComponent('Hola, me interesa el ' + p.nombre + '. ¿Pueden darme información y precio?')}"
+       target="_blank" class="modal-wp">
+      ${WP_SVG} Consultar por WhatsApp
+    </a>
+  `;
+
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
 }
 
-// Abre WhatsApp con el nombre del producto
-function cotizar(nombre) {
-  const msg = encodeURIComponent(`Hola, me interesa cotizar el ${nombre}. ¿Cuál es el precio y disponibilidad?`);
-  window.open(`https://wa.me/${WHATSAPP}?text=${msg}`, '_blank');
+function cambiarImg(src, el) {
+  document.getElementById('modalImgMain').src = src;
+  document.querySelectorAll('.modal-thumb').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
 }
 
-// Maneja el envío del formulario de contacto
-function enviarForm(e) {
-  e.preventDefault();
-  document.getElementById('contactForm').style.display = 'none';
-  document.getElementById('formSuccess').style.display = 'block';
+function cerrarModal(e) {
+  if (e.target === document.getElementById('modalOverlay')) cerrarModalBtn();
 }
 
-// ══════════════════════════════════════
-//   SCROLL REVEAL
-// ══════════════════════════════════════
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-    }
-  });
-}, { threshold: 0.12 });
+function cerrarModalBtn() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
 
-document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+document.addEventListener('keydown', e => { if (e.key === 'Escape') cerrarModalBtn(); });
 
-// ══════════════════════════════════════
-//   INICIO
-// ══════════════════════════════════════
-renderProductos(productos);
+// ── SCROLL REVEAL ──
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+// ── INICIO ──
+renderProductos();
