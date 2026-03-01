@@ -43,6 +43,12 @@ const WP_SVG = `<svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.75
 const THEME_KEY = 'paTheme';
 
 // ========================================
+// BANDERAS DE ESTADO
+// ========================================
+
+// (Flag eliminado para permitir filtros activos desde el inicio)
+
+// ========================================
 // GESTIÓN DEL TEMA (CLARO/OSCURO)
 // ========================================
 
@@ -398,6 +404,7 @@ function getProductSearchText(p) {
 
 /**
  * Filtra los productos según búsqueda y categoría seleccionados
+ * Siempre aplica los filtros activos (búsqueda y/o categoría)
  * @returns {Array} Array de productos filtrados
  */
 function getFilteredProductos() {
@@ -405,12 +412,12 @@ function getFilteredProductos() {
   const categoryEl = document.getElementById('catalogCategory');
   // Obtener valor de búsqueda y normalizar (quitar tildes)
   const query = (searchEl && searchEl.value) ? searchEl.value.trim().toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '') : '';
-  // Obtener categoría seleccionada
-  const category = (categoryEl && categoryEl.value) ? categoryEl.value : '';
+  // Obtener categoría seleccionada (normalizar para comparación case-insensitive)
+  const category = (categoryEl && categoryEl.value) ? categoryEl.value.trim().toLowerCase() : '';
 
   let list = productos;
-  // Filtrar por categoría si hay una seleccionada
-  if (category) list = list.filter(p => (p.cat || '') === category);
+  // Filtrar por categoría si hay una seleccionada (comparación case-insensitive)
+  if (category) list = list.filter(p => (p.cat || '').toLowerCase().includes(category));
   // Filtrar por búsqueda si hay texto
   if (query) list = list.filter(p => getProductSearchText(p).includes(query));
   return list;
@@ -539,16 +546,19 @@ function setupCatalogFilters() {
   const searchTrigger = document.getElementById('navSearchTrigger');
 
   // Evento de input para búsqueda (se ejecuta en tiempo real)
-  if (searchEl) searchEl.addEventListener('input', renderProductos);
+  if (searchEl) {
+    searchEl.addEventListener('input', function() {
+      renderProductos();
+    });
+  }
   
-  // Evento de cambio de categoría: limpiar búsqueda y renderizar
+  // Evento de cambio de categoría: renderizar manteniendo búsqueda si existe
   if (categoryEl) categoryEl.addEventListener('change', function() {
-    // LIMPIAR FILTRO DE BÚSQUEDA al cambiar de categoría
-    if (searchEl) {
-      searchEl.value = '';
-    }
-    // Renderizar productos con la nueva categoría
+    // NO limpiar el filtro de búsqueda - permitir filtro combinado
+    // Renderizar productos con la nueva categoría (manteniendo búsqueda si existe)
     renderProductos();
+    // Scroll a la sección de productos
+    document.getElementById('productos').scrollIntoView({ behavior: 'smooth' });
   });
 
   // Configurar expansión del cuadro de búsqueda
