@@ -25,59 +25,81 @@ function toggleTheme() {
   window.localStorage.setItem(THEME_KEY, next);
 }
 
-// ── AUDIO INTRO: se reproduce sola al cargar, se detiene al navegar (scroll o clic en enlaces) ──
+// ── LOGO CLICK: Scroll al inicio ──
+function handleLogoClick(e) {
+  e.preventDefault();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  // Quitar selección del menú al ir al inicio
+  clearNavActive();
+}
+
+// ── NAV CLICK: Cerrar menú móvil y quitar selección después de navegar ──
+function handleNavClick(e, sectionId) {
+  // Cerrar menú móvil si está abierto
+  toggleMobileMenu();
+  
+  // Quitar selección activa después de un breve momento para permitir el scroll
+  setTimeout(() => {
+    clearNavActive();
+  }, 100);
+}
+
+// ── CLEAR NAV ACTIVE: Quitar todas las clases active del menú ──
+function clearNavActive() {
+  const navLinks = document.querySelectorAll('.nav-link');
+  navLinks.forEach(link => link.classList.remove('active'));
+}
+
+// ── AUDIO INTRO: Solo se reproduce cuando está en el inicio (sin scroll) ──
 function initIntroAudio() {
   const audio = document.getElementById('introAudio');
   if (!audio) return;
 
   let introStopped = false;
   let introStarted = false;
-  let navigateListenersAdded = false;
 
   function stopIntro() {
     if (introStopped) return;
     introStopped = true;
     audio.pause();
     audio.currentTime = 0;
-    window.removeEventListener('scroll', onNavigate, { passive: true });
-    document.removeEventListener('click', onNavigate);
-  }
-
-  function onNavigate(e) {
-    if (e.type === 'click') {
-      const a = e.target.closest('a');
-      if (a && a.getAttribute('href')) stopIntro();
-      return;
-    }
-    if (e.type === 'scroll') stopIntro();
-  }
-
-  function addNavigateListeners() {
-    if (navigateListenersAdded) return;
-    navigateListenersAdded = true;
-    window.addEventListener('scroll', onNavigate, { passive: true });
-    document.addEventListener('click', onNavigate);
   }
 
   function playAudio() {
-    if (introStarted || introStopped) return;
+    // Solo reproducir si está en el inicio (scrollY < 100)
+    if (introStarted || introStopped || window.scrollY >= 100) return;
+    
     introStarted = true;
     audio.volume = 0.7;
     audio.play()
-      .then(() => addNavigateListeners())
       .catch(function (err) {
-        console.log('Audio bloqueado por el navegador, se reproducirá al interactuar');
+        console.log('Audio bloqueado por el navegador');
         introStarted = false;
       });
   }
 
-  // Intentar reproducir al cargar
+  function onScroll() {
+    // Detener cuando el usuario hace scroll hacia otra sección
+    if (window.scrollY >= 100 && !introStopped) {
+      stopIntro();
+    }
+    // Intentar reproducir si vuelve al inicio
+    if (window.scrollY < 100 && !introStarted && !introStopped) {
+      playAudio();
+    }
+  }
+
+  // Escuchar scroll para detener/reanudar audio
+  window.addEventListener('scroll', onScroll, { passive: true });
+  
+  // Intentar reproducir al cargar si está en el inicio
   playAudio();
 
   // Si el navegador bloquea el autoplay, intentar en el primer clic del usuario
   document.addEventListener('click', function firstInteraction() {
-    playAudio();
-    // Remover el listener después del primer intento
+    if (window.scrollY < 100) {
+      playAudio();
+    }
     document.removeEventListener('click', firstInteraction);
   }, { once: true });
 }

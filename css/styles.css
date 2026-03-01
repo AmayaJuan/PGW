@@ -75,9 +75,9 @@ body[data-theme="light"] nav {
 }
 .nav-logo img { height: 48px; object-fit: contain; }
 .nav-links { display: flex; gap: 2rem; list-style: none; }
-.nav-links a { color: var(--muted); text-decoration: none; font-size: 0.85rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; transition: color .2s; position: relative; }
-.nav-links a:hover { color: var(--rojo); }
-.nav-links a.active { color: var(--rojo); }
+.nav-links a { color: var(--muted); text-decoration: none; font-size: 0.85rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; transition: color .2s, background .2s, padding .2s; position: relative; padding: 0.5rem 0.8rem; border-radius: 6px; display: inline-block; }
+.nav-links a:hover { color: var(--rojo); background: rgba(232,25,44,0.1); }
+.nav-links a.active { color: var(--rojo); background: rgba(232,25,44,0.15); }
 .nav-links a.active::after {
   content: '';
   position: absolute;
