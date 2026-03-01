@@ -173,7 +173,209 @@
       <div class="modal-titulo" id="modalTitulo"></div>
       <button class="modal-close" onclick="cerrarModalBtn()">✕</button>
     </div>
+    <div class="modal-body" id="modalBody"><!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PA Acoustic — Audio Profesional</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Nunito:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/styles.css"/>
+</head>
+<body>
+
+<!-- WP FLOTANTE -->
+<a class="wp-float" href="https://wa.me/573053402732?text=Hola,%20quiero%20más%20información" target="_blank">
+  <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <img src="img/logo.jpg" alt="PA Acoustic"/>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#productos">Productos</a></li>
+    <li><a href="#nosotros">Nosotros</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+  </ul>
+  <div class="nav-catalog-controls">
+    <div class="nav-search-box" id="navSearchBox">
+      <button type="button" class="nav-search-trigger" id="navSearchTrigger" title="Buscar" aria-label="Abrir búsqueda" aria-expanded="false" aria-controls="catalogSearch">
+        <span class="nav-search-icon" aria-hidden="true">🔍</span>
+      </button>
+      <input type="search" id="catalogSearch" class="nav-search-input" placeholder="Buscar..." autocomplete="off" aria-label="Buscar productos"/>
+    </div>
+    <select id="catalogCategory" class="nav-category-select" title="Filtrar por categoría" aria-label="Filtrar por categoría">
+      <option value="">Todas las categorías</option>
+    </select>
+  </div>
+  <button type="button" class="theme-toggle" onclick="toggleTheme()">
+    <span class="theme-toggle-ico">☾</span>
+    <span class="theme-toggle-label">Tema</span>
+  </button>
+  <a class="nav-wp" href="https://wa.me/573053402732?text=Hola,%20quiero%20más%20información" target="_blank">
+    <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    WhatsApp
+  </a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <img src="img/logo.jpg" alt="PA Acoustic" class="hero-logo-img"/>
+    <div class="hero-tag">Audio Profesional Medellin - Colombia</div>
+    <h1 class="hero-titulo">
+      Equipos de
+      <span class="linea2">Alta Potencia</span>
+    </h1>
+    <p class="hero-sub">Line arrays, woofers y parlantes profesionales diseñados para eventos de gran formato, instalaciones fijas y sistemas de refuerzo sonoro de alto rendimiento.</p>
+    <div class="hero-btns">
+      <a href="#productos" class="btn-rojo">Ver Productos</a>
+      <a href="https://wa.me/573053402732?text=Hola,%20quiero%20más%20información" target="_blank" class="btn-outline">Cotizar por WhatsApp</a>
+    </div>
+  </div>
+</section>
+
+<!-- BANNER FOTOS -->
+<div class="banner-wrap">
+  <div class="banner-track" id="bannerTrack"></div>
+</div>
+
+<!-- MARCAS -->
+<div class="marcas-wrap">
+  <div class="marcas-track">
+    <span class="marca-item">PA HL-30A</span>
+    <span class="marca-item">PA HL-10A</span>
+    <span class="marca-item">PA10N-900</span>
+    <span class="marca-item">LF18X401+</span>
+    <span class="marca-item">18LW2420+</span>
+    <span class="marca-item">Line Array</span>
+    <span class="marca-item">Woofer 18"</span>
+    <span class="marca-item">Neodymium</span>
+    <span class="marca-item">PA HL-30A</span>
+    <span class="marca-item">PA HL-10A</span>
+    <span class="marca-item">PA10N-900</span>
+    <span class="marca-item">LF18X401+</span>
+    <span class="marca-item">18LW2420+</span>
+    <span class="marca-item">Line Array</span>
+    <span class="marca-item">Woofer 18"</span>
+    <span class="marca-item">Neodymium</span>
+  </div>
+</div>
+
+<!-- PRODUCTOS -->
+<section id="productos" class="sec">
+  <div class="reveal">
+    <div class="sec-label">— Nuestros Equipos</div>
+    <h2 class="sec-titulo">Catálogo de Productos</h2>
+  </div>
+  <div class="productos-grid" id="productosGrid"></div>
+</section>
+
+<!-- NOSOTROS -->
+<section id="nosotros" class="sec-alt">
+  <div class="nos-grid">
+    <div class="nos-logo-box reveal">
+      <img src="img/logo.jpg" alt="PA Acoustic"/>
+    </div>
+    <div class="reveal">
+      <div class="sec-label">— Quiénes Somos</div>
+      <h2 class="nos-titulo">Soluciones en <span>Audio Pro</span></h2>
+      <p class="nos-texto">Somos fabricantes y distribuidores de equipos de audio profesional de alta potencia. Nuestros productos están diseñados para cumplir las exigencias de los profesionales del sonido en eventos, instalaciones y producción en vivo.</p>
+      <p class="nos-texto">Cada equipo es desarrollado con tecnología de punta, componentes de neodimio y amplificación clase D para garantizar el máximo rendimiento con la mayor eficiencia energética.</p>
+      <div class="nos-items">
+        <div class="nos-item">
+          <div class="nos-ico">⚡</div>
+          <div><h4>Alta Potencia</h4><p>Sistemas desde 700W hasta 2200W RMS para cualquier escala de evento.</p></div>
+        </div>
+        <div class="nos-item">
+          <div class="nos-ico">🎯</div>
+          <div><h4>Precisión Acústica</h4><p>DSP integrado, cobertura controlada y SPL máximo de hasta 137 dB.</p></div>
+        </div>
+        <div class="nos-item">
+          <div class="nos-ico">🛡️</div>
+          <div><h4>Garantía y Soporte</h4><p>Respaldo técnico especializado y garantía en todos nuestros equipos.</p></div>
+        </div>
+        <div class="nos-item">
+          <div class="nos-ico">🚚</div>
+          <div><h4>Envíos a Colombia</h4><p>Despachamos a cualquier ciudad con empaque seguro.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACTO -->
+<section id="contacto" class="sec">
+  <div class="reveal" style="margin-bottom:2.5rem">
+    <div class="sec-label">— Estamos para ayudarte</div>
+    <h2 class="sec-titulo">Contáctanos</h2>
+  </div>
+  <div class="con-grid">
+    <div class="reveal">
+      <h3 class="con-titulo">Hablemos de <span>Tu Proyecto</span></h3>
+      <p class="con-sub">¿Necesitas un equipo específico o asesoría técnica? Escríbenos por WhatsApp y te respondemos de inmediato.</p>
+      <div class="con-items">
+        <div class="con-item">
+          <div class="con-ico">📱</div>
+          <div><div class="con-lbl">WhatsApp</div><div class="con-val">+57 305 340 2732</div></div>
+        </div>
+        <div class="con-item">
+          <div class="con-ico">🕐</div>
+          <div><div class="con-lbl">Horario</div><div class="con-val">Lun – Vie: 8:45 – 18:00 · Sáb: 8:45 – 15:00</div></div>
+        </div>
+        <div class="con-item">
+          <div class="con-ico">🇨🇴</div>
+          <div><div class="con-lbl">País / ciudad</div><div class="con-val">Colombia / Medellín</div></div>
+         <!----<div><div class="con-lbl">Ciudad</div><div class="con-val">Medellín</div></div>-->
+        </div>
+      </div>
+      <a href="https://wa.me/573053402732?text=Hola,%20quiero%20más%20información" target="_blank" class="btn-wp-grande">
+        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Escribir por WhatsApp Ahora
+      </a>
+    </div>
+    <div class="reveal con-card">
+      <img src="img/logo.jpg" alt="PA Acoustic" style="width:120px;margin-bottom:1.5rem;display:block"/>
+      <p style="font-size:0.82rem;color:var(--muted);line-height:1.8;margin-bottom:1rem">Especialistas en sistemas de audio profesional de alta potencia. Contáctanos para recibir asesoría técnica personalizada y cotización de nuestros equipos.</p>
+      <p style="font-size:0.78rem;color:var(--rojo);font-weight:600">📦 Envíos a todo Colombia</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo"><img src="img/logo.jpg" alt="PA Acoustic"/></div>
+  <p>© 2026 PA Acoustic — Audio Profesional Medellin - Colombia 🇨🇴</p>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="cerrarModal(event)">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <div class="modal-titulo" id="modalTitulo"></div>
+      <button class="modal-close" onclick="cerrarModalBtn()">✕</button>
+    </div>
     <div class="modal-body" id="modalBody">
+      <div class="modal-imgs">
+        <div class="modal-img-main"><img id="modalImgMain" src="" alt=""/></div>
+        <div class="modal-img-thumbs" id="modalThumbs"></div>
+      </div>
+      <div class="modal-info" id="modalInfo"></div>
+    </div>
+  </div>
+</div>
+
+<audio id="introAudio" preload="auto" autoplay>
+  <source src="audio/intro.mp3" type="audio/mpeg"/>
+</audio>
+
+<script src="js/main.js"></script>
+</body>
+</html>
       <div class="modal-imgs">
         <div class="modal-img-main"><img id="modalImgMain" src="" alt=""/></div>
         <div class="modal-img-thumbs" id="modalThumbs"></div>

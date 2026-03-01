@@ -7,15 +7,6 @@ const WP = 'https://wa.me/573053402732';
 const WP_SVG = `<svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>`;
 
 const THEME_KEY = 'paTheme';
-const INTRO_MUSIC_KEY = 'paIntroPlayed';
-// YouTube intro — paste full URL or video ID (e.g. https://www.youtube.com/watch?v=VIDEO_ID)
-const YOUTUBE_INTRO = '';
-
-function getYouTubeId(val) {
-  if (!val) return '';
-  const m = val.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&?#]+)/);
-  return m ? m[1] : val.trim();
-}
 
 function applyTheme(theme) {
   document.body.setAttribute('data-theme', theme);
@@ -34,46 +25,43 @@ function toggleTheme() {
   window.localStorage.setItem(THEME_KEY, next);
 }
 
-// ── INTRO MUSIC (YouTube) ──
-let introPlayer = null;
+// ── AUDIO INTRO: se reproduce sola al cargar, se detiene al navegar (scroll o clic en enlaces) ──
+function initIntroAudio() {
+  const audio = document.getElementById('introAudio');
+  if (!audio) return;
 
-function initIntroMusic() {
-  if (window.localStorage.getItem(INTRO_MUSIC_KEY)) return;
-  const videoId = getYouTubeId(YOUTUBE_INTRO);
-  if (!videoId) return;
+  let introStopped = false;
+  let navigateListenersAdded = false;
 
-  const container = document.getElementById('introYoutube');
-  if (!container) return;
-
-  const onYouTubeIframeAPIReady = () => {
-    introPlayer = new YT.Player('introYoutube', {
-      height: '1',
-      width: '1',
-      videoId: videoId,
-      playerVars: {
-        autoplay: 1,
-        mute: 0,
-        controls: 0,
-        disablekb: 1,
-        fs: 0,
-        modestbranding: 1,
-        rel: 0,
-        showinfo: 0
-      },
-      events: {
-        onReady: (e) => {
-          e.target.playVideo();
-          window.localStorage.setItem(INTRO_MUSIC_KEY, '1');
-        }
-      }
-    });
-  };
-
-  if (typeof YT !== 'undefined' && YT.Player) {
-    onYouTubeIframeAPIReady();
-  } else {
-    window.onYouTubeIframeAPIReady = onYouTubeIframeAPIReady;
+  function stopIntro() {
+    if (introStopped) return;
+    introStopped = true;
+    audio.pause();
+    audio.currentTime = 0;
+    window.removeEventListener('scroll', onNavigate, { passive: true });
+    document.removeEventListener('click', onNavigate);
   }
+
+  function onNavigate(e) {
+    if (e.type === 'click') {
+      const a = e.target.closest('a');
+      if (a && a.getAttribute('href')) stopIntro();
+      return;
+    }
+    if (e.type === 'scroll') stopIntro();
+  }
+
+  function addNavigateListeners() {
+    if (navigateListenersAdded) return;
+    navigateListenersAdded = true;
+    window.addEventListener('scroll', onNavigate, { passive: true });
+    document.addEventListener('click', onNavigate);
+  }
+
+  audio.volume = 0.7;
+  audio.play()
+    .then(() => addNavigateListeners())
+    .catch(function () {});
 }
 
 // ── PRODUCTOS ──
@@ -241,9 +229,67 @@ function renderBanner() {
   `).join('');
 }
 
-// ── RENDER TARJETAS ──
+// ── FILTRO CATÁLOGO (búsqueda + categoría) ──
+function getProductSearchText(p) {
+  const parts = [p.nombre, p.cat, p.desc, (p.tags || []).join(' '), (p.apps || []).join(' ')];
+  return parts.join(' ').toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '');
+}
+
+function getFilteredProductos() {
+  const searchEl = document.getElementById('catalogSearch');
+  const categoryEl = document.getElementById('catalogCategory');
+  const query = (searchEl && searchEl.value) ? searchEl.value.trim().toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '') : '';
+  const category = (categoryEl && categoryEl.value) ? categoryEl.value : '';
+
+  let list = productos;
+  if (category) list = list.filter(p => (p.cat || '') === category);
+  if (query) list = list.filter(p => getProductSearchText(p).includes(query));
+  return list;
+}
+
+function getUniqueCategories() {
+  const set = new Set();
+  productos.forEach(p => { if (p.cat) set.add(p.cat); });
+  return Array.from(set).sort();
+}
+
+function fillCategorySelect() {
+  const sel = document.getElementById('catalogCategory');
+  if (!sel) return;
+  const current = sel.value;
+  const categories = getUniqueCategories();
+  sel.innerHTML = '<option value="">Todas las categorías</option>' +
+    categories.map(c => `<option value="${escapeAttr(c)}">${escapeHtml(c)}</option>`).join('');
+  if (categories.includes(current)) sel.value = current;
+}
+
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text || '';
+  return div.innerHTML;
+}
+
+/** Para atributos HTML: escapar comillas para que value="..." no se corte */
+function escapeAttr(text) {
+  return String(text || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
 function renderProductos() {
-  document.getElementById('productosGrid').innerHTML = productos.map((p, i) => `
+  const filtered = getFilteredProductos();
+  const grid = document.getElementById('productosGrid');
+  if (!grid) return;
+
+  if (filtered.length === 0) {
+    grid.innerHTML = `
+      <div class="catalog-empty" style="grid-column:1/-1;text-align:center;padding:3rem 2rem;background:var(--bg3);border:1px solid var(--borde);border-radius:12px;">
+        <p style="font-size:1rem;color:var(--texto);margin-bottom:.5rem;">No hay productos con los filtros seleccionados.</p>
+        <p style="font-size:.85rem;color:var(--muted);">Cambia la categoría o el texto de búsqueda.</p>
+      </div>
+    `;
+    return;
+  }
+
+  grid.innerHTML = filtered.map((p, i) => `
     <div class="prod-card" style="opacity:0;animation:fadeUp .6s ease forwards ${i * 0.07}s" onclick="abrirModal('${p.id}')">
       <div class="prod-img-wrap">
         <img src="${p.imgs[0]}" alt="${p.nombre}"/>
@@ -261,6 +307,40 @@ function renderProductos() {
       </div>
     </div>
   `).join('');
+}
+
+function setupCatalogFilters() {
+  fillCategorySelect();
+  const searchEl = document.getElementById('catalogSearch');
+  const categoryEl = document.getElementById('catalogCategory');
+  const searchBox = document.getElementById('navSearchBox');
+  const searchTrigger = document.getElementById('navSearchTrigger');
+
+  if (searchEl) searchEl.addEventListener('input', renderProductos);
+  if (categoryEl) categoryEl.addEventListener('change', renderProductos);
+
+  if (searchBox && searchTrigger && searchEl) {
+    searchTrigger.addEventListener('click', () => {
+      const isExpanded = searchBox.classList.toggle('expanded');
+      searchTrigger.setAttribute('aria-expanded', isExpanded);
+      if (isExpanded) {
+        searchEl.focus();
+      }
+    });
+    searchEl.addEventListener('blur', () => {
+      setTimeout(() => {
+        searchBox.classList.remove('expanded');
+        searchTrigger.setAttribute('aria-expanded', 'false');
+      }, 180);
+    });
+    searchEl.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        searchEl.blur();
+        searchBox.classList.remove('expanded');
+        searchTrigger.setAttribute('aria-expanded', 'false');
+      }
+    });
+  }
 }
 
 // ── MODAL ──
@@ -334,6 +414,7 @@ document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
 // ── INICIO ──
 loadTheme();
-initIntroMusic();
+initIntroAudio();
 renderBanner();
 renderProductos();
+setupCatalogFilters();
