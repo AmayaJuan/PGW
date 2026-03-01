@@ -19,11 +19,23 @@
   <div class="nav-logo">
     <img src="img/logo.jpg" alt="PA Acoustic"/>
   </div>
-  <ul class="nav-links">
-    <li><a href="#productos">Productos</a></li>
-    <li><a href="#nosotros">Nosotros</a></li>
-    <li><a href="#contacto">Contacto</a></li>
+  
+  <!-- Mobile menu overlay -->
+  <div class="nav-mobile-overlay" id="navMobileOverlay" onclick="toggleMobileMenu()"></div>
+  
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#productos" class="nav-link" onclick="toggleMobileMenu()">Productos</a></li>
+    <li><a href="#nosotros" class="nav-link" onclick="toggleMobileMenu()">Nosotros</a></li>
+    <li><a href="#contacto" class="nav-link" onclick="toggleMobileMenu()">Contacto</a></li>
   </ul>
+  
+  <!-- Hamburger menu button -->
+  <button type="button" class="nav-hamburger" id="navHamburger" onclick="toggleMobileMenu()" aria-label="Abrir menú" aria-expanded="false">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+  
   <div class="nav-catalog-controls">
     <div class="nav-search-box" id="navSearchBox">
       <button type="button" class="nav-search-trigger" id="navSearchTrigger" title="Buscar" aria-label="Abrir búsqueda" aria-expanded="false" aria-controls="catalogSearch">

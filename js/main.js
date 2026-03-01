@@ -289,7 +289,7 @@ function escapeHtml(text) {
 
 /** Para atributos HTML: escapar comillas para que value="..." no se corte */
 function escapeAttr(text) {
-  return String(text || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  return String(text || '').replace(/&/g, '&amp;').replace(/"/g, '"').replace(/</g, '<').replace(/>/g, '>');
 }
 
 function renderProductos() {
@@ -430,9 +430,58 @@ const obs = new IntersectionObserver(entries => {
 }, { threshold: 0.1 });
 document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
+// ── MOBILE MENU TOGGLE ──
+function toggleMobileMenu() {
+  const hamburger = document.getElementById('navHamburger');
+  const navLinks = document.getElementById('navLinks');
+  const overlay = document.getElementById('navMobileOverlay');
+  
+  if (!hamburger || !navLinks) return;
+  
+  const isOpen = hamburger.classList.toggle('active');
+  navLinks.classList.toggle('open');
+  
+  if (overlay) {
+    overlay.classList.toggle('open');
+  }
+  
+  hamburger.setAttribute('aria-expanded', isOpen);
+}
+
+// ── ACTIVE MENU LINK ON SCROLL ──
+function initActiveMenuLink() {
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-link');
+  
+  if (sections.length === 0 || navLinks.length === 0) return;
+  
+  function updateActiveLink() {
+    const scrollPos = window.scrollY + 150;
+    
+    sections.forEach(section => {
+      const sectionTop = section.offsetTop;
+      const sectionHeight = section.offsetHeight;
+      const sectionId = section.getAttribute('id');
+      
+      if (scrollPos >= sectionTop && scrollPos < sectionTop + sectionHeight) {
+        navLinks.forEach(link => {
+          link.classList.remove('active');
+          if (link.getAttribute('href') === '#' + sectionId) {
+            link.classList.add('active');
+          }
+        });
+      }
+    });
+  }
+  
+  window.addEventListener('scroll', updateActiveLink, { passive: true });
+  updateActiveLink();
+}
+
 // ── INICIO ──
 loadTheme();
 initIntroAudio();
 renderBanner();
 renderProductos();
 setupCatalogFilters();
+initActiveMenuLink();
