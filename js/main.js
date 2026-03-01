@@ -31,6 +31,7 @@ function initIntroAudio() {
   if (!audio) return;
 
   let introStopped = false;
+  let introStarted = false;
   let navigateListenersAdded = false;
 
   function stopIntro() {
@@ -58,10 +59,27 @@ function initIntroAudio() {
     document.addEventListener('click', onNavigate);
   }
 
-  audio.volume = 0.7;
-  audio.play()
-    .then(() => addNavigateListeners())
-    .catch(function () {});
+  function playAudio() {
+    if (introStarted || introStopped) return;
+    introStarted = true;
+    audio.volume = 0.7;
+    audio.play()
+      .then(() => addNavigateListeners())
+      .catch(function (err) {
+        console.log('Audio bloqueado por el navegador, se reproducirá al interactuar');
+        introStarted = false;
+      });
+  }
+
+  // Intentar reproducir al cargar
+  playAudio();
+
+  // Si el navegador bloquea el autoplay, intentar en el primer clic del usuario
+  document.addEventListener('click', function firstInteraction() {
+    playAudio();
+    // Remover el listener después del primer intento
+    document.removeEventListener('click', firstInteraction);
+  }, { once: true });
 }
 
 // ── PRODUCTOS ──
