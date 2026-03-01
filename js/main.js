@@ -538,9 +538,18 @@ function setupCatalogFilters() {
   const searchBox = document.getElementById('navSearchBox');
   const searchTrigger = document.getElementById('navSearchTrigger');
 
-  // Eventos de input y change para filtros
+  // Evento de input para búsqueda (se ejecuta en tiempo real)
   if (searchEl) searchEl.addEventListener('input', renderProductos);
-  if (categoryEl) categoryEl.addEventListener('change', renderProductos);
+  
+  // Evento de cambio de categoría: limpiar búsqueda y renderizar
+  if (categoryEl) categoryEl.addEventListener('change', function() {
+    // LIMPIAR FILTRO DE BÚSQUEDA al cambiar de categoría
+    if (searchEl) {
+      searchEl.value = '';
+    }
+    // Renderizar productos con la nueva categoría
+    renderProductos();
+  });
 
   // Configurar expansión del cuadro de búsqueda
   if (searchBox && searchTrigger && searchEl) {
