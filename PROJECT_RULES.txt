@@ -1,0 +1,53 @@
+================================================================================
+PA ACOUSTIC - POLÍTICAS DEL PROYECTO
+================================================================================
+
+REGLAS OBLIGATORIAS PARA CUALQUIER MODIFICACIÓN DEL CÓDIGO
+
+================================================================================
+1. ESTADO INICIAL DEL CATÁLOGO
+================================================================================
+- Al cargar la página NO debe haber filtros activos.
+- NO debe haber categoría seleccionada por defecto.
+- El catálogo debe mostrar TODOS los productos al inicio.
+
+================================================================================
+2. LÓGICA DE FILTRADO
+================================================================================
+- El filtrado por categoría SOLO se ejecuta cuando el usuario selecciona una.
+- El filtrado por búsqueda SOLO se ejecuta cuando el usuario escribe texto.
+- El mensaje "No hay productos con los filtros seleccionados"
+  SOLO se muestra cuando el resultado final sea realmente cero productos.
+
+================================================================================
+3. DISEÑO
+================================================================================
+- NO modificar el diseño visual sin autorización.
+- NO agregar ni eliminar animaciones si no se solicita explícitamente.
+- Mantener el diseño original del catálogo sin particiones innecesarias.
+- Cuidar el contraste en modo claro y oscuro.
+
+================================================================================
+4. GIT
+================================================================================
+- El repositorio YA existe.
+- Usar únicamente el Git integrado de Visual Studio Code.
+- NO sugerir GitHub CLI (gh).
+- NO crear ni subir repositorios nuevos.
+
+================================================================================
+5. CÓDIGO (OBLIGATORIO)
+================================================================================
+- Comentar CADA línea de código (HTML, CSS y JavaScript)
+  explicando qué hace, incluso si no se solicita explícitamente.
+- Escribir comentarios claros, simples y útiles para repasar
+  o modificar el código en el futuro.
+- NO omitir comentarios por considerarlos "obvios".
+
+================================================================================
+REGLA FINAL
+================================================================================
+Si algo ya funcionaba, NO lo rompas.
+Si no se pidió, NO lo hagas.
+
+================================================================================

@@ -1,7 +1,16 @@
 /**
-
 ======================================================================
 PA ACOUSTIC — main.js
+
+REGLAS CRÍTICAS DEL PROYECTO (OBLIGATORIO LEER):
+-------------------------------------------------
+1. ESTADO INICIAL: Sin filtros activos, mostrar TODOS los productos.
+2. FILTRADO: Solo ejecutar cuando el usuario seleccione categoría O escriba búsqueda.
+3. MENSAJE "Sin resultados": Solo mostrar cuando filtered.length === 0.
+4. DISEÑO: No modificar sin autorización. No agregar/eliminar animaciones.
+5. COMENTARIOS (OBLIGATORIO): Comentar CADA línea de código explicando qué hace.
+   Escribir comentarios claros, simples y útiles. NO omitir por considerarlos "obvios".
+6. REGLA FINAL: "Si algo ya funcionaba, NO lo rompas. Si no se pidió, NO lo haces."
 
 Este archivo contiene toda la funcionalidad JavaScript del sitio web.
 Incluye:
