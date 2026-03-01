@@ -34,6 +34,8 @@ REGLAS OBLIGATORIAS PARA CUALQUIER MODIFICACIÓN DEL CÓDIGO
 - Usar únicamente el Git integrado de Visual Studio Code.
 - NO sugerir GitHub CLI (gh).
 - NO crear ni subir repositorios nuevos.
+- NUNCA iniciar instrucciones usando comandos encadenados con && en PowerShell.
+  Si se requieren varios comandos, indicarlos en líneas separadas o usar git -C.
 
 ================================================================================
 5. CÓDIGO (OBLIGATORIO)
