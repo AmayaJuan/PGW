@@ -1,69 +1,126 @@
 <!DOCTYPE html>
+<!-- 
+  ========================================
+  PA ACOUSTIC - Sitio Web de Audio Profesional
+  ========================================
+  Este es el archivo principal HTML del sitio.
+  Contiene la estructura completa de la página:
+  - Navegación
+  - Hero (sección principal)
+  - Banner de productos
+  - Catálogo de productos
+  - Sección Nosotros
+  - Sección Contacto
+  - Footer
+  - Modal de detalles de producto
+-->
 <html lang="es">
 <head>
+  <!-- Codificación de caracteres UTF-8 para soporte de tildes y caracteres especiales -->
   <meta charset="UTF-8"/>
+  <!-- Configuración de viewport para diseño responsivo en dispositivos móviles -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <!-- Título de la página que aparece en la pestaña del navegador -->
   <title>PA Acoustic — Audio Profesional</title>
+  
+  <!-- Carga de fuentes de Google Fonts: Rajdhani (títulos) y Nunito (texto) -->
   <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Nunito:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <!-- Enlace al archivo de estilos CSS principal -->
   <link rel="stylesheet" href="css/styles.css"/>
 </head>
 <body>
 
-<!-- WP FLOTANTE -->
+<!-- ========================================
+     MARCA DE AGUA DE FONDO (PAGE WATERMARK)
+     Imagen de fondo que aparece en toda la página
+     como elemento decorativo de la marca
+     ======================================== -->
+<div class="page-watermark"></div>
+
+<!-- ========================================
+     BOTÓN FLOTANTE DE WHATSAPP
+     Botón de contacto fijo en la esquina inferior derecha
+     que permite iniciar una conversación de WhatsApp
+     ======================================== -->
 <a class="wp-float" href="https://wa.me/573053402732?text=Hola,%20quiero%20más%20información" target="_blank">
+  <!-- Icono SVG de WhatsApp -->
   <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
 </a>
 
-<!-- NAV -->
+<!-- ========================================
+     NAVEGACIÓN PRINCIPAL
+     Barra de navegación fija en la parte superior
+     Incluye: logo, menú de enlaces, búsqueda, 
+     selector de categorías y botón de tema claro/oscuro
+     ======================================== -->
 <nav>
+  <!-- Logo del sitio que funciona como enlace al inicio -->
   <div class="nav-logo">
     <a href="#" onclick="handleLogoClick(event)">
       <img src="img/logo.jpg" alt="PA Acoustic"/>
     </a>
   </div>
   
-  <!-- Mobile menu overlay -->
+  <!-- Overlay semitransparente para el menú móvil -->
   <div class="nav-mobile-overlay" id="navMobileOverlay" onclick="toggleMobileMenu()"></div>
   
+  <!-- Menú de navegación con enlaces a las secciones principales -->
   <ul class="nav-links" id="navLinks">
     <li><a href="#productos" class="nav-link" onclick="handleNavClick(event, 'productos')">Productos</a></li>
     <li><a href="#nosotros" class="nav-link" onclick="handleNavClick(event, 'nosotros')">Nosotros</a></li>
     <li><a href="#contacto" class="nav-link" onclick="handleNavClick(event, 'contacto')">Contacto</a></li>
   </ul>
   
+  <!-- Controles del catálogo: búsqueda y filtro de categorías -->
   <div class="nav-catalog-controls">
+    <!-- Cuadro de búsqueda expandible -->
     <div class="nav-search-box" id="navSearchBox">
       <button type="button" class="nav-search-trigger" id="navSearchTrigger" title="Buscar" aria-label="Abrir búsqueda" aria-expanded="false" aria-controls="catalogSearch">
         <span class="nav-search-icon" aria-hidden="true">🔍</span>
       </button>
       <input type="search" id="catalogSearch" class="nav-search-input" placeholder="Buscar..." autocomplete="off" aria-label="Buscar productos"/>
     </div>
+    <!-- Selector desplegable para filtrar productos por categoría -->
     <select id="catalogCategory" class="nav-category-select" title="Filtrar por categoría" aria-label="Filtrar por categoría">
       <option value="">Todas las categorías</option>
     </select>
   </div>
+  
+  <!-- Botón para cambiar entre tema claro y oscuro -->
   <button type="button" class="theme-toggle" onclick="toggleTheme()">
     <span class="theme-toggle-ico">☾</span>
     <span class="theme-toggle-label">Tema</span>
   </button>
   
-  <!-- Hamburger menu button -->
+  <!-- Botón de hamburguesa para menú móvil -->
   <button type="button" class="nav-hamburger" id="navHamburger" onclick="toggleMobileMenu()" aria-label="Abrir menú" aria-expanded="false">
     <span></span>
     <span></span>
     <span></span>
   </button>
   
+  <!-- Enlace directo a WhatsApp en la barra de navegación -->
   <a class="nav-wp" href="https://wa.me/573053402732?text=Hola,%20quiero%20más%20información" target="_blank">
     <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
     WhatsApp
   </a>
 </nav>
 
-<!-- HERO -->
+<!-- ========================================
+     SECCIÓN HERO
+     Sección principal de bienvenida con:
+     - Imagen de fondo
+     - Logo
+     - Título principal
+     - Subtítulo descriptivo
+     - Botones de llamada a la acción
+     ======================================== -->
 <section class="hero">
+  <!-- Fondo con degradado radial -->
   <div class="hero-bg"></div>
+  <!-- Grid decorativo de líneas -->
   <div class="hero-grid"></div>
+  <!-- Contenido principal del hero -->
   <div class="hero-content">
     <img src="img/logo.jpg" alt="PA Acoustic" class="hero-logo-img"/>
     <div class="hero-tag">Audio Profesional Medellin - Colombia</div>
@@ -79,12 +136,20 @@
   </div>
 </section>
 
-<!-- BANNER FOTOS -->
+<!-- ========================================
+     BANNER DE FOTOS
+     Carrusel infinito con imágenes de productos
+     que permite hacer clic para ver detalles
+     ======================================== -->
 <div class="banner-wrap">
   <div class="banner-track" id="bannerTrack"></div>
 </div>
 
-<!-- MARCAS -->
+<!-- ========================================
+     SECCIÓN DE MARCAS
+     Barra horizontal con nombres de productos
+     y categorías que se desplaza automáticamente
+     ======================================== -->
 <div class="marcas-wrap">
   <div class="marcas-track">
     <span class="marca-item">PA HL-30A</span>
@@ -95,6 +160,7 @@
     <span class="marca-item">Line Array</span>
     <span class="marca-item">Woofer 18"</span>
     <span class="marca-item">Neodymium</span>
+    <!-- Duplicado para efecto de scroll infinito -->
     <span class="marca-item">PA HL-30A</span>
     <span class="marca-item">PA HL-10A</span>
     <span class="marca-item">PA10N-900</span>
@@ -106,16 +172,32 @@
   </div>
 </div>
 
-<!-- PRODUCTOS -->
+<!-- ========================================
+     CATÁLOGO DE PRODUCTOS
+     Grid de tarjetas de productos generados dinámicamente
+     por JavaScript. Cada tarjeta muestra:
+     - Imagen del producto
+     - Badge (etiqueta de categoría)
+     - Nombre y descripción
+     - Especificaciones
+     - Botón para ver más detalles
+     ======================================== -->
 <section id="productos" class="sec">
   <div class="reveal">
     <div class="sec-label">— Nuestros Equipos</div>
     <h2 class="sec-titulo">Catálogo de Productos</h2>
   </div>
+  <!-- Contenedor grid donde JavaScript inserta las tarjetas de productos -->
   <div class="productos-grid" id="productosGrid"></div>
 </section>
 
-<!-- NOSOTROS -->
+<!-- ========================================
+     SECCIÓN NOSOTROS
+     Información sobre la empresa:
+     - Logo
+     - Título y descripción
+     - Lista de características/beneficios
+     ======================================== -->
 <section id="nosotros" class="sec-alt">
   <div class="nos-grid">
     <div class="nos-logo-box reveal">
@@ -126,6 +208,7 @@
       <h2 class="nos-titulo">Soluciones en <span>Audio Pro</span></h2>
       <p class="nos-texto">Somos fabricantes y distribuidores de equipos de audio profesional de alta potencia. Nuestros productos están diseñados para cumplir las exigencias de los profesionales del sonido en eventos, instalaciones y producción en vivo.</p>
       <p class="nos-texto">Cada equipo es desarrollado con tecnología de punta, componentes de neodimio y amplificación clase D para garantizar el máximo rendimiento con la mayor eficiencia energética.</p>
+      <!-- Lista de características de la empresa -->
       <div class="nos-items">
         <div class="nos-item">
           <div class="nos-ico">⚡</div>
@@ -148,7 +231,14 @@
   </div>
 </section>
 
-<!-- CONTACTO -->
+<!-- ========================================
+     SECCIÓN CONTACTO
+     Información de contacto y formulario:
+     - Título y descripción
+     - Datos de contacto (WhatsApp, horario, ubicación)
+     - Botón de WhatsApp
+     - Tarjeta con información adicional
+     ======================================== -->
 <section id="contacto" class="sec">
   <div class="reveal" style="margin-bottom:2.5rem">
     <div class="sec-label">— Estamos para ayudarte</div>
@@ -158,6 +248,7 @@
     <div class="reveal">
       <h3 class="con-titulo">Hablemos de <span>Tu Proyecto</span></h3>
       <p class="con-sub">¿Necesitas un equipo específico o asesoría técnica? Escríbenos por WhatsApp y te respondemos de inmediato.</p>
+      <!-- Lista de datos de contacto -->
       <div class="con-items">
         <div class="con-item">
           <div class="con-ico">📱</div>
@@ -170,14 +261,15 @@
         <div class="con-item">
           <div class="con-ico">🇨🇴</div>
           <div><div class="con-lbl">País / ciudad</div><div class="con-val">Colombia / Medellín</div></div>
-         <!----<div><div class="con-lbl">Ciudad</div><div class="con-val">Medellín</div></div>-->
         </div>
       </div>
+      <!-- Botón grande de WhatsApp -->
       <a href="https://wa.me/573053402732?text=Hola,%20quiero%20más%20información" target="_blank" class="btn-wp-grande">
         <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
         Escribir por WhatsApp Ahora
       </a>
     </div>
+    <!-- Tarjeta lateral con información adicional -->
     <div class="reveal con-card">
       <img src="img/logo.jpg" alt="PA Acoustic" style="width:120px;margin-bottom:1.5rem;display:block"/>
       <p style="font-size:0.82rem;color:var(--muted);line-height:1.8;margin-bottom:1rem">Especialistas en sistemas de audio profesional de alta potencia. Contáctanos para recibir asesoría técnica personalizada y cotización de nuestros equipos.</p>
@@ -186,13 +278,24 @@
   </div>
 </section>
 
-<!-- FOOTER -->
+<!-- ========================================
+     PIE DE PÁGINA (FOOTER)
+     Información de copyright y logo
+     ======================================== -->
 <footer>
   <div class="footer-logo"><img src="img/logo.jpg" alt="PA Acoustic"/></div>
   <p>© 2026 PA Acoustic — Audio Profesional Medellin - Colombia 🇨🇴</p>
 </footer>
 
-<!-- MODAL -->
+<!-- ========================================
+     MODAL DE DETALLES DE PRODUCTO
+     Ventana emergente que muestra información
+     detallada del producto seleccionado:
+     - Imágenes (principal y miniaturas)
+     - Especificaciones técnicas
+     - Aplicaciones
+     - Botón de contacto por WhatsApp
+     ======================================== -->
 <div class="modal-overlay" id="modalOverlay" onclick="cerrarModal(event)">
   <div class="modal" id="modal">
     <div class="modal-header">
@@ -209,10 +312,20 @@
   </div>
 </div>
 
+<!-- ========================================
+     AUDIO INTRODUCTORIO
+     Archivo de audio que se reproduce al cargar
+     la página (si el usuario está en el inicio)
+     ======================================== -->
 <audio id="introAudio" preload="auto">
   <source src="audio/intro.mp3" type="audio/mpeg"/>
 </audio>
 
+<!-- ========================================
+     SCRIPTS JAVASCRIPT
+     Carga del archivo JavaScript principal que
+     maneja toda la funcionalidad interactiva
+     ======================================== -->
 <script src="js/main.js"></script>
 </body>
 </html>
