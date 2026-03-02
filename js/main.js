@@ -241,7 +241,7 @@ const productos = [
       ['Impedancia',   '4 ohms'],
       ['Cobertura H',  '100°'],
       ['Cobertura V',  '15°'],
-      ['Woofer',       '2 × 10″ Neodymium (bob. 65.5mm)'],
+      ['Woofer',       '2 × 10" Neodymium (bob. 65.5mm)'],
       ['Driver',       '1.4mm Neodymium · Titanio · Bob. 4"'],
       ['Entrada',      'XLR'],
       ['Salida link',  'Powercom'],
@@ -258,7 +258,7 @@ const productos = [
     cat: 'Line Array Activo',
     badge: 'Nuevo',
     desc: 'Sistema line array activo bi-amplificado de 2 vías para formato pequeño y mediano. 1400W pico, 700W RMS, SPL 133dB.',
-    imgs: ['img/hl10a-1.jpg'],
+    imgs: ['img/hl10a-1.png'],
     watermark: 'img/hl10a-2.png',
     specs: [
       ['Modelo',       'PA HL-10A'],
@@ -290,7 +290,7 @@ const productos = [
     cat: 'Parlante 10" Neodimio',
     badge: 'Pro',
     desc: 'Altavoz profesional de 10 pulgadas para Line Array, cajas turbo y car audio. 1000W programados, 500W RMS, sensibilidad 99dB.',
-    imgs: ['img/pa10n-1.jpg'],
+    imgs: ['img/pa10n-1.png'],
     watermark: 'img/pa10n-2.png',
     specs: [
       ['Modelo',             'PA10N-900'],
@@ -671,7 +671,7 @@ function cambiarImg(src, el) {
  * Cierra el modal al hacer clic fuera del contenido
  * @param {Event} e - Evento del clic
  */
-function cerrModal(e) {
+function cerrarModal(e) {
   if (e.target === document.getElementById('modalOverlay')) cerrarModalBtn();
 }
 
