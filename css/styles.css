@@ -970,6 +970,9 @@ body[data-theme="light"] .modal-watermark {
   nav { padding: 0.6rem 1.2rem; }
   .hero { padding-top: 4rem; }
   .nav-links a { font-size: 0.95rem; }
+  /* Keep WP button in bounds on portrait - reduce spacing */
+  .wp-float { bottom: 1rem; right: 1rem; width: 48px; height: 48px; }
+  .wp-float svg { width: 22px; height: 22px; }
 }
 
 /* Mobile catalog controls - Botones de filtro en movil */
