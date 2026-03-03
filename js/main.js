@@ -771,14 +771,17 @@ function initActiveMenuLink() {
 // INICIALIZACIÓN AL CARGAR LA PÁGINA
 // ========================================
 
-// Ejecutar funciones al cargar el DOM
-loadTheme();                  // Cargar tema guardado
-initIntroAudio();           // Inicializar audio
-renderBanner();              // Renderizar banner
-renderProductos();           // Renderizar catálogo
-setupCatalogFilters();       // Configurar filtros
-initActiveMenuLink();       // Activar enlace de menú
-initMobileFilters();       // Inicializar filtros móviles
+// Ejecutar funciones al cargar el DOM - asegurar que el tema se cargue primero
+document.addEventListener('DOMContentLoaded', function() {
+  // Aplicar tema inmediatamente para evitar flash de contenido incorrecto
+  loadTheme();
+  initIntroAudio();
+  renderBanner();
+  renderProductos();
+  setupCatalogFilters();
+  initActiveMenuLink();
+  initMobileFilters();
+});
 
 // ========================================
 // FILTROS MÓVILES
