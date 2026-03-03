@@ -64,17 +64,34 @@
 
   // Manejar cambio de orientación en dispositivos móviles
   window.addEventListener('orientationchange', function() {
-    // Aplicar padding después de que cambie la orientación
-    setTimeout(aplicarPaddingNavbar, 100);
+    // Aplicar padding con delays múltiples para asegurar que el DOM se reajustó
+    setTimeout(aplicarPaddingNavbar, 50);
+    setTimeout(aplicarPaddingNavbar, 200);
+    setTimeout(aplicarPaddingNavbar, 500);
   });
 
   // También escuchar cambios de media query por si el navegador no dispara
   // orientationchange (algunos emuladores o tablets antiguos).
   var mPortrait = window.matchMedia('(orientation: portrait)');
   if (mPortrait.addEventListener) {
-    mPortrait.addEventListener('change', aplicarPaddingNavbar);
+    mPortrait.addEventListener('change', function() {
+      setTimeout(aplicarPaddingNavbar, 50);
+      setTimeout(aplicarPaddingNavbar, 200);
+    });
   } else if (mPortrait.addListener) {
-    mPortrait.addListener(aplicarPaddingNavbar);
+    mPortrait.addListener(function() {
+      setTimeout(aplicarPaddingNavbar, 50);
+      setTimeout(aplicarPaddingNavbar, 200);
+    });
+  }
+
+  // Usar ResizeObserver para detectar cambios en el tamaño del navbar
+  // (como cuando se reajusta por cambio de orientación)
+  if (window.ResizeObserver) {
+    var resizeObserver = new ResizeObserver(function() {
+      aplicarPaddingNavbar();
+    });
+    resizeObserver.observe(navbar);
   }
 
   console.log('PA Acoustic: Sistema de padding dinámico del navbar inicializado');
