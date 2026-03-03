@@ -91,3 +91,69 @@ Si no recibes confirmación, NO continúes.
 Si incumples estas reglas, el trabajo se considera inválido.
 
 ================================================================================
+POLÍTICA DE SOBRESCRIBIR ARCHIVOS (OBLIGATORIO)
+================================================================================
+A partir de este momento queda estrictamente PROHIBIDO usar `create_file` o cualquier acción que reescriba completamente un archivo existente, especialmente `index.html`, archivos principales de layout o componentes críticos.
+
+Reglas obligatorias:
+1. NO sobrescribir archivos completos.
+2. NO eliminar estructura existente.
+3. NO duplicar código.
+4. NO modificar secciones que no fueron solicitadas.
+5. SOLO editar la sección específica indicada.
+6. Mostrar exactamente qué líneas se van a modificar antes de aplicar cambios grandes.
+
+Si la tarea requiere cambios estructurales mayores:
+* Primero explicar qué se va a hacer.
+* Esperar confirmación.
+* Luego aplicar modificaciones controladas.
+
+Si no es posible editar sin sobrescribir, se debe informar antes de ejecutar cualquier acción.
+
+Objetivo: mantener estabilidad del proyecto y evitar pérdidas de código o reprocesos innecesarios.
+
+================================================================================
+POLÍTICA DE IDIOMA OBLIGATORIA
+================================================================================
+A partir de ahora, todas las respuestas, explicaciones, comentarios en el código y confirmaciones deben realizarse exclusivamente en ESPAÑOL.
+
+Reglas:
+1. No responder en inglés.
+2. No mezclar español con inglés, salvo términos técnicos estrictamente necesarios.
+3. Los comentarios dentro del código deben estar en español.
+4. Si se detecta que la respuesta está en inglés, corregir inmediatamente antes de continuar.
+
+El proyecto está definido para comunicación técnica en español y debe respetarse en todo momento.
+
+================================================================================
+POLÍTICA DE ESTADO OPERATIVO DE LA IA
+================================================================================
+Antes de ejecutar cambios relevantes en el proyecto, la IA debe indicar claramente su estado operativo.
+
+Debe confirmar explícitamente una de las siguientes opciones:
+* "Operativa correctamente" → Puede ejecutar cambios con normalidad.
+* "Presenta limitaciones" → Debe explicar qué limitaciones tiene antes de continuar.
+* "Presenta fallas" → No debe ejecutar cambios hasta que se confirme cómo proceder.
+
+Si la IA detecta comportamientos anómalos (duplicación de código, errores recurrentes, problemas para editar sin sobrescribir, pérdida de contexto, etc.), debe informarlo inmediatamente antes de aplicar cualquier modificación.
+
+Objetivo: evitar ejecuciones inestables, pérdida de código y reprocesos innecesarios.
+
+================================================================================
+POLÍTICA DE CONFIRMACIÓN DE FINALIZACIÓN
+================================================================================
+Al terminar cualquier tarea o modificación, la IA debe indicar explícitamente que el proceso ha finalizado.
+
+Debe incluir una confirmación clara como:
+* "Tarea finalizada correctamente."
+* "Cambios aplicados y proceso completado."
+* "Implementación terminada sin errores detectados."
+
+Además, debe:
+1. Resumir brevemente qué se modificó.
+2. Confirmar que no se alteraron otras partes del proyecto.
+3. Indicar si se recomienda validar algo manualmente.
+
+No se debe dar una tarea por concluida sin esta confirmación explícita.
+
+================================================================================

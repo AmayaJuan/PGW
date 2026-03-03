@@ -55,8 +55,6 @@ const THEME_KEY = 'paTheme';
 // BANDERAS DE ESTADO
 // ========================================
 
-// (Flag eliminado para permitir filtros activos desde el inicio)
-
 // ========================================
 // GESTIÓN DEL TEMA (CLARO/OSCURO)
 // ========================================
@@ -206,18 +204,6 @@ function initIntroAudio() {
 /**
  * Array de objetos con los datos de cada producto
  * Para agregar un producto: copiar un objeto, cambiar los datos e imágenes
- * 
- * Estructura de cada producto:
- * - id: Identificador único
- * - nombre: Nombre del producto
- * - cat: Categoría
- * - badge: Etiqueta visual (Top, Nuevo, Pro)
- * - desc: Descripción corta
- * - imgs: Array de rutas de imágenes
- * - watermark: Ruta de la imagen de marca de agua
- * - specs: Array de arrays [clave, valor] para especificaciones técnicas
- * - apps: Array de aplicaciones/usos del producto
- * - tags: Array de etiquetas para mostrar en la tarjeta
  */
 const productos = [
   {
@@ -368,7 +354,6 @@ const productos = [
 
 /**
  * Maneja el clic en un item del banner
- * Hace scroll a productos y abre el modal del producto
  * @param {string} id - ID del producto
  */
 function onBannerItemClick(id) {
@@ -378,15 +363,12 @@ function onBannerItemClick(id) {
 
 /**
  * Renderiza el banner carrusel con las imágenes de productos
- * Duplica los items para crear efecto infinito
  */
 function renderBanner() {
   const track = document.getElementById('bannerTrack');
   if (!track) return;
 
-  // Obtener todas las imágenes de productos
   const items = productos.flatMap(p => p.imgs.map(src => ({ src, alt: p.nombre, id: p.id })));
-  // Duplicar para efecto de scroll infinito
   const duplicated = [...items, ...items];
 
   track.innerHTML = duplicated.map(({ src, alt, id }) => `
@@ -402,7 +384,6 @@ function renderBanner() {
 
 /**
  * Obtiene el texto de búsqueda de un producto
- * Combina nombre, categoría, descripción, tags y aplicaciones
  * @param {Object} p - Objeto del producto
  * @returns {string} Texto normalizado para búsqueda
  */
@@ -413,21 +394,16 @@ function getProductSearchText(p) {
 
 /**
  * Filtra los productos según búsqueda y categoría seleccionados
- * Siempre aplica los filtros activos (búsqueda y/o categoría)
  * @returns {Array} Array de productos filtrados
  */
 function getFilteredProductos() {
   const searchEl = document.getElementById('catalogSearch');
   const categoryEl = document.getElementById('catalogCategory');
-  // Obtener valor de búsqueda y normalizar (quitar tildes)
   const query = (searchEl && searchEl.value) ? searchEl.value.trim().toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '') : '';
-  // Obtener categoría seleccionada (normalizar para comparación case-insensitive)
   const category = (categoryEl && categoryEl.value) ? categoryEl.value.trim().toLowerCase() : '';
 
   let list = productos;
-  // Filtrar por categoría si hay una seleccionada (comparación case-insensitive)
   if (category) list = list.filter(p => (p.cat || '').toLowerCase().includes(category));
-  // Filtrar por búsqueda si hay texto
   if (query) list = list.filter(p => getProductSearchText(p).includes(query));
   return list;
 }
@@ -448,13 +424,10 @@ function getUniqueCategories() {
 function fillCategorySelect() {
   const sel = document.getElementById('catalogCategory');
   if (!sel) return;
-  // Guardar valor actual para no perder selección
   const current = sel.value;
   const categories = getUniqueCategories();
-  // Generar opciones HTML
   sel.innerHTML = '<option value="">Todas las categorías</option>' +
     categories.map(c => `<option value="${escapeAttr(c)}">${escapeHtml(c)}</option>`).join('');
-  // Restaurar valor si sigue siendo válido
   if (categories.includes(current)) sel.value = current;
 }
 
@@ -480,14 +453,12 @@ function escapeAttr(text) {
 
 /**
  * Renderiza las tarjetas de productos en el grid
- * Agrupa por categoría y aplica animaciones
  */
 function renderProductos() {
   const filtered = getFilteredProductos();
   const grid = document.getElementById('productosGrid');
   if (!grid) return;
 
-  // Mostrar mensaje si no hay resultados
   if (filtered.length === 0) {
     grid.innerHTML = `
       <div class="catalog-empty" style="grid-column:1/-1;text-align:center;padding:3rem 2rem;background:var(--bg3);border:1px solid var(--borde);border-radius:12px;">
@@ -498,7 +469,6 @@ function renderProductos() {
     return;
   }
 
-  // Agrupar productos por categoría
   const grouped = {};
   filtered.forEach(p => {
     if (!grouped[p.cat]) grouped[p.cat] = [];
@@ -510,7 +480,6 @@ function renderProductos() {
   const categories = Object.keys(grouped);
   
   categories.forEach((cat, catIndex) => {
-    // Añadir encabezado de categoría (oculto en CSS)
     if (catIndex > 0) {
       html += `<div class="prod-category-header"><span>${cat}</span></div>`;
     }
@@ -546,7 +515,6 @@ function renderProductos() {
  * Configura los eventos de los filtros de búsqueda y categoría
  */
 function setupCatalogFilters() {
-  // Llenar selector de categorías
   fillCategorySelect();
   
   const searchEl = document.getElementById('catalogSearch');
@@ -554,23 +522,17 @@ function setupCatalogFilters() {
   const searchBox = document.getElementById('navSearchBox');
   const searchTrigger = document.getElementById('navSearchTrigger');
 
-  // Evento de input para búsqueda (se ejecuta en tiempo real)
   if (searchEl) {
     searchEl.addEventListener('input', function() {
       renderProductos();
     });
   }
   
-  // Evento de cambio de categoría: renderizar manteniendo búsqueda si existe
   if (categoryEl) categoryEl.addEventListener('change', function() {
-    // NO limpiar el filtro de búsqueda - permitir filtro combinado
-    // Renderizar productos con la nueva categoría (manteniendo búsqueda si existe)
     renderProductos();
-    // Scroll a la sección de productos
     document.getElementById('productos').scrollIntoView({ behavior: 'smooth' });
   });
 
-  // Configurar expansión del cuadro de búsqueda
   if (searchBox && searchTrigger && searchEl) {
     searchTrigger.addEventListener('click', () => {
       const isExpanded = searchBox.classList.toggle('expanded');
@@ -579,14 +541,12 @@ function setupCatalogFilters() {
         searchEl.focus();
       }
     });
-    // Contraer al perder foco
     searchEl.addEventListener('blur', () => {
       setTimeout(() => {
         searchBox.classList.remove('expanded');
         searchTrigger.setAttribute('aria-expanded', 'false');
       }, 180);
     });
-    // Cerrar con Escape
     searchEl.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         searchEl.blur();
@@ -610,10 +570,8 @@ function abrirModal(id) {
   if (!p) return;
 
   const mb = document.getElementById('modalBody');
-  // Eliminar marca de agua anterior si existe
   const oldWm = mb.querySelector('.modal-watermark');
   if (oldWm) oldWm.remove();
-  // Añadir nueva marca de agua si existe
   if(p.watermark) {
     const wm = document.createElement('img');
     wm.src = p.watermark;
@@ -621,18 +579,15 @@ function abrirModal(id) {
     mb.appendChild(wm);
   }
 
-  // Actualizar título e imagen principal
   document.getElementById('modalTitulo').textContent = p.nombre;
   document.getElementById('modalImgMain').src = p.imgs[0];
 
-  // Generar miniaturas
   document.getElementById('modalThumbs').innerHTML = p.imgs.map((img, i) => `
     <div class="modal-thumb ${i === 0 ? 'active' : ''}" onclick="cambiarImg('${img}', this)">
       <img src="${img}" alt=""/>
     </div>
   `).join('');
 
-  // Generar contenido del modal (badge, specs, apps, botón WhatsApp)
   document.getElementById('modalInfo').innerHTML = `
     <span class="modal-badge">${p.badge}</span>
     <div class="modal-cat">${p.cat}</div>
@@ -651,9 +606,8 @@ function abrirModal(id) {
     </a>
   `;
 
-  // Abrir modal
   document.getElementById('modalOverlay').classList.add('open');
-  document.body.style.overflow = 'hidden'; // Prevenir scroll
+  document.body.style.overflow = 'hidden';
 }
 
 /**
@@ -692,7 +646,6 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') cerrarModalB
 
 /**
  * IntersectionObserver para animaciones de reveal al hacer scroll
- * Añade clase 'visible' cuando los elementos entran en viewport
  */
 const obs = new IntersectionObserver(entries => {
   entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
@@ -740,13 +693,11 @@ function initActiveMenuLink() {
     const scrollPos = window.scrollY + 150;
     const heroHeight = document.querySelector('.hero')?.offsetHeight || 600;
     
-    // Si está en el inicio (hero), quitar selección activa
     if (scrollPos < heroHeight) {
       navLinks.forEach(link => link.classList.remove('active'));
       return;
     }
     
-    // Actualizar según la sección visible
     sections.forEach(section => {
       const sectionTop = section.offsetTop;
       const sectionHeight = section.offsetHeight;
@@ -771,9 +722,7 @@ function initActiveMenuLink() {
 // INICIALIZACIÓN AL CARGAR LA PÁGINA
 // ========================================
 
-// Ejecutar funciones al cargar el DOM - asegurar que el tema se cargue primero
 document.addEventListener('DOMContentLoaded', function() {
-  // Aplicar tema inmediatamente para evitar flash de contenido incorrecto
   loadTheme();
   initIntroAudio();
   renderBanner();
@@ -789,15 +738,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
 /**
  * Inicializa los controles de filtro para móvil
- * Llena el selector de categorías móvil y configura eventos
  */
 function initMobileFilters() {
-  // Llenar selector de categorías móvil
   const mobileCategorySelect = document.getElementById('mobileCategorySelect');
   const desktopCategorySelect = document.getElementById('catalogCategory');
   
   if (mobileCategorySelect && desktopCategorySelect) {
-    // Copiar opciones del selector de escritorio
     mobileCategorySelect.innerHTML = desktopCategorySelect.innerHTML;
   }
 }
@@ -809,15 +755,12 @@ function toggleMobileSearch() {
   const searchPanel = document.getElementById('mobileSearchPanel');
   const filterPanel = document.getElementById('mobileFilterPanel');
   
-  // Cerrar panel de filtros si está abierto
   if (filterPanel && filterPanel.classList.contains('open')) {
     filterPanel.classList.remove('open');
   }
   
-  // Alternar panel de búsqueda
   if (searchPanel) {
     searchPanel.classList.toggle('open');
-    // Enfocar input cuando se abre
     if (searchPanel.classList.contains('open')) {
       setTimeout(() => {
         const searchInput = document.getElementById('mobileSearchInput');
@@ -834,12 +777,10 @@ function toggleMobileFilters() {
   const filterPanel = document.getElementById('mobileFilterPanel');
   const searchPanel = document.getElementById('mobileSearchPanel');
   
-  // Cerrar panel de búsqueda si está abierto
   if (searchPanel && searchPanel.classList.contains('open')) {
     searchPanel.classList.remove('open');
   }
   
-  // Alternar panel de filtros
   if (filterPanel) {
     filterPanel.classList.toggle('open');
   }
@@ -853,16 +794,11 @@ function applyMobileSearch() {
   const desktopInput = document.getElementById('catalogSearch');
   
   if (mobileInput && desktopInput) {
-    // Sincronizar con el input del escritorio
     desktopInput.value = mobileInput.value;
-    // Renderizar productos con el nuevo filtro
     renderProductos();
   }
   
-  // Cerrar panel
   toggleMobileSearch();
-  
-  // Scroll a productos
   document.getElementById('productos').scrollIntoView({ behavior: 'smooth' });
 }
 
@@ -876,10 +812,7 @@ function clearMobileSearch() {
   if (mobileInput) mobileInput.value = '';
   if (desktopInput) desktopInput.value = '';
   
-  // Renderizar productos sin filtro de búsqueda
   renderProductos();
-  
-  // Cerrar panel
   toggleMobileSearch();
 }
 
@@ -892,12 +825,9 @@ function applyMobileFilters() {
   const filterBtn = document.getElementById('mobileFilterBtn');
   
   if (mobileSelect && desktopSelect) {
-    // Sincronizar con el selector del escritorio
     desktopSelect.value = mobileSelect.value;
-    // Renderizar productos con el nuevo filtro
     renderProductos();
     
-    // Actualizar botón activo
     if (filterBtn) {
       if (mobileSelect.value) {
         filterBtn.classList.add('active');
@@ -907,10 +837,7 @@ function applyMobileFilters() {
     }
   }
   
-  // Cerrar panel
   toggleMobileFilters();
-  
-  // Scroll a productos
   document.getElementById('productos').scrollIntoView({ behavior: 'smooth' });
 }
 
@@ -925,14 +852,10 @@ function clearMobileFilters() {
   if (mobileSelect) mobileSelect.value = '';
   if (desktopSelect) desktopSelect.value = '';
   
-  // Quitar clase activa del botón
   if (filterBtn) {
     filterBtn.classList.remove('active');
   }
   
-  // Renderizar productos sin filtro
   renderProductos();
-  
-  // Cerrar panel
   toggleMobileFilters();
 }
