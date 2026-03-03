@@ -68,6 +68,15 @@
     setTimeout(aplicarPaddingNavbar, 100);
   });
 
+  // También escuchar cambios de media query por si el navegador no dispara
+  // orientationchange (algunos emuladores o tablets antiguos).
+  var mPortrait = window.matchMedia('(orientation: portrait)');
+  if (mPortrait.addEventListener) {
+    mPortrait.addEventListener('change', aplicarPaddingNavbar);
+  } else if (mPortrait.addListener) {
+    mPortrait.addListener(aplicarPaddingNavbar);
+  }
+
   console.log('PA Acoustic: Sistema de padding dinámico del navbar inicializado');
 
 })();

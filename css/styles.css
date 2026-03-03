@@ -948,6 +948,18 @@ body[data-theme="light"] .modal-watermark {
 /* Extra extra small devices */
 @media (max-width: 360px) {
   .modal-body { padding: 0.75rem; }
+}
+
+/* --------------------------------------------------
+   Orientation-specific tweaks
+   - fixes for tablet held in portrait mode
+   -------------------------------------------------- */
+@media (max-width: 768px) and (orientation: portrait) {
+  /* slightly tighter padding to avoid nav overlap */
+  nav { padding: 0.6rem 1.2rem; }
+  .hero { padding-top: 4rem; }
+  .nav-links a { font-size: 0.95rem; }
+}
   .modal-badge { font-size: 0.55rem; padding: 0.2rem 0.5rem; }
   .modal-cat { font-size: 0.6rem; }
   .modal-nombre { font-size: 1.2rem; }
