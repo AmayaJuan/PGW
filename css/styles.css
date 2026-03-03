@@ -821,6 +821,7 @@ body[data-theme="light"] .modal-watermark {
 /* Tablet: 769px - 1024px */
 @media (max-width: 1024px) {
   nav { padding: 0.8rem 2rem; }
+  .nav-logo img { height: 44px; }
   .nav-links { gap: 1.5rem; }
   .nav-links a { font-size: 0.8rem; }
   .hero { padding: 6rem 2rem 3rem; }
