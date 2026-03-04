@@ -10,13 +10,13 @@ Sitio web oficial de **PA Acoustic**, empresa especializada en equipos de audio 
 
 | Fecha | Cambios | Archivos Afectados |
 |-------|---------|-------------------|
-| 17/01/2025 | Corrección bug variable WP undefined en modal + creación inicial README | js/main.js, README.md |
-| 17/01/2025 | Agregada política de actualización del README en PROJECT_RULES.txt | PROJECT_RULES.txt |
-| 17/01/2025 | Corrección overflow navbar en tablet - elementos no se desbordan | css/styles.css |
-| 17/01/2025 | Ocultar botón WhatsApp navbar en móvil portrait - permite ver menú hamburguesa | css/styles.css |
-| 17/01/2025 | Agregar botón WhatsApp dentro del menú hamburguesa en móviles | index.html, css/styles.css |
-| 17/01/2025 | Corregir menú hamburguesa no mostraba contenido - agregar estilos display:block | css/styles.css |
-| 17/01/2025 | Separar selectores de categoría desktop/móvil - nunca se ven ambos al mismo tiempo | css/styles.css |
+| 03/03/2026 | Separar selectores de categoría desktop/móvil - nunca se ven ambos al mismo tiempo | css/styles.css |
+| 03/03/2026 | Corregir menú hamburguesa no mostraba contenido - agregar estilos display:block | css/styles.css |
+| 03/03/2026 | Agregar botón WhatsApp dentro del menú hamburguesa en móviles | index.html, css/styles.css |
+| 03/03/2026 | Ocultar botón WhatsApp navbar en móvil portrait - permite ver menú hamburguesa | css/styles.css |
+| 03/03/2026 | Corrección overflow navbar en tablet - elementos no se desbordan | css/styles.css |
+| 03/03/2026 | Agregada política de actualización del README en PROJECT_RULES.txt | PROJECT_RULES.txt |
+| 03/03/2026 | Corrección bug variable WP undefined en modal + creación inicial README | js/main.js, README.md |
 
 ---
 
