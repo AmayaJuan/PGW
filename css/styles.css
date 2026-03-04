@@ -1221,7 +1221,7 @@ body[data-theme="light"] .modal-watermark {
 /* Show mobile controls on small screens */
 @media (max-width: 768px) {
   body {
-    overflow-x: hidden;
+    overflow-x: visible;
   }
   .mobile-catalog-controls {
     display: flex;
