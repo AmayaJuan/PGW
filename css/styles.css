@@ -183,7 +183,7 @@ body[data-theme="light"] .theme-toggle:hover {
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; overflow-x: hidden; }
-body { background: var(--bg); color: var(--texto); font-family: 'Nunito', sans-serif; overflow-x: hidden; position: relative; }
+body { background: var(--bg); color: var(--texto); font-family: 'Nunito', sans-serif; overflow-x: clip; position: relative; }
 
 /* ══════════════════════════════════════
    PAGE WATERMARK - Background visible across entire page

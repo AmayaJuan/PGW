@@ -11,6 +11,7 @@ Sitio web oficial de **PA Acoustic**, empresa especializada en equipos de audio 
 | Fecha | Cambios | Archivos Afectados |
 |-------|---------|-------------------|
 | 03/03/2026 | Separar selectores de categoría desktop/móvil - nunca se ven ambos al mismo tiempo | css/styles.css |
+| 03/03/2026 | Corregir navbar sticky que no seguía al hacer scroll - cambiar overflow body de hidden a clip | css/styles.css |
 | 03/03/2026 | Corregir menú hamburguesa no mostraba contenido - agregar estilos display:block | css/styles.css |
 | 03/03/2026 | Agregar botón WhatsApp dentro del menú hamburguesa en móviles | index.html, css/styles.css |
 | 03/03/2026 | Ocultar botón WhatsApp navbar en móvil portrait - permite ver menú hamburguesa | css/styles.css |
