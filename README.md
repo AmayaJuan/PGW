@@ -13,6 +13,7 @@ Sitio web oficial de **PA Acoustic**, empresa especializada en equipos de audio 
 | 17/01/2025 | Corrección bug variable WP undefined en modal + creación inicial README | js/main.js, README.md |
 | 17/01/2025 | Agregada política de actualización del README en PROJECT_RULES.txt | PROJECT_RULES.txt |
 | 17/01/2025 | Corrección overflow navbar en tablet - elementos no se desbordan | css/styles.css |
+| 17/01/2025 | Ocultar botón WhatsApp navbar en móvil portrait - permite ver menú hamburguesa | css/styles.css |
 
 ---
 
