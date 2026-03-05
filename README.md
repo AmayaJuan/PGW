@@ -10,6 +10,9 @@ Sitio web oficial de **PA Acoustic**, empresa especializada en equipos de audio 
 
 | Fecha | Cambios | Archivos Afectados |
 |-------|---------|-------------------|
+| 06/03/2026 | Mover IntersectionObserver dentro de DOMContentLoaded - evitar errores al cargar antes del DOM | js/main.js |
+| 06/03/2026 | Agregar DOCTYPE html al inicio del archivo | index.html |
+| 05/03/2026 | Agregar estilo :active para enlaces del menú - corrige color oscuro al presionar en móvil | css/styles.css |
 | 04/03/2026 | Corregir filtrado catálogo - mensaje "sin resultados" solo cuando hay filtros activos Y no hay productos | js/main.js |
 | 04/03/2026 | Corregir navbar sticky en móvil - agregar z-index 250 para superposición correcta | css/styles.css |
 | 05/03/2026 | Corregir navbar sticky en móvil/tablet - agregar position:sticky explícito en media query móvil | css/styles.css |

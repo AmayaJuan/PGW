@@ -455,7 +455,11 @@ function escapeHtml(text) {
  * @returns {string} Texto escapado para atributos
  */
 function escapeAttr(text) {
-  return String(text || '').replace(/&/g, '&amp;').replace(/"/g, '"').replace(/</g, '<').replace(/>/g, '>');
+  return String(text || '')
+  .replace(/&/g, '&amp;')
+  .replace(/"/g, '&quot;')
+  .replace(/</g, '&lt;')
+  .replace(/>/g, '&gt;');
 }
 
 /**
@@ -581,6 +585,19 @@ function setupCatalogFilters() {
   }
 }
 
+/**
+ * Maneja el cambio de categoría en el select del menú móvil
+ * Sincroniza el valor con el select de escritorio y actualiza el catálogo
+ * @param {HTMLSelectElement} sel - Elemento select del menú móvil
+ */
+function handleMobileCategoryChange(sel) {
+  // Sincronizar el select del menú móvil con el select del escritorio
+  const desktopSelect = document.getElementById('catalogCategory');
+  if (desktopSelect) desktopSelect.value = sel.value; // Copiar el valor seleccionado al select de escritorio
+  renderProductos(); // Re-renderizar el catálogo con el nuevo filtro
+  document.getElementById('productos').scrollIntoView({ behavior: 'smooth' }); // Hacer scroll suave a la sección de productos
+}
+
 // ========================================
 // MODAL DE DETALLES DE PRODUCTO
 // ========================================
@@ -624,8 +641,8 @@ function abrirModal(id) {
       <h4>Aplicaciones</h4>
       <ul>${p.apps.map(a => `<li>${a}</li>`).join('')}</ul>
     </div>
-    <a href="${WP}?text=${encodeURIComponent('Hola, me interesa el ' + p.nombre + '. ¿Pueden darme información y precio?')}"
-       target="_blank" class="modal-wp">
+<a href="${WP}?text=${encodeURIComponent('Hola, me interesa el ' + p.nombre + '. ¿Pueden darme información y precio?')}"
+       target="_blank" rel="noopener noreferrer" class="modal-wp">
       ${WP_SVG} Consultar por WhatsApp
     </a>
   `;
@@ -663,18 +680,6 @@ function cerrarModalBtn() {
 
 // Cerrar modal con tecla Escape
 document.addEventListener('keydown', e => { if (e.key === 'Escape') cerrarModalBtn(); });
-
-// ========================================
-// ANIMACIONES DE SCROLL (REVEAL)
-// ========================================
-
-/**
- * IntersectionObserver para animaciones de reveal al hacer scroll
- */
-const obs = new IntersectionObserver(entries => {
-  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-}, { threshold: 0.1 });
-document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
 // ========================================
 // MENÚ MÓVIL
@@ -754,6 +759,13 @@ document.addEventListener('DOMContentLoaded', function() {
   setupCatalogFilters();
   initActiveMenuLink();
   initMobileFilters();
+  // Crear el observador de intersección para las animaciones de reveal
+  const obs = new IntersectionObserver(entries => {
+    // Por cada entrada del observador, agregar clase 'visible' si el elemento es visible
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  // Observar todos los elementos con clase 'reveal'
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 });
 
 // ========================================
