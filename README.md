@@ -10,6 +10,7 @@ Sitio web oficial de **PA Acoustic**, empresa especializada en equipos de audio 
 
 | Fecha | Cambios | Archivos Afectados |
 |-------|---------|-------------------|
+| 09/04/2026 | Agregar focus trap al modal - mantener foco dentro del modal al presionar Tab y restaurar foco al cerrar | js/main.js |
 | 06/04/2026 | Agregar texto descriptivo al atributo alt de imagen principal del modal al abrirlo - mejorar accesibilidad | js/main.js |
 | 04/04/2026 | Triplicar items del carrusel en renderBanner() - evitar salto visible del loop en pantallas anchas | js/main.js |
 | 14/03/2026 | Refactorizar SVG de WhatsApp - definir símbolo reutilizable una sola vez y usar <use> en los 5 enlaces | index.html |

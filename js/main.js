@@ -656,6 +656,43 @@ function abrirModal(id) {
 
   document.getElementById('modalOverlay').classList.add('open');
   document.body.style.overflow = 'hidden';
+
+  /* Guardar referencia al elemento que tenía el foco antes de abrir el modal */
+  abrirModal._focusAnterior = document.activeElement;
+
+  /* Obtener todos los elementos enfocables dentro del modal */
+  const modal = document.getElementById('modal');
+  const enfocables = modal.querySelectorAll(
+    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+  );
+  /* Primer y último elemento enfocable del modal */
+  const primero = enfocables[0];
+  const ultimo = enfocables[enfocables.length - 1];
+
+  /* Función que atrapa el foco dentro del modal al presionar Tab */
+  function trapFocus(e) {
+    if (e.key !== 'Tab') return; /* Solo actuar cuando se presiona Tab */
+    if (e.shiftKey) {
+      /* Si se presiona Shift+Tab y el foco está en el primero, ir al último */
+      if (document.activeElement === primero) {
+        e.preventDefault();
+        ultimo.focus();
+      }
+    } else {
+      /* Si se presiona Tab y el foco está en el último, volver al primero */
+      if (document.activeElement === ultimo) {
+        e.preventDefault();
+        primero.focus();
+      }
+    }
+  }
+
+  /* Registrar el listener del focus trap y guardarlo para poder eliminarlo después */
+  document.addEventListener('keydown', trapFocus);
+  abrirModal._trapFocus = trapFocus; /* Guardar referencia para eliminar en cerrarModalBtn */
+
+  /* Enfocar el primer elemento del modal al abrirlo */
+  if (primero) primero.focus();
 }
 
 /**
@@ -681,6 +718,17 @@ function cerrarModal(e) {
  * Cierra el modal y restaura el scroll
  */
 function cerrarModalBtn() {
+  /* Eliminar el listener del focus trap al cerrar el modal */
+  if (abrirModal._trapFocus) {
+    document.removeEventListener('keydown', abrirModal._trapFocus);
+    abrirModal._trapFocus = null; /* Limpiar la referencia */
+  }
+  /* Devolver el foco al elemento que lo tenía antes de abrir el modal */
+  if (abrirModal._focusAnterior) {
+    abrirModal._focusAnterior.focus();
+    abrirModal._focusAnterior = null; /* Limpiar la referencia */
+  }
+
   document.getElementById('modalOverlay').classList.remove('open');
   document.body.style.overflow = '';
 }

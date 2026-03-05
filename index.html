@@ -352,6 +352,44 @@
 </audio>
 
 <!-- ========================================
+     CONTROLES DE CATÁLOGO MÓVIL
+     Botones flotantes para buscar y filtrar en móvil
+     ======================================== -->
+<div class="mobile-catalog-controls">
+  <button type="button" class="mobile-filter-btn" id="mobileSearchBtn" onclick="toggleMobileSearch()" aria-label="Buscar">
+    🔍 Buscar
+  </button>
+  <button type="button" class="mobile-filter-btn" id="mobileFilterBtn" onclick="toggleMobileFilters()" aria-label="Filtrar por categoría">
+    ☰ Categoría
+  </button>
+</div>
+
+<!-- Panel de búsqueda móvil -->
+<div class="mobile-filter-panel" id="mobileSearchPanel">
+  <div class="mobile-filter-header">
+    <span class="mobile-filter-title">Buscar Productos</span>
+    <button type="button" class="mobile-filter-close" onclick="toggleMobileSearch()" aria-label="Cerrar">✕</button>
+  </div>
+  <input type="search" id="mobileSearchInput" class="mobile-search-input" placeholder="Escribe para buscar..." autocomplete="off" aria-label="Buscar productos"/>
+  <button type="button" class="mobile-filter-apply" onclick="applyMobileSearch()">Buscar</button>
+  <button type="button" class="mobile-filter-clear" onclick="clearMobileSearch()">Limpiar</button>
+</div>
+
+<!-- Panel de filtros móvil -->
+<div class="mobile-filter-panel" id="mobileFilterPanel">
+  <div class="mobile-filter-header">
+    <span class="mobile-filter-title">Filtrar por Categoría</span>
+    <button type="button" class="mobile-filter-close" onclick="toggleMobileFilters()" aria-label="Cerrar">✕</button>
+  </div>
+  <label class="mobile-category-label">Categoría</label>
+  <select id="mobileCategorySelect" class="mobile-category-select">
+    <option value="">Todas las categorías</option>
+  </select>
+  <button type="button" class="mobile-filter-apply" onclick="applyMobileFilters()">Aplicar Filtro</button>
+  <button type="button" class="mobile-filter-clear" onclick="clearMobileFilters()">Limpiar Filtro</button>
+</div>
+
+<!-- ========================================
      SCRIPTS JAVASCRIPT
      Carga del archivo JavaScript principal que
      maneja toda la funcionalidad interactiva
