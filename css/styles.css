@@ -355,8 +355,16 @@ nav {
   position: sticky; top: 0; left: 0; right: 0; z-index: 200;
   display: flex; align-items: center; justify-content: space-between;
   padding: 0.8rem 3rem;
-  background: rgba(5,7,9,0.96); backdrop-filter: blur(16px);
+  background-color: rgba(5,7,9,0.96) !important;
+  backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--borde);
+}
+
+/* Evitar que los enlaces del navbar cambien de color al hacer clic o:focus */
+.nav-links a:active,
+.nav-links a:focus {
+  background: transparent !important;
+  outline: none;
 }
 .nav-logo img { height: 48px; object-fit: contain; }
 .nav-links { display: flex; gap: 2rem; list-style: none; }
