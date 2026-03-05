@@ -367,7 +367,8 @@ function renderBanner() {
   if (!track) return;
 
   const items = productos.flatMap(p => p.imgs.map(src => ({ src, alt: p.nombre, id: p.id })));
-  const duplicated = [...items, ...items];
+  /* Triplicar los items para evitar el salto visible del loop en pantallas anchas */
+  const duplicated = [...items, ...items, ...items];
 
   track.innerHTML = duplicated.map(({ src, alt, id }) => `
     <div class="banner-item" onclick="onBannerItemClick('${id}')" role="button" tabindex="0">
