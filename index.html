@@ -78,7 +78,7 @@
      Incluye: logo, menú de enlaces, búsqueda, 
      selector de categorías y botón de tema claro/oscuro
      ======================================== -->
-<nav>
+<nav aria-label="Navegación principal">
   <!-- Logo del sitio que funciona como enlace al inicio -->
   <div class="nav-logo">
     <a href="#" onclick="handleLogoClick(event); return false;">
@@ -190,10 +190,11 @@
      - Especificaciones
      - Botón para ver más detalles
      ======================================== -->
-<section id="productos" class="sec">
+<!-- aria-labelledby vincula la sección con su título para lectores de pantalla -->
+<section id="productos" class="sec" aria-labelledby="titulo-productos">
   <div class="reveal">
     <div class="sec-label">— Nuestros Equipos</div>
-    <h2 class="sec-titulo">Catálogo de Productos</h2>
+<h2 class="sec-titulo" id="titulo-productos">Catálogo de Productos</h2>
   </div>
   <!-- Contenedor grid donde JavaScript inserta las tarjetas de productos -->
   <div class="productos-grid" id="productosGrid"></div>
@@ -206,14 +207,15 @@
      - Título y descripción
      - Lista de características/beneficios
      ======================================== -->
-<section id="nosotros" class="sec-alt">
+<!-- aria-labelledby vincula la sección con su título para lectores de pantalla -->
+<section id="nosotros" class="sec-alt" aria-labelledby="titulo-nosotros">
   <div class="nos-grid">
     <div class="nos-logo-box reveal">
       <img src="img/logo.jpg" alt="PA Acoustic"/>
     </div>
     <div class="reveal">
       <div class="sec-label">— Quiénes Somos</div>
-      <h2 class="nos-titulo">Soluciones en <span>Audio Pro</span></h2>
+<h2 class="nos-titulo" id="titulo-nosotros">Soluciones en <span>Audio Pro</span></h2>
       <p class="nos-texto">Somos fabricantes y distribuidores de equipos de audio profesional de alta potencia. Nuestros productos están diseñados para cumplir las exigencias de los profesionales del sonido en eventos, instalaciones y producción en vivo.</p>
       <p class="nos-texto">Cada equipo es desarrollado con tecnología de punta, componentes de neodimio y amplificación clase D para garantizar el máximo rendimiento con la mayor eficiencia energética.</p>
       <!-- Lista de características de la empresa -->
@@ -247,10 +249,11 @@
      - Botón de WhatsApp
      - Tarjeta con información adicional
      ======================================== -->
-<section id="contacto" class="sec">
+<!-- aria-labelledby vincula la sección con su título para lectores de pantalla -->
+<section id="contacto" class="sec" aria-labelledby="titulo-contacto">
   <div class="reveal" style="margin-bottom:2.5rem">
     <div class="sec-label">— Estamos para ayudarte</div>
-    <h2 class="sec-titulo">Contáctanos</h2>
+<h2 class="sec-titulo" id="titulo-contacto">Contáctanos</h2>
   </div>
   <div class="con-grid">
     <div class="reveal">

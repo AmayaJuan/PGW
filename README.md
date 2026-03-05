@@ -10,6 +10,9 @@ Sitio web oficial de **PA Acoustic**, empresa especializada en equipos de audio 
 
 | Fecha | Cambios | Archivos Afectados |
 |-------|---------|-------------------|
+| 08/03/2026 | Agregar atributos aria-label y aria-labelledby en nav y sections - mejorar accesibilidad para lectores de pantalla | index.html |
+| 11/03/2026 | Agregar variables de sombra para tema oscuro en :root - evitan que sombras fallen en modo oscuro | css/styles.css |
+| 06/03/2026 | Agregar escapeHtml() en renderProductos() - prevenir XSS en badge, cat, nombre y desc del catálogo | js/main.js |
 | 06/03/2026 | Mover IntersectionObserver dentro de DOMContentLoaded - evitar errores al cargar antes del DOM | js/main.js |
 | 06/03/2026 | Agregar DOCTYPE html al inicio del archivo | index.html |
 | 05/03/2026 | Agregar estilo :active para enlaces del menú - corrige color oscuro al presionar en móvil | css/styles.css |
