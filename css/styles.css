@@ -910,7 +910,7 @@ body[data-theme="light"] .modal-watermark {
   nav { 
     padding: 0.8rem 1.5rem; 
     position: sticky;
-    top: 0;
+    top: 0 !important;
     z-index: 250;
   }
   
