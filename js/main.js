@@ -685,7 +685,7 @@ function getUniqueCategories() {
  */
 function fillCategorySelect() {
   const sel = document.getElementById('catalogCategory');
-  const mobileSel = document.getElementById('mobileCategoryInMenu');
+  const mobileMenuCategory = document.getElementById('mobileMenuCategory');
   const current = sel ? sel.value : '';
   const categories = getUniqueCategories();
   
@@ -697,8 +697,9 @@ function fillCategorySelect() {
     if (categories.includes(current)) sel.value = current;
   }
   
-  if (mobileSel) {
-    mobileSel.innerHTML = optionsHTML;
+  // Llenar el selector de categorías en el menú móvil si existe
+  if (mobileMenuCategory) {
+    mobileMenuCategory.innerHTML = optionsHTML;
   }
 }
 
@@ -819,7 +820,7 @@ function setupCatalogFilters() {
   
   const searchEl = document.getElementById('catalogSearch');
   const categoryEl = document.getElementById('catalogCategory');
-  const mobileCategoryEl = document.getElementById('mobileCategoryInMenu');
+  const mobileMenuCategory = document.getElementById('mobileMenuCategory');
   const searchBox = document.getElementById('navSearchBox');
   const searchTrigger = document.getElementById('navSearchTrigger');
 
@@ -835,8 +836,8 @@ function setupCatalogFilters() {
   });
 
   // Evento para el selector de categorías en menú móvil
-  if (mobileCategoryEl) mobileCategoryEl.addEventListener('change', function() {
-    if (categoryEl) categoryEl.value = mobileCategoryEl.value;
+  if (mobileMenuCategory) mobileMenuCategory.addEventListener('change', function() {
+    if (categoryEl) categoryEl.value = mobileMenuCategory.value;
     renderProductos();
     document.getElementById('productos').scrollIntoView({ behavior: 'smooth' });
   });
@@ -1225,4 +1226,86 @@ function clearMobileFilters() {
   
   renderProductos();
   toggleMobileFilters();
+}
+
+// ========================================
+// FUNCIONES UNIFICADAS PARA PANEL MÓVIL
+// ========================================
+
+/**
+ * Aplica tanto búsqueda como filtro de categoría desde el panel móvil unificado
+ * Función llamada por el botón "Aplicar" en index.html
+ */
+function applyAllFilters() {
+  // Obtener elementos del panel móvil y escritorio
+  const mobileSearchInput = document.getElementById('mobileSearchInput');
+  const desktopSearchInput = document.getElementById('catalogSearch');
+  const mobileCategorySelect = document.getElementById('mobileCategorySelect');
+  const desktopCategorySelect = document.getElementById('catalogCategory');
+  const filterBtn = document.getElementById('mobileFilterBtn');
+  
+  // Sincronizar búsqueda desde móvil a escritorio
+  if (mobileSearchInput && desktopSearchInput) {
+    desktopSearchInput.value = mobileSearchInput.value;
+  }
+  
+  // Sincronizar categoría desde móvil a escritorio
+  if (mobileCategorySelect && desktopCategorySelect) {
+    desktopCategorySelect.value = mobileCategorySelect.value;
+  }
+  
+  // Actualizar indicador de botón activo
+  if (filterBtn) {
+    const hayFiltros = (mobileSearchInput && mobileSearchInput.value !== '') || 
+                       (mobileCategorySelect && mobileCategorySelect.value !== '');
+    if (hayFiltros) {
+      filterBtn.classList.add('active');
+    } else {
+      filterBtn.classList.remove('active');
+    }
+  }
+  
+  // Re-renderizar catálogo con los filtros aplicados
+  renderProductos();
+  
+  // Cerrar el panel de filtros
+  toggleMobileFilters();
+  
+  // Scroll suave a la sección de productos
+  document.getElementById('productos').scrollIntoView({ behavior: 'smooth' });
+}
+
+/**
+ * Limpia tanto búsqueda como filtro de categoría desde el panel móvil unificado
+ * Función llamada por el botón "Limpiar Todo" en index.html
+ */
+function clearAllFilters() {
+  // Obtener elementos del panel móvil y escritorio
+  const mobileSearchInput = document.getElementById('mobileSearchInput');
+  const desktopSearchInput = document.getElementById('catalogSearch');
+  const mobileCategorySelect = document.getElementById('mobileCategorySelect');
+  const desktopCategorySelect = document.getElementById('catalogCategory');
+  const filterBtn = document.getElementById('mobileFilterBtn');
+  
+  // Limpiar búsqueda
+  if (mobileSearchInput) mobileSearchInput.value = '';
+  if (desktopSearchInput) desktopSearchInput.value = '';
+  
+  // Limpiar categoría
+  if (mobileCategorySelect) mobileCategorySelect.value = '';
+  if (desktopCategorySelect) desktopCategorySelect.value = '';
+  
+  // Quitar indicador de botón activo
+  if (filterBtn) {
+    filterBtn.classList.remove('active');
+  }
+  
+  // Re-renderizar catálogo con todos los productos
+  renderProductos();
+  
+  // Cerrar el panel de filtros
+  toggleMobileFilters();
+  
+  // Scroll suave a la sección de productos
+  document.getElementById('productos').scrollIntoView({ behavior: 'smooth' });
 }

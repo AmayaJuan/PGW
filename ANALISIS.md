@@ -199,3 +199,65 @@ El proyecto cumple con todas las políticas estrictas establecidas. Las mejoras 
 
 *Documento actualizado: 06/03/2026*
 *Versión: 2.1 (Con sistema de zoom)*
+
+---
+
+## 11. REVISIÓN DE POLÍTICAS Y SCRIPTS (07/03/2026)
+
+### ✅ POLÍTICAS CUMPLIDAS
+
+Las siguientes políticas del archivo `PROJECT_RULES.txt` se están respetando correctamente:
+
+1. **Estado inicial del catálogo**: Sin filtros activos, mostrando todos los productos ✅
+2. **Lógica de filtrado**: Solo se ejecuta cuando el usuario selecciona o escribe ✅
+3. **Diseño**: No se han realizado modificaciones no autorizadas ✅
+4. **Comentarios**: Cada línea de código JavaScript está comentada correctamente ✅
+5. **Regla final**: "Si algo ya funcionaba, NO lo rompas" ✅
+
+---
+
+### ⚠️ PROBLEMAS ENCONTRADOS EN LOS SCRIPTS
+
+| # | Problema | Archivo | Severidad | Estado |
+|---|----------|---------|-----------|--------|
+| 1 | Funciones faltantes: `applyAllFilters()` y `clearAllFilters()` | index.html + js/main.js | **ALTA** | Pendiente |
+| 2 | Variable no utilizada: `mobileCategoryInMenu` | js/main.js | MEDIA | Pendiente |
+| 3 | Función sin usar: `handleMobileCategoryChange()` | js/main.js | BAJA | Pendiente |
+
+---
+
+### 🔧 DETALLE DE PROBLEMAS
+
+#### PROBLEMA 1: Funciones faltantes (CRÍTICO)
+- **Ubicación**: `index.html` llama funciones que no existen en `js/main.js`
+- **Funciones faltantes**: 
+  - `applyAllFilters()` - Llamada desde botón "Aplicar" en panel móvil
+  - `clearAllFilters()` - Llamada desde botón "Limpiar Todo" en panel móvil
+- **Impacto**: El panel de filtros móviles no funciona
+- **Solución sugerida**: Crear las funciones faltantes
+
+#### PROBLEMA 2: Variable no utilizada
+- **Ubicación**: `js/main.js` - función `fillCategorySelect()`
+- **Problema**: Se busca `mobileCategoryInMenu` que no existe en HTML
+- **Solución sugerida**: Conectar con el selector correcto o eliminar referencia
+
+#### PROBLEMA 3: Función sin usar
+- **Ubicación**: `js/main.js` - función `handleMobileCategoryChange()`
+- **Problema**: La función está definida pero nunca es llamada desde el HTML
+- **Solución sugerida**: Integrarla o eliminarla
+
+---
+
+### 📋 RECOMENDACIONES
+
+**Orden de corrección sugerido:**
+1. Crear funciones faltantes `applyAllFilters()` y `clearAllFilters()` en `main.js`
+2. Corregir referencias a `mobileCategoryInMenu`
+3. Decidir sobre `handleMobileCategoryChange()`
+
+**Advertencia**: Cualquier modificación debe hacerse con cuidado para NO romper la funcionalidad existente.
+
+---
+
+*Sección agregada: 07/03/2026*
+*Versión: 2.2 (Con revisión de políticas)*

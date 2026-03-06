@@ -10,11 +10,12 @@ Sitio web oficial de **PA Acoustic**, empresa especializada en equipos de audio 
 
 | Fecha | Cambios | Archivos Afectados |
 |-------|---------|-------------------|
+| 07/03/2026 | Revisión de políticas y scripts - Crear funciones applyAllFilters() y clearAllFilters() | js/main.js, ANALISIS.md, CHECKLIST_REQUISITOS.md |
 | 07/03/2026 | Indicador de categoría activa en catálogo | index.html, css/styles.css, js/main.js, ANALISIS.md, CHECKLIST_REQUISITOS.md |
-| 07/03/2026 | Agregar nuevo producto: PA Sheffield 10 | js/main.js, README.md |
+| 07/03/2026 | Agregar nuevo producto: PA Sheffield 10 | js/main.js |
 | 06/03/2026 | Sistema de zoom en modal de productos (minZoom=1, maxZoom=3, wheel + pinch-to-zoom) | js/main.js |
-| 06/03/2026 | Auditoría técnica completa del proyecto - Análisis de código, políticas y cumplimiento. Puntaje: 92.5/100 | ANALISIS.md, README.md |
-| 06/03/2026 | Corregir sistemas de búsqueda duplicados en navbar desktop | css/styles.css, ANALISIS.md |
+| 06/03/2026 | Auditoría técnica completa del proyecto - Análisis de código, políticas y cumplimiento. Puntaje: 92.5/100 | ANALISIS.md |
+| 06/03/2026 | Corregir sistemas de búsqueda duplicados en navbar desktop | css/styles.css |
 | 06/03/2026 | Actualización checklist de requisitos | CHECKLIST_REQUISITOS.md |
 | 05/03/2026 | Agregar 2 nuevos productos: PA8N-600 y PA12N-1000 | js/main.js |
 | 05/03/2026 | Análisis completo del código | index.html, css/styles.css, js/main.js |

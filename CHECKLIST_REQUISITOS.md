@@ -71,6 +71,9 @@
 | Sistema de zoom en modal de productos | ✅ Completado | minZoom=1, maxZoom=3 |
 | Auditoría técnica completa | ✅ Completado | 06/03/2026 |
 | Corrección sistemas búsqueda duplicados | ✅ Completado | 06/03/2026 |
+| Revisión de políticas y scripts | ✅ Completado | 07/03/2026 |
+| Crear funciones applyAllFilters() y clearAllFilters() | ✅ Completado | 07/03/2026 |
+| Corregir referencias a mobileMenuCategory | ✅ Completado | 07/03/2026 |
 
 ---
 
@@ -121,9 +124,9 @@
 
 | Categoría | Completados | Pendientes | Total |
 |-----------|-------------|------------|-------|
-| Secciones | 6 | 2 | 8 |
-| Funcionalidades | 7 | 1 | 8 |
-| Ajustes solicitados | 8 | 0 | 8 |
+| Secciones | 6           | 2           | 8    |
+| Funcionalidades | 7     | 1           | 8    |
+| Ajustes solicitados | 8 | 0           | 8    |
 
 **Progreso general: ~90%**
 
