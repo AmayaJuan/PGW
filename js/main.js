@@ -108,13 +108,18 @@ function handleLogoClick(e) {
 
 /**
  * Maneja el clic en enlaces de navegación
- * Cierra el menú móvil y actualiza el enlace activo
+ * Cierra el menú móvil solo si está abierto y actualiza el enlace activo
  * @param {Event} e - Evento del clic
  * @param {string} sectionId - ID de la sección destino
  */
 function handleNavClick(e, sectionId) {
-  // Cerrar menú móvil si está abierto
-  toggleMobileMenu();
+  // Cerrar menú móvil SOLO si está abierto
+  const navLinks = document.getElementById('navLinks');
+  const isMobileMenuOpen = navLinks && navLinks.classList.contains('open');
+  
+  if (isMobileMenuOpen) {
+    toggleMobileMenu();
+  }
   
   // Quitar selección activa después de un breve momento para permitir el scroll
   setTimeout(() => {
