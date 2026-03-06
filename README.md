@@ -10,6 +10,7 @@ Sitio web oficial de **PA Acoustic**, empresa especializada en equipos de audio 
 
 | Fecha | Cambios | Archivos Afectados |
 |-------|---------|-------------------|
+| 07/03/2026 | Agregar nuevo producto: PA Sheffield 10 | js/main.js, README.md |
 | 06/03/2026 | Sistema de zoom en modal de productos (minZoom=1, maxZoom=3, wheel + pinch-to-zoom) | js/main.js |
 | 06/03/2026 | Auditoría técnica completa del proyecto - Análisis de código, políticas y cumplimiento. Puntaje: 92.5/100 | ANALISIS.md, README.md |
 | 06/03/2026 | Corregir sistemas de búsqueda duplicados en navbar desktop | css/styles.css, ANALISIS.md |
@@ -86,7 +87,9 @@ PGW/
 │   ├── pa12n1000.png       # Imagen producto PA12N-1000
 │   ├── pa12n1000-1.png     # Marca de agua PA12N-1000
 │   ├── p12sheffield.png    # Imagen producto Sheffield 12
-│   └── pa12shieffield-1.png # Marca de agua Sheffield 12
+│   ├── pa12shieffield-1.png # Marca de agua Sheffield 12
+│   ├── pa10shefieeld.png   # Imagen producto Sheffield 10
+│   └── pa10shefieeld-1.png # Marca de agua Sheffield 10
 └── doc/
     ├── DOCUMENTO DE REQUISITOS DEL PROYECTO WEB.docx
     ├── FICHA TECNICA PA HL 10A.docx
@@ -137,6 +140,7 @@ npx http-server .
 | PA8N-600 | Woofer 8" Neodimio | 600W | Sensibilidad 97dB, bobina 2" |
 | PA12N-1000 | Woofer 12" Neodimio | 1000W | Sensibilidad 100dB, cono semi-impermeable |
 | PA Sheffield 12 | Parlante 12" Ferrita | 1000W | Bobina 3" kapton |
+| PA Sheffield 10 | Parlante 10" Ferrita | 800W | Bobina 3" kapton, nuevo |
 
 ---
 

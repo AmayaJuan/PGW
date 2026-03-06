@@ -35,6 +35,7 @@ NOTAS DE MARCAS DE AGUA (WATERMARKS):
   PA8N-600:   img/pa8n600-1.png
   PA12N-1000: img/pa12n1000-1.png
   Sheffield12: img/pa12shieffield-1.png
+  Sheffield10: img/pa10shefieeld-1.png
 - Estilos en css/styles.css:
   .prod-watermark (catálogo) y .modal-watermark (modal)
 ======================================================================
@@ -362,7 +363,7 @@ const productos = [
   {
     id: 'hl30a',
     nombre: 'PA HL-30A',
-    cat: 'Line Array Activo',
+    cat: 'Line Array',
     badge: 'Top',
     desc: 'Sistema line array activo bi-amplificado de 2 vías. 2200W totales, 1100W RMS, SPL 137dB, rango 50Hz–20kHz. DSP 32 bits integrado.',
     imgs: ['img/hl30a-1.png'],
@@ -394,7 +395,7 @@ const productos = [
   {
     id: 'hl10a',
     nombre: 'PA HL-10A',
-    cat: 'Line Array Activo',
+    cat: 'Line Array',
     badge: 'Nuevo',
     desc: 'Sistema line array activo bi-amplificado de 2 vías para formato pequeño y mediano. 1400W pico, 700W RMS, SPL 133dB.',
     imgs: ['img/hl10a-1.png'],
@@ -426,7 +427,7 @@ const productos = [
   {
     id: 'pa10n',
     nombre: 'PA10N-900',
-    cat: 'Parlante 10" Neodimio',
+    cat: 'Parlantes',
     badge: 'Pro',
     desc: 'Altavoz profesional de 10 pulgadas para Line Array, cajas turbo y car audio. 1000W programados, 500W RMS, sensibilidad 99dB.',
     imgs: ['img/pa10n-1.png'],
@@ -448,7 +449,7 @@ const productos = [
   {
     id: 'lf18x',
     nombre: 'LF18X401+',
-    cat: 'Woofer 18" Alto Rendimiento',
+    cat: 'Woofers',
     badge: 'Pro',
     desc: 'Woofer profesional de 18". 1900W RMS, 3800W programados, carga magnética 180oz, bobina 4.5", rango 30Hz–1000Hz.',
     imgs: ['img/lf18x-1.png'],
@@ -476,7 +477,7 @@ const productos = [
 {
     id: 'woof18lw',
     nombre: '18LW2420+',
-    cat: 'Woofer 18" Ferrita',
+    cat: 'Woofers',
     badge: 'Pro',
     desc: 'Woofer profesional de 18" con imán de ferrita. 1300W RMS, 2600W programados, bobina 4", rango 30Hz–2500Hz.',
     imgs: ['img/woof18lw-1.png'],
@@ -502,7 +503,7 @@ const productos = [
   {
     id: 'pa8n600',
     nombre: 'PA8N-600',
-    cat: 'Woofer 8" Neodimio',
+    cat: 'Woofers',
     badge: 'Nuevo',
     desc: 'Woofer profesional de 8 pulgadas con imán de neodimio. Diseño para rango medio y alta eficiencia. 600W programados, 300W RMS, bobina 2" IN-OUT.',
     imgs: ['img/pa8n600.png'],
@@ -524,7 +525,7 @@ const productos = [
   {
     id: 'pa12n1000',
     nombre: 'PA12N-1000',
-    cat: 'Woofer 12" Neodimio',
+    cat: 'Woofers',
     badge: 'Top',
     desc: 'Woofer profesional de 12" con imán de neodimio. Máxima potencia con sensibilidad de 100dB. 1000W RMS, cono semi-impermeable, bobina 3" IN-OUT.',
     imgs: ['img/pa12n1000.png'],
@@ -566,6 +567,30 @@ const productos = [
     ],
     apps: ['Cajas convencionales','Sistemas full-range de alto desempeño','Equipos profesionales para música en vivo','Monitores de escenario de alta presión sonora','Reemplazos para proyectos de reparación'],
     tags: ['1000 W', '97 dB', '12"', 'Ferrita']
+  },
+  {
+    id: 'sheffield10',
+    nombre: 'PA Sheffield 10',
+    cat: 'Parlante 10" Ferrita',
+    badge: 'Nuevo',
+    desc: 'El parlante SHEFFIELD 10 es un componente de alta calidad diseñado para sistemas profesionales que requieren graves profundos y medios precisos. Con bobina de 3" en kapton, imán de ferrita y construcción robusta, ofrece un rendimiento confiable y duradero.',
+    imgs: ['img/pa10shefieeld.png'],
+    watermark: 'img/pa10shefieeld-1.png',
+    specs: [
+      ['Modelo',             'PA Sheffield 10'],
+      ['Diámetro Nominal',  '10 pulgadas'],
+      ['Impedancia',        '8 ohmios'],
+      ['Potencia RMS',      '400 W'],
+      ['Potencia Programada','800 W'],
+      ['Sensibilidad',      '96 dB'],
+      ['Rango de Frecuencia','50 Hz – 3KHz'],
+      ['Diámetro de Bobina','3 pulgadas'],
+      ['Material de Bobina','Kapton / Alambre Cobre'],
+      ['Tipo de Imán',      'Ferrita'],
+      ['Tipo de Chasis',    'Lámina'],
+    ],
+    apps: ['Cajas convencionales','Sistemas full-range','Equipos profesionales para música en vivo','Monitores de escenario','Proyectos de reparación','Cajas bass reflex'],
+    tags: ['800 W', '96 dB', '10"', 'Ferrita']
   }
 ];
 
@@ -604,6 +629,7 @@ function renderBanner() {
 // FILTRO Y BÚSQUEDA DEL CATÁLOGO
 // ========================================
 
+
 /**
  * Obtiene el texto de búsqueda de un producto
  * @param {Object} p - Objeto del producto
@@ -630,14 +656,28 @@ function getFilteredProductos() {
   return list;
 }
 
+
 /**
  * Obtiene las categorías únicas de los productos
- * @returns {Array} Array de nombres de categorías ordenados
+ * ORDEN FIJO: Parlantes, Drivers, Cabinas, Line Array
+ * @returns {Array} Array de nombres de categorías en orden específico
  */
 function getUniqueCategories() {
-  const set = new Set();
-  productos.forEach(p => { if (p.cat) set.add(p.cat); });
-  return Array.from(set).sort();
+  // Categorías fijas requeridas por el proyecto (en orden específico)
+  const fixedCategories = ['Parlantes', 'Drivers', 'Cabinas', 'Line Array'];
+  
+  // Obtener categorías de productos existentes
+  const productCategories = [];
+  productos.forEach(p => { 
+    if (p.cat && !productCategories.includes(p.cat)) {
+      productCategories.push(p.cat);
+    }
+  });
+  
+  // Combinar: primero las fijas, luego las adicionales de productos (sin duplicados)
+  const allCategories = [...new Set([...fixedCategories, ...productCategories])];
+  
+  return allCategories;
 }
 
 /**
