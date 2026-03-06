@@ -214,7 +214,12 @@
 <section id="productos" class="sec" aria-labelledby="titulo-productos">
   <div class="reveal">
     <div class="sec-label">— Nuestros Equipos</div>
-<h2 class="sec-titulo" id="titulo-productos">Catálogo de Productos</h2>
+    <h2 class="sec-titulo" id="titulo-productos">Catálogo de Productos</h2>
+    <!-- Indicador de categoría activa - muestra la categoría seleccionada -->
+    <div id="categoriaActiva" class="categoria-activa" style="display: none;">
+      <span class="categoria-badge">Categoría:</span>
+      <span id="categoriaNombre" class="categoria-nombre"></span>
+    </div>
   </div>
   <!-- Contenedor grid donde JavaScript inserta las tarjetas de productos -->
   <div class="productos-grid" id="productosGrid"></div>

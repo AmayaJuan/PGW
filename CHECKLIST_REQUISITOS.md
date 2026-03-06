@@ -31,6 +31,7 @@
 | Carrusel automático en inicio | ✅ Completado | Banner con productos |
 | Sistema de zoom en modal | ✅ Completado | Rueda mouse y pinch-to-zoom |
 | Selector de categorías | ✅ Completado | Desktop, tablet y móvil |
+| Indicador de categoría activa | ✅ Completado | Muestra la categoría seleccionada |
 
 ---
 

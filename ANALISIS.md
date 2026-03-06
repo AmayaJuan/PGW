@@ -144,6 +144,12 @@ PA Acoustic Web/
 - ✅ Transiciones suaves
 - ✅ Variables CSS para mantenimiento
 
+### 8.5 INDICADOR DE CATEGORÍA ACTIVA
+- ✅ Elemento HTML en sección productos
+- ✅ Estilos CSS para el indicador
+- ✅ Actualización dinámica en renderProductos()
+- ✅ Muestra/oculta según filtro activo
+
 ---
 
 ## 9. SISTEMA DE ZOOM IMPLEMENTADO

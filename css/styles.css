@@ -1124,7 +1124,7 @@ body[data-theme="light"] .modal-watermark {
   .sec-alt { padding: 2rem 0.75rem; }
 }
 
-/* Mobile catalog controls */
+/* Mobile catalog controls - existente */
 .mobile-catalog-controls {
   display: none;
   position: fixed;
@@ -1137,6 +1137,32 @@ body[data-theme="light"] .modal-watermark {
   z-index: 150;
   gap: 0.75rem;
   justify-content: center;
+}
+
+/* Indicador de categoría activa en el catálogo */
+.categoria-activa {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: var(--rojo);
+  border-radius: 6px;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.categoria-badge {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.categoria-nombre {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: white;
 }
 
 .mobile-filter-btn {

@@ -10,6 +10,7 @@ Sitio web oficial de **PA Acoustic**, empresa especializada en equipos de audio 
 
 | Fecha | Cambios | Archivos Afectados |
 |-------|---------|-------------------|
+| 07/03/2026 | Indicador de categoría activa en catálogo | index.html, css/styles.css, js/main.js, ANALISIS.md, CHECKLIST_REQUISITOS.md |
 | 07/03/2026 | Agregar nuevo producto: PA Sheffield 10 | js/main.js, README.md |
 | 06/03/2026 | Sistema de zoom en modal de productos (minZoom=1, maxZoom=3, wheel + pinch-to-zoom) | js/main.js |
 | 06/03/2026 | Auditoría técnica completa del proyecto - Análisis de código, políticas y cumplimiento. Puntaje: 92.5/100 | ANALISIS.md, README.md |
