@@ -259,5 +259,43 @@ El proyecto se encuentra en óptimas condiciones técnicas.
 
 ---
 
-*Documento actualizado: 17/03/2026*
-*Versión: 2.5 (Con todos los problemas resueltos)*
+*Documento actualizado: 07/03/2026*
+*Versión: 2.6 (Actualización a inglés y limpieza de código)*
+
+---
+
+## 14. ACTUALIZACIÓN 07/03/2026 - INGLÉS Y LIMPIEZA
+
+### Cambios realizados:
+| Cambio | Descripción | Estado |
+|--------|-------------|--------|
+| productos.json | Actualizado a inglés (name, desc, specs, apps, tags) | ✅ |
+| Variables JS | Mantenidas en español (productos, filtered, etc.) | ✅ |
+| README.md | Actualizado historial de cambios | ✅ |
+| ANALISIS.md | Actualizada versión a 2.6 | ✅ |
+
+### Archivos actualizados:
+- **productos.json**: Todos los campos en inglés (name, cat, desc, imgs, specs, apps, tags)
+- **js/main.js**: Variables en español según políticas del proyecto
+- **README.md**: Nuevo registro en historial de cambios
+- **ANALISIS.md**: Nueva sección de actualización
+
+### Estado de variables:
+| Variable | Idioma | Razón |
+|----------|--------|-------|
+| productos (array) | Español | Política del proyecto |
+| funciones | Español | Política del proyecto |
+| comentarios | Español | Política del proyecto |
+| productos.json | Inglés | Formato de datos |
+
+### ✅ CUMPLIMIENTO DE POLÍTICAS
+1. Variables en español en JS ✅
+2. Comentarios en español ✅
+3. JSON en inglés ✅
+4. Código limpio sin errores ✅
+5. Documentación actualizada ✅
+
+---
+
+*Documento actualizado: 07/03/2026*
+*Versión: 2.6 (Actualización a inglés y limpieza de código)*

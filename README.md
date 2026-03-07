@@ -10,8 +10,9 @@ Sitio web oficial de **PA Acoustic**, empresa especializada en equipos de audio 
 
 | Fecha | Cambios | Archivos Afectados |
 |-------|---------|-------------------|
-| 17/03/2026 | Agregar contador de productos en el catálogo | index.html, css/styles.css, js/main.js |
-| 15/03/2026 | Corregir y organizar productos.json (errores de sintaxis, campos estandarizados) | productos.json |
+| 07/03/2026 | Actualizar productos.json a inglés, revisar variables en inglés, actualizar documentación | productos.json, README.md, ANALISIS.md |
+| 07/03/2026 | Agregar contador de productos en el catálogo | index.html, css/styles.css, js/main.js |
+| 07/03/2026 | Corregir y organizar productos.json (errores de sintaxis, campos estandarizados) | productos.json |
 | 07/03/2026 | Implementar sistema de cache DOM (domCache, initCache, función $()) | js/main.js |
 | 07/03/2026 | Eliminar funciones sin usar: applyMobileSearch, clearMobileSearch, applyMobileFilters, clearMobileFilters | js/main.js |
 | 07/03/2026 | Corregir búsqueda en menú móvil - agregar evento input para mobileMenuSearch | js/main.js |

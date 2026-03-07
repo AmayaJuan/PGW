@@ -196,7 +196,7 @@ Reglas obligatorias:
 1. Incluir una sección de "Historial de cambios" o "Última actualización" en el README.
 2. Documentar qué archivos fueron modificados.
 3. Describir brevemente el cambio realizado.
-4. Actualizar la fecha de la última modificación.
+4. **PREGUNTAR LA FECHA ACTUAL AL USUARIO ANTES DE ACTUALIZAR** - Esta es la regla más importante.
 5. Si se agregan nuevas características, añadirlas a la sección correspondiente.
 6. Si se corrigen errores, documentar qué error se corrigió.
 
@@ -206,5 +206,7 @@ Ejemplo de formato de entrada:
 - Fecha: [DD/MM/AAAA]
 - Cambios: [Descripción breve]
 - Archivos afectados: [Lista de archivos]
+
+**IMPORTANTE**: Antes de agregar cualquier fecha, PREGUNTAR al usuario: "¿Qué fecha debo usar para el registro de cambios?"
 
 ================================================================================

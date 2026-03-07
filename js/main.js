@@ -810,8 +810,12 @@ function renderProductos() {
   const productosCount = document.getElementById('productosCount');
   if (productosCount) {
     const total = filtered.length;
-    const texto = total === 1 ? '1 producto' : `${total} productos`;
-    productosCount.innerHTML = `<strong>${total}</strong> ${total === 1 ? 'producto' : 'productos'} encontrado${total !== 1 ? 's' : ''}`;
+    // Calcular variables de paginación para el contador
+    const itemsPerPage = PAGINATION_CONFIG.itemsPerPage;
+    const currentPage = PAGINATION_CONFIG.currentPage;
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    // Formato: "Pag. 1. 8 / 8 de 9 productos"
+    productosCount.innerHTML = `Pag. ${currentPage}. ${Math.min(startIndex + itemsPerPage, total)} / ${startIndex + itemsPerPage} de ${total} productos`;
   }
 
   // Obtener valores de los filtros activos
