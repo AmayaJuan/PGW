@@ -866,21 +866,7 @@ function setupCatalogFilters() {
   }
 }
 
-/**
- * Maneja el cambio de categoría en el select del menú móvil
- * Sincroniza el valor con el select de escritorio y actualiza el catálogo
- * @param {HTMLSelectElement} sel - Elemento select del menú móvil
- */
-function handleMobileCategoryChange(sel) {
-  // Sincronizar el select del menú móvil con el select del escritorio
-  const desktopSelect = document.getElementById('catalogCategory');
-  if (desktopSelect) desktopSelect.value = sel.value; // Copiar el valor seleccionado al select de escritorio
-  renderProductos(); // Re-renderizar el catálogo con el nuevo filtro
-  document.getElementById('productos').scrollIntoView({ behavior: 'smooth' }); // Hacer scroll suave a la sección de productos
-}
 
-// ========================================
-// MODAL DE DETALLES DE PRODUCTO
 // ========================================
 
 /**
