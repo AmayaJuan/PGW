@@ -197,7 +197,7 @@ El proyecto cumple con todas las políticas estrictas establecidas. Las mejoras 
 
 ---
 
-*Documento actualizado: 17/03/2026*
+*Documento actualizado: 07/03/2026*
 *Versión: 2.4 (Con contador de productos)*
 
 ---
@@ -256,6 +256,62 @@ Las siguientes políticas del archivo `PROJECT_RULES.txt` se están respetando c
 **Estado: TODOS LOS PROBLEMAS RESUELTOS ✅**
 
 El proyecto se encuentra en óptimas condiciones técnicas.
+
+---
+
+*Documento actualizado: 07/03/2026*
+*Versión: 2.7 (Actualización contador de paginación)*
+
+---
+
+## 15. ACTUALIZACIÓN 07/03/2026 - CONTADOR DE PAGINACIÓN
+
+### Cambio realizado:
+Se actualizó el formato del contador de paginación del catálogo.
+
+### Formato anterior:
+```
+"9 productos encontrados"
+```
+
+### Nuevo formato:
+```
+"Pag. 1. 8 / 8 de 9 productos"
+```
+
+### Descripción:
+El contador ahora muestra:
+- Número de página actual
+- Último producto mostrado en la página actual
+- Cantidad de productos por página (8)
+- Total de productos disponibles
+
+### Archivos modificados:
+| Archivo | Cambio |
+|---------|--------|
+| js/main.js | Actualizado productosCount.innerHTML en función renderProductos() |
+
+### Código actualizado:
+```javascript
+// Actualizar contador de productos
+const productosCount = document.getElementById('productosCount');
+if (productosCount) {
+  const total = filtered.length;
+  // Calcular variables de paginación para el contador
+  const itemsPerPage = PAGINATION_CONFIG.itemsPerPage;
+  const currentPage = PAGINATION_CONFIG.currentPage;
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  // Formato: "Pag. 1. 8 / 8 de 9 productos"
+  productosCount.innerHTML = `Pag. ${currentPage}. ${Math.min(startIndex + itemsPerPage, total)} / ${startIndex + itemsPerPage} de ${total} productos`;
+}
+```
+
+### ✅ POLÍTICAS CUMPLIDAS
+1. Estado inicial sin filtros ✅
+2. Lógica de filtrado solo cuando el usuario selecciona ✅
+3. Diseño sin modificaciones no autorizadas ✅
+4. Comentarios en español ✅
+5. Regla final: "Si algo ya funcionaba, NO lo rompas" ✅
 
 ---
 

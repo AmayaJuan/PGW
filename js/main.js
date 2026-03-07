@@ -1030,13 +1030,31 @@ function setupCatalogFilters() {
   });
 
 
-if (mobileMenuSearch) {
+  // Evento para búsqueda en menú móvil - sin scroll automático al escribir
+  if (mobileMenuSearch) {
     mobileMenuSearch.addEventListener('input', function() {
       if (searchEl) {
         searchEl.value = mobileMenuSearch.value;
         PAGINATION_CONFIG.currentPage = 1; // Reiniciar a página 1 al buscar
         renderProductos();
-        // Scroll instantáneo a productos en móvil cuando el usuario escribe
+        // No hacer scroll automáticamente al escribir - el usuario debe presionar Enter o buscar manualmente
+      }
+    });
+    // Agregar soporte para tecla Enter en búsqueda móvil
+    mobileMenuSearch.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        // Sincronizar valor antes de buscar
+        if (searchEl) {
+          searchEl.value = mobileMenuSearch.value;
+          renderProductos();
+        }
+        // Cerrar el menú móvil si está abierto
+        const navLinks = document.getElementById('navLinks');
+        if (navLinks && navLinks.classList.contains('open')) {
+          toggleMobileMenu();
+        }
+        // Scroll a productos solo al presionar Enter
         document.getElementById('productos').scrollIntoView({ behavior: 'smooth' });
       }
     });

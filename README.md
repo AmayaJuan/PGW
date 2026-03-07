@@ -10,6 +10,7 @@ Sitio web oficial de **PA Acoustic**, empresa especializada en equipos de audio 
 
 | Fecha | Cambios | Archivos Afectados |
 |-------|---------|-------------------|
+| 07/03/2026 | Actualizar contador de paginación al formato "Pag. 1. 8 / 8 de 9 productos" | js/main.js |
 | 07/03/2026 | Actualizar productos.json a inglés, revisar variables en inglés, actualizar documentación | productos.json, README.md, ANALISIS.md |
 | 07/03/2026 | Agregar contador de productos en el catálogo | index.html, css/styles.css, js/main.js |
 | 07/03/2026 | Corregir y organizar productos.json (errores de sintaxis, campos estandarizados) | productos.json |
