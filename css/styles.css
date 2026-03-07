@@ -909,9 +909,12 @@ body[data-theme="light"] .modal-watermark {
 @media (max-width: 768px) {
   nav { 
     padding: 0.8rem 1.5rem; 
-    position: sticky;
+    position: fixed;
     top: 0 !important;
+    left: 0;
+    right: 0;
     z-index: 250;
+    width: 100%;
   }
   
   /* Show hamburger */
