@@ -914,12 +914,14 @@ function setupCatalogFilters() {
     document.getElementById('productos').scrollIntoView({ behavior: 'smooth' });
   });
 
-  // Evento para la búsqueda en el menú móvil - NUEVO
-  if (mobileMenuSearch) {
+
+if (mobileMenuSearch) {
     mobileMenuSearch.addEventListener('input', function() {
       if (searchEl) {
         searchEl.value = mobileMenuSearch.value;
         renderProductos();
+        // Scroll instantáneo a productos en móvil cuando el usuario escribe
+        document.getElementById('productos').scrollIntoView({ behavior: 'smooth' });
       }
     });
   }

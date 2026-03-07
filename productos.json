@@ -1,0 +1,136 @@
+[
+  {
+    "id": "hl30a",
+    "nombre": "PA HL-30A",
+    "categoria": "Line Array",
+    "badge": "Top",
+    "descripcion": "Sistema line array activo bi-amplificado de 2 vías. 2200W totales, 1100W RMS, SPL 137dB.",
+    "imagenes": ["img/hl30a-1.png"],
+    "watermark": "img/hl30a-2.png",
+    "especificaciones": [
+      ["Modelo", "PA HL-30A"],
+      ["Tipo", "Módulo activo 2 vías"],
+      ["Potencia total", "2200 W"],
+      ["SPL máximo", "137 dB"]
+    ],
+    "aplicaciones": ["Conciertos en vivo", "Teatros"],
+    "etiquetas": ["2200 W", "137 dB"]
+  },
+  {
+    "id": "hl10a",
+    "nombre": "PA HL-10A",
+    "categoria": "Line Array",
+    "badge": "Nuevo",
+    "descripcion": "Sistema line array activo. 1400W pico, 700W RMS, SPL 133dB.",
+    "imagenes": ["img/hl10a-1.png"],
+    "watermark": "img/hl10a-2.png",
+    "especificaciones": [
+      ["Modelo", "PA HL-10A"],
+      ["Potencia pico", "1400 W"],
+      ["SPL máximo", "133 dB"]
+    ],
+    "aplicaciones": ["Conciertos en vivo"],
+    "etiquetas": ["1400 W", "133 dB"]
+  },
+  {
+    "id": "pa10n",
+    "nombre": "PA10N-900",
+    "categoria": "Parlantes",
+    "badge": "Pro",
+    "descripcion": "Altavoz profesional de 10 pulgadas. 1000W programados, 500W RMS.",
+    "imagenes": ["img/pa10n-1.png"],
+    "watermark": "img/pa10n-2.png",
+    "especificaciones": [
+      ["Potencia Programada", "1000 W"],
+      ["Sensibilidad", "99 dB"]
+    ],
+    "aplicaciones": ["Sistemas line array"],
+    "etiquetas": ["1000 W", "99 dB"]
+  },
+  {
+    "id": "lf18x",
+    "nombre": "LF18X401+",
+    "categoria": "Parlantes",
+    "badge": "Pro",
+    "descripcion": "Woofer profesional de 18 pulgadas. 3800W programados.",
+    "imagenes": ["img/lf18x-1.png"],
+    "watermark": "img/lf18x-2.png",
+    "especificaciones": [
+      ["Potencia Programada", "3800 W"],
+      ["Sensibilidad", "98 dB"]
+    ],
+    "aplicaciones": ["Subwoofers"],
+    "etiquetas": ["3800 W", "98 dB"]
+  },
+  {
+    "id": "woof18lw",
+    "nombre": "18LW2420+",
+    "categoria": "Parlantes",
+    "badge": "Pro",
+    "descripcion": "Woofer 18 pulgadas con imán de ferrita.",
+    "imagenes": ["img/woof18lw-1.png"],
+    "watermark": "img/woof18lw-2.png",
+    "especificaciones": [
+      ["Potencia Programada", "2600 W"]
+    ],
+    "aplicaciones": ["Subwoofers"],
+    "etiquetas": ["2600 W"]
+  },
+  {
+    "id": "pa8n600",
+    "nombre": "PA8N-600",
+    "categoria": "Parlantes",
+    "badge": "Nuevo",
+    "descripcion": "Woofer 8 pulgadas neodimio.",
+    "imagenes": ["img/pa8n600.png"],
+    "watermark": "img/pa8n600-1.png",
+    "especificaciones": [
+      ["Potencia Programada", "600 W"]
+    ],
+    "aplicaciones": ["Cajas de dos vías"],
+    "etiquetas": ["600 W"]
+  },
+  {
+    "id": "pa12n1000",
+    "nombre": "PA12N-1000",
+    "categoria": "Parlantes",
+    "badge": "Top",
+    "descripcion": "Woofer 12 pulgadas neodimio.",
+    "imagenes": ["img/pa12n1000.png"],
+    "watermark": "img/pa12n1000-1.png",
+    "especificaciones": [
+      ["Potencia RMS", "1000 W"],
+      ["Sensibilidad", "100 dB"]
+    ],
+    "aplicaciones": ["Sistemas PA"],
+    "etiquetas": ["1000 W", "100 dB"]
+  },
+  {
+    "id": "sheffield12",
+    "nombre": "PA Sheffield 12",
+    "categoria": "Parlantes",
+    "badge": "Pro",
+    "descripcion": "Parlante 12 pulgadas ferrita.",
+    "imagenes": ["img/p12sheffield.png"],
+    "watermark": "img/pa12shieffield-1.png",
+    "especificaciones": [
+      ["Potencia Programada", "1000 W"]
+    ],
+    "aplicaciones": ["Cajas convencionales"],
+    "etiquetas": ["1000 W"]
+  },
+  {
+    "id": "sheffield10",
+    "nombre": "PA Sheffield 10",
+    "categoria": "Parlantes",
+    "badge": "Nuevo",
+    "descripcion": "Parlante 10 pulgadas ferrita.",
+    "imagenes": ["img/pa10shefieeld.png"],
+    "watermark": "img/pa10shefieeld-1.png",
+    "especificaciones": [
+      ["Potencia Programada", "800 W"]
+    ],
+    "aplicaciones": ["Cajas convencionales"],
+    "etiquetas": ["800 W"]
+  }
+]
