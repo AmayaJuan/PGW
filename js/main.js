@@ -1006,11 +1006,21 @@ function setupCatalogFilters() {
   const searchBox = document.getElementById('navSearchBox');
   const searchTrigger = document.getElementById('navSearchTrigger');
 
-// Evento de búsqueda en escritorio
+// Evento de búsqueda en escritorio - sin scroll automático al escribir
   if (searchEl) {
     searchEl.addEventListener('input', function() {
       PAGINATION_CONFIG.currentPage = 1; // Reiniciar a página 1 al buscar
       renderProductos();
+      // No hacer scroll automáticamente al escribir
+    });
+    // Agregar soporte para tecla Enter en búsqueda de escritorio
+    searchEl.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        renderProductos();
+        // Scroll a productos solo al presionar Enter
+        document.getElementById('productos').scrollIntoView({ behavior: 'smooth' });
+      }
     });
   }
   
@@ -1312,13 +1322,39 @@ document.addEventListener('DOMContentLoaded', function() {
 
 /**
  * Inicializa los controles de filtro para móvil
+ * Usa los elementos existentes: mobileMenuSearch y mobileMenuCategory
  */
 function initMobileFilters() {
-  const mobileCategorySelect = document.getElementById('mobileCategorySelect');
-  const desktopCategorySelect = document.getElementById('catalogCategory');
+  // El selector de categorías ya se llena en setupCatalogFilters
+  // Aquí configuramos los eventos específicos del panel móvil si existe
   
-  if (mobileCategorySelect && desktopCategorySelect) {
-    mobileCategorySelect.innerHTML = desktopCategorySelect.innerHTML;
+  const mobileSearchInput = document.getElementById('mobileMenuSearch');
+  const mobileCategorySelect = document.getElementById('mobileMenuCategory');
+  
+  // Sincronizar búsqueda desde móvil a escritorio en tiempo real
+  if (mobileSearchInput) {
+    mobileSearchInput.addEventListener('input', function() {
+      const desktopSearchInput = document.getElementById('catalogSearch');
+      if (desktopSearchInput) {
+        desktopSearchInput.value = mobileSearchInput.value;
+        PAGINATION_CONFIG.currentPage = 1;
+        renderProductos();
+      }
+    });
+  }
+  
+  // Sincronizar categoría desde móvil a escritorio en tiempo real
+  if (mobileCategorySelect) {
+    mobileCategorySelect.addEventListener('change', function() {
+      const desktopCategorySelect = document.getElementById('catalogCategory');
+      if (desktopCategorySelect) {
+        desktopCategorySelect.value = mobileCategorySelect.value;
+        PAGINATION_CONFIG.currentPage = 1;
+        renderProductos();
+        // Scroll a productos
+        document.getElementById('productos').scrollIntoView({ behavior: 'smooth' });
+      }
+    });
   }
 }
 
