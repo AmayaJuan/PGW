@@ -75,6 +75,9 @@
 | Crear funciones applyAllFilters() y clearAllFilters() | ✅ Completado | 07/03/2026 |
 | Corregir referencias a mobileMenuCategory | ✅ Completado | 07/03/2026 |
 | Limpiar código: eliminar función handleMobileCategoryChange() sin usar | ✅ Completado | 08/03/2026 |
+| Reorganización: eliminar archivos sin uso (productos.json, fonts/, hl30a-3.jpg) | ✅ Completado | 09/03/2026 |
+| Corregir nombres de imágenes (pa10shefieeld → pa10sheffield) | ✅ Completado | 09/03/2026 |
+| Optimizar código: eliminar funciones sin usar | ✅ Completado | 09/03/2026 |
 
 ---
 
@@ -134,4 +137,64 @@
 ---
 
 *Documento creado para seguimiento del proyecto PA Acoustic*
-*Última actualización: 06/03/2026*
+*Última actualización: 09/03/2026*
+
+---
+
+## 10. RECOMENDACIÓN: SISTEMA DE CARGA AUTOMÁTICA DE PRODUCTOS
+
+### Problema Actual:
+Los productos están hardcoded en `js/main.js`. Cuando el cliente agrega nuevas imágenes o documentos, debe editar el código manualmente.
+
+### Solución Propuesta:
+
+**Estructura de carpetas sugerida:**
+```
+img/
+├── products/
+│   ├── hl30a/
+│   │   ├── main.png        (imagen principal)
+│   │   ├── thumb-1.png    (miniaturas)
+│   │   ├── thumb-2.png
+│   │   └── watermark.png  (marca de agua)
+│   ├── hl10a/
+│   └── ...
+│
+doc/
+├── products/
+│   ├── hl30a.pdf   (ficha técnica)
+│   ├── hl10a.pdf
+│   └── ...
+```
+
+**Implementación recomendada:**
+
+1. **Crear un archivo JSON de configuración** (`products-config.json`):
+```json
+{
+  "products": [
+    {
+      "id": "hl30a",
+      "name": "PA HL-30A",
+      "category": "Line Array",
+      "images": ["img/products/hl30a/main.png"],
+      "watermark": "img/products/hl30a/watermark.png",
+      "specs": "doc/products/hl30a.pdf"
+    }
+  ]
+}
+```
+
+2. **O usar carga dinámica** - Leer carpetas y auto-generar productos:
+   - Crear función que escanee carpetas `img/products/` y `doc/products/`
+   - Generar array de productos automáticamente
+   - No requiere editar código para agregar productos
+
+### Ventajas:
+- ✅ Cliente puede agregar productos sin editar código
+- ✅ Solo necesita crear carpetas con imágenes
+- ✅ Sistema escalable
+- ✅ Mantenimiento más fácil
+
+### Pendiente de Confirmación:
+¿Deseas que implemente este sistema de carga automática?

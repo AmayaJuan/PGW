@@ -11,6 +11,7 @@ Sitio web oficial de **PA Acoustic**, empresa especializada en equipos de audio 
 | Fecha | Cambios | Archivos Afectados |
 |-------|---------|-------------------|
 | 09/03/2026 | Reorganización del proyecto: eliminar archivos sin uso, corregir nombres de imágenes (sheffield) | index.html, js/main.js, productos.json, fonts/, img/ |
+| 09/03/2026 | Optimizar código: eliminar funciones sin usar (toggleMobileSearch, toggleMobileFilters, applyAllFilters, clearAllFilters) | js/main.js |
 | 09/03/2026 | Eliminar productos.json (no está en funcionamiento - datos en main.js) | productos.json |
 | 09/03/2026 | Eliminar carpeta fonts/ vacía | fonts/ |
 | 09/03/2026 | Eliminar imagen sin uso hl30a-3.jpg | img/hl30a-3.jpg |
