@@ -10,6 +10,7 @@ Sitio web oficial de **PA Acoustic**, empresa especializada en equipos de audio 
 
 | Fecha | Cambios | Archivos Afectados |
 |-------|---------|-------------------|
+| 09/03/2026 | Optimizar código: eliminar función initMobileFilters() vacía (proceso redundante) | js/main.js |
 | 09/03/2026 | Revisión completa del proyecto: análisis de código fuente (index.html, css/styles.css, js/main.js), verificación de políticas, documentación actualizada | README.md, ANALISIS.md |
 | 09/03/2026 | Mejorar comportamiento zoom: scroll solo cuando cursor está sobre imagen, si no permite scroll normal | js/main.js |
 | 09/03/2026 | Mejorar visibilidad watermark en modal: mayor opacidad y mejor contraste en modo claro | css/styles.css |

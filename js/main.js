@@ -1331,7 +1331,6 @@ document.addEventListener('DOMContentLoaded', function() {
   renderProductos();
   setupCatalogFilters();
   initActiveMenuLink();
-  initMobileFilters();
   initZoomControls();
   // Crear el observador de intersección para las animaciones de reveal
   const obs = new IntersectionObserver(entries => {
@@ -1341,16 +1340,3 @@ document.addEventListener('DOMContentLoaded', function() {
   // Observar todos los elementos con clase 'reveal'
   document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 });
-
-// ========================================
-// FILTROS MÓVILES
-// ========================================
-
-/**
- * Inicializa los controles de filtro para móvil
- * Usa los elementos existentes: mobileMenuSearch y mobileMenuCategory
- */
-function initMobileFilters() {
-  // Los event listeners ya están configurados en setupCatalogFilters()
-  // No añadir nada aquí para evitar duplicación de eventos
-}
