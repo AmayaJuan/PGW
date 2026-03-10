@@ -13,7 +13,7 @@ Sitio web oficial de **PA Acoustic**, empresa especializada en equipos de audio 
 | 10/03/2026 | Optimizar audio: cambiar preload="auto" a preload="metadata" para evitar errores de autoplay | index.html |
 | 10/03/2026 | Optimizar código: eliminar función initMobileFilters() vacía (proceso redundante) | js/main.js |
 | 10/03/2026 | Revisión completa del proyecto: análisis de código fuente (index.html, css/styles.css, js/main.js), verificación de políticas, documentación actualizada | README.md, ANALISIS.md |
-| 09/03/2026 | Mejorar comportamiento zoom: scroll solo cuando cursor está sobre imagen, si no permite scroll normal | js/main.js |
+| 10/03/2026 | Eliminar función resetZoom() sin usar del código JavaScript | js/main.js |
 | 09/03/2026 | Mejorar visibilidad watermark en modal: mayor opacidad y mejor contraste en modo claro | css/styles.css |
 | 09/03/2026 | Reorganización del proyecto: eliminar archivos sin uso, corregir nombres de imágenes (sheffield) | index.html, js/main.js, productos.json, fonts/, img/ |
 | 09/03/2026 | Optimizar código: eliminar funciones sin usar (toggleMobileSearch, toggleMobileFilters, applyAllFilters, clearAllFilters) | js/main.js |

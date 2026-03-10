@@ -190,14 +190,6 @@ function applyZoomToImages() {
 }
 
 /**
- * Reinicia el zoom al nivel mínimo (1)
- */
-function resetZoom() {
-  ZOOM_CONFIG.currentZoom = ZOOM_CONFIG.minZoom;
-  applyZoomToImages();
-}
-
-/**
  * Maneja el evento de rueda del mouse para zoom
  * Solo activa zoom cuando el cursor está sobre la imagen principal del modal
  * Si el cursor NO está sobre la imagen, permite scroll normal
