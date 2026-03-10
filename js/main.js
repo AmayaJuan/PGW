@@ -389,7 +389,7 @@ function initIntroAudio() {
   if (!audio) return;
 
   let introStopped = false;
-  let introStarted = false
+  let introStarted = false;
 
   // Función para detener el audio
  function stopIntro() {
