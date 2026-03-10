@@ -96,11 +96,8 @@ function initCache() {
   domCache.modalInfo = document.getElementById('modalInfo');
   
   // Elementos de filtros móviles
-  domCache.mobileSearchInput = document.getElementById('mobileSearchInput');
-  domCache.mobileCategorySelect = document.getElementById('mobileCategorySelect');
-  domCache.mobileFilterBtn = document.getElementById('mobileFilterBtn');
-  domCache.mobileSearchPanel = document.getElementById('mobileSearchPanel');
-  domCache.mobileFilterPanel = document.getElementById('mobileFilterPanel');
+  // Elementos de filtros móviles - ELIMINADOS (referenciaban elementos inexistentes)
+  // Los filtros móviles usan: mobileMenuSearch y mobileMenuCategory (ya definidos arriba)
   
   // Audio
   domCache.introAudio = document.getElementById('introAudio');
@@ -384,8 +381,8 @@ function clearNavActive() {
 
 /**
  * Controla la reproducción del audio introductorio
- * Solo se reproduce cuando el usuario está en el inicio (sin scroll)
- * Se detiene al hacer scroll hacia otra sección
+ * Solo se reproduce una vez al cargar la página cuando está en el inicio
+ * Se detiene al hacer scroll hacia otra sección y no vuelve a reproducirse
  */
 function initIntroAudio() {
   const audio = document.getElementById('introAudio');
@@ -395,20 +392,26 @@ function initIntroAudio() {
   let introStarted = false;
 
   // Función para detener el audio
-  function stopIntro() {
-    if (introStopped) return;
-    introStopped = true;
-    audio.pause();
-    audio.currentTime = 0;
-  }
+ function stopIntro() {
+  let fade = setInterval(() => {
+    if (audio.volume > 0.05) {
+      audio.volume -= 0.05;
+    } else {
+      clearInterval(fade);
+      audio.pause();
+      audio.volume = 0.6;
+      introStarted = false;
+    }
+  }, 80);
+}
 
-  // Función para reproducir el audio
+  // Función para reproducir el audio (solo una vez)
   function playAudio() {
     // Solo reproducir si está en el inicio (scrollY < 100)
-    if (introStarted || introStopped || window.scrollY >= 100) return;
+    if (introStarted || window.scrollY >= 100) return;
     
     introStarted = true;
-    audio.volume = 0.7;
+    audio.volume = 0.5;
     audio.play()
       .catch(function (err) {
         console.log('Audio bloqueado por el navegador');
@@ -419,11 +422,13 @@ function initIntroAudio() {
   // Función que maneja el scroll
   function onScroll() {
     // Detener cuando el usuario hace scroll hacia otra sección
-    if (window.scrollY >= 100 && !introStopped) {
+    if (window.scrollY >= 100 && introStarted) {
       stopIntro();
+      // Resetear introStarted para que pueda reproducirse de nuevo al volver arriba
+     // introStarted = false;
     }
     // Intentar reproducir si vuelve al inicio
-    if (window.scrollY < 100 && !introStarted && !introStopped) {
+    if (window.scrollY < 100 && !introStarted) {
       playAudio();
     }
   }
@@ -1346,35 +1351,6 @@ document.addEventListener('DOMContentLoaded', function() {
  * Usa los elementos existentes: mobileMenuSearch y mobileMenuCategory
  */
 function initMobileFilters() {
-  // El selector de categorías ya se llena en setupCatalogFilters
-  // Aquí configuramos los eventos específicos del panel móvil si existe
-  
-  const mobileSearchInput = document.getElementById('mobileMenuSearch');
-  const mobileCategorySelect = document.getElementById('mobileMenuCategory');
-  
-  // Sincronizar búsqueda desde móvil a escritorio en tiempo real
-  if (mobileSearchInput) {
-    mobileSearchInput.addEventListener('input', function() {
-      const desktopSearchInput = document.getElementById('catalogSearch');
-      if (desktopSearchInput) {
-        desktopSearchInput.value = mobileSearchInput.value;
-        PAGINATION_CONFIG.currentPage = 1;
-        renderProductos();
-      }
-    });
-  }
-  
-  // Sincronizar categoría desde móvil a escritorio en tiempo real
-  if (mobileCategorySelect) {
-    mobileCategorySelect.addEventListener('change', function() {
-      const desktopCategorySelect = document.getElementById('catalogCategory');
-      if (desktopCategorySelect) {
-        desktopCategorySelect.value = mobileCategorySelect.value;
-        PAGINATION_CONFIG.currentPage = 1;
-        renderProductos();
-        // Scroll a productos
-        document.getElementById('productos').scrollIntoView({ behavior: 'smooth' });
-      }
-    });
-  }
+  // Los event listeners ya están configurados en setupCatalogFilters()
+  // No añadir nada aquí para evitar duplicación de eventos
 }

@@ -642,7 +642,7 @@ body[data-theme="light"] .prod-watermark {
 }
 .banner-track {
   display: flex; gap: 2rem;
-  animation: bannerScroll 30s linear infinite;
+  animation: bannerScroll 20s linear infinite;
   width: max-content;
 }
 .banner-wrap:hover .banner-track { animation-play-state: paused; }

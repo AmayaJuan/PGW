@@ -17,16 +17,7 @@
 <html lang="es">
 <head>
   <!-- Script inline para cargar el tema inmediatamente sin flash -->
-  <script>
-    (function() {
-      var theme = localStorage.getItem('paTheme');
-      if (theme === 'light' || theme === 'dark') {
-        document.body.setAttribute('data-theme', theme);
-      } else {
-        document.body.setAttribute('data-theme', 'dark');
-      }
-    })();
-  </script>
+  <!-- MOVIDO al final del body para evitar error null document.body -->
   <!-- Codificación de caracteres UTF-8 para soporte de tildes y caracteres especiales -->
   <meta charset="UTF-8"/>
   <!-- Configuración de viewport para diseño responsivo en dispositivos móviles -->
@@ -361,7 +352,7 @@
      la página (si el usuario está en el inicio)
      ======================================== -->
 <audio id="introAudio" preload="auto">
-  <source src="audio/intro.mp3" type="audio/mpeg"/>
+  <source src="audio/intro.mp3" type="audio/mpeg">
 </audio>
 
 <!-- ========================================
@@ -383,5 +374,22 @@
      El espacio superior se maneja con padding del .hero en CSS
      ======================================== -->
 <!-- <script src="js/navbar-fix.js"></script> -->
+
+<!-- ========================================
+     SCRIPT DEL TEMA (CLARO/OSCURO)
+     Movido aquí para ejecutarse después de que el body exista
+     Evita error "Cannot read properties of null"
+     ======================================== -->
+<script>
+  (function() {
+    var theme = localStorage.getItem('paTheme');
+    if (theme === 'light' || theme === 'dark') {
+      document.body.setAttribute('data-theme', theme);
+    } else {
+      document.body.setAttribute('data-theme', 'dark');
+    }
+  })();
+</script>
+
 </body>
 </html>
