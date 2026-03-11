@@ -4,7 +4,7 @@ PA ACOUSTIC — main.js
 
 REGLAS CRÍTICAS DEL PROYECTO (OBLIGATORIO LEER):
 -------------------------------------------------
-1. ESTADO INICIAL: Sin filtros activos, mostrar TODOS los productos.
+1. ESTADO INICIAL: Sin filtros activos, mostrar TODOS los products.
 2. FILTRADO: Solo ejecutar cuando el usuario seleccione categoría O escriba búsqueda.
 3. MENSAJE "Sin resultados": Solo mostrar cuando filtered.length === 0.
 4. DISEÑO: No modificar sin autorización. No agregar/eliminar animaciones.
@@ -15,7 +15,7 @@ REGLAS CRÍTICAS DEL PROYECTO (OBLIGATORIO LEER):
 Este archivo contiene toda la funcionalidad JavaScript del sitio web.
 Incluye:
 - Gestión del tema claro/oscuro
-- Datos de productos
+- Datos de products
 - Renderizado del catálogo
 - Búsqueda y filtros
 - Modal de detalles de producto
@@ -41,7 +41,6 @@ NOTAS DE MARCAS DE AGUA (WATERMARKS):
 ======================================================================
 
 **/
-
 
 
 // URL base de WhatsApp para enlaces de contacto
@@ -80,10 +79,10 @@ function initCache() {
   domCache.mobileMenuSearch = document.getElementById('mobileMenuSearch');
   
   // Elementos del catálogo
-  domCache.productosGrid = document.getElementById('productosGrid');
-  domCache.productos = document.getElementById('productos');
+  domCache.productsGrid = document.getElementById('productsGrid');
+  domCache.products = document.getElementById('products');
   domCache.categoriaActiva = document.getElementById('categoriaActiva');
-  domCache.categoriaNombre = document.getElementById('categoriaNombre');
+  domCache.categorianame = document.getElementById('categorianame');
   domCache.bannerTrack = document.getElementById('bannerTrack');
   
   // Elementos del modal
@@ -121,7 +120,7 @@ function $(id) {
 
 // Configuración de paginación
 const PAGINATION_CONFIG = {
-  itemsPerPage: 8,  // Productos por página
+  itemsPerPage: 8,  // products por página
   currentPage: 1    // Página actual
 };
 
@@ -440,247 +439,51 @@ function initIntroAudio() {
 }
 
 // ========================================
-// DATOS DE PRODUCTOS
+// DATOS DE products
 // ========================================
 
 /**
  * Array de objetos con los datos de cada producto
  * Para agregar un producto: copiar un objeto, cambiar los datos e imágenes
  */
-const productos = [
-  {
-    id: 'hl30a',
-    nombre: 'PA HL-30A',
-    cat: 'Line Array',
-    badge: 'Top',
-    desc: 'Sistema line array activo bi-amplificado de 2 vías. 2200W totales, 1100W RMS, SPL 137dB, rango 50Hz–20kHz. DSP 32 bits integrado.',
-    imgs: ['img/hl30a-1.png'],
-    watermark: 'img/hl30a-2.png',
-    specs: [
-      ['Modelo',       'PA HL-30A'],
-      ['Tipo',         'Módulo activo 2 vías, biamplificado'],
-      ['Amplificador', 'Clase D · DSP NET WORK'],
-      ['Potencia total','2200 W'],
-      ['Potencia RMS', '1100 W'],
-      ['Potencia LF',  '1600 W PGM / 800 W RMS'],
-      ['Potencia HF',  '600 W PGM / 300 W RMS'],
-      ['Frecuencia',   '50 Hz – 20 kHz'],
-      ['SPL máximo',   '137 dB'],
-      ['Impedancia',   '4 ohms'],
-      ['Cobertura H',  '100°'],
-      ['Cobertura V',  '15°'],
-      ['Woofer',       '2 × 10" Neodymium (bob. 65.5mm)'],
-      ['Driver',       '1.4mm Neodymium · Titanio · Bob. 4"'],
-      ['Entrada',      'XLR'],
-      ['Salida link',  'Powercom'],
-      ['Material',     'Polipropileno'],
-      ['Rigging',      'Sistema integrado con ajustes de ángulo'],
-      ['Dimensiones',  '294 × 707 × 508 mm'],
-    ],
-    apps: ['Conciertos en vivo','Teatros y auditorios','Espacios medianos y grandes','Instalaciones fijas','Espectáculos móviles','Iglesias y colegios','Eventos corporativos'],
-    tags: ['2200 W', '137 dB', '2×10"', 'Clase D DSP']
-  },
-  {
-    id: 'hl10a',
-    nombre: 'PA HL-10A',
-    cat: 'Line Array',
-    badge: 'Nuevo',
-    desc: 'Sistema line array activo bi-amplificado de 2 vías para formato pequeño y mediano. 1400W pico, 700W RMS, SPL 133dB.',
-    imgs: ['img/hl10a-1.png'],
-    watermark: 'img/hl10a-2.png',
-    specs: [
-      ['Modelo',       'PA HL-10A'],
-      ['Tipo',         'Módulo activo 2 vías, biamplificado'],
-      ['Potencia pico','1400 W'],
-      ['Potencia RMS', '700 W'],
-      ['Potencia LF',  '1000 W pico / 500 W RMS'],
-      ['Potencia HF',  '400 W pico / 200 W RMS'],
-      ['Frecuencia',   '65 Hz – 20 kHz'],
-      ['SPL máximo',   '133 dB'],
-      ['Cobertura H',  '100°'],
-      ['Cobertura V',  '15°'],
-      ['Transductores','2×8" Neodymium + Driver 2.5"'],
-      ['Entrada',      'XLR / TRS combo'],
-      ['Salida link',  'XLR'],
-      ['Crossover',    '800 Hz'],
-      ['Alimentación', 'powerCON IN/OUT'],
-      ['Material',     'Polipropileno'],
-      ['Rigging',      'Ángulos cada 2°'],
-      ['Dimensiones',  '294 × 569 × 434 mm'],
-      ['Peso',         '20.4 kg'],
-    ],
-    apps: ['Conciertos en vivo','Iglesias y colegios','Teatros y auditorios','Eventos corporativos','Conciertos al aire libre','Clubes y DJ','Centros de convenciones'],
-    tags: ['1400 W', '133 dB', '2×8"', 'Clase D']
-  },
-  {
-    id: 'pa10n',
-    nombre: 'PA10N-900',
-    cat: 'Parlantes',
-    badge: 'Pro',
-    desc: 'Altavoz profesional de 10 pulgadas para Line Array, cajas turbo y car audio. 1000W programados, 500W RMS, sensibilidad 99dB.',
-    imgs: ['img/pa10n-1.png'],
-    watermark: 'img/pa10n-2.png',
-    specs: [
-      ['Modelo',             'PA10N-900'],
-      ['Diámetro',           '255mm (10 pulgadas)'],
-      ['Impedancia',         '8 ohmios'],
-      ['Potencia Programada','1000 W'],
-      ['Potencia RMS',       '500 W'],
-      ['Sensibilidad',       '99 dB'],
-      ['Frecuencia',        '50 Hz – 3500 Hz'],
-      ['Bobina',            '3 pulgadas'],
-      ['Capas',             '2 capas (IN - OUT)'],
-    ],
-    apps: ['Sistemas line array','Monitores de escenario','Cajas turbo','Sistema pickup','Car audio','Proyectos ligereza + potencia'],
-    tags: ['1000 W', '99 dB', '10"', 'Neodimio']
-  },
-  {
-    id: 'lf18x',
-    nombre: 'LF18X401+',
-    cat: 'Parlantes',
-    badge: 'Pro',
-    desc: 'Woofer profesional de 18". 1900W RMS, 3800W programados, carga magnética 180oz, bobina 4.5", rango 30Hz–1000Hz.',
-    imgs: ['img/lf18x-1.png'],
-    watermark: 'img/lf18x-2.png',
-    specs: [
-      ['Modelo',             'LF18X401+'],
-      ['Diámetro',           '18 pulgadas (457 mm)'],
-      ['Carga magnética',    '180 onzas'],
-      ['Impedancia',         '8 ohmios'],
-      ['Potencia Programada','3800 W'],
-      ['Potencia RMS',       '1900 W'],
-      ['Sensibilidad',       '98 dB'],
-      ['Frecuencia',         '30 Hz – 1000 Hz'],
-      ['Excursión máx.',     '54 mm (2.13 pulgadas)'],
-      ['Bobina',             '4.5 pulgadas (114 mm)'],
-      ['Material bobina',    'Til / Alambre Cobre'],
-      ['Capas',              '2 (Inside/Outside)'],
-      ['Cono',               'Cartón prensado con fibra de vidrio'],
-      ['Diámetro total',     '465 mm'],
-      ['Altura total',       '212 mm'],
-    ],
-    apps: ['Subwoofers de alta potencia','Sistemas de sonido profesional','Cajas bass réflex','Conciertos en vivo','Teatros y auditorios','Clubes nocturnos'],
-    tags: ['3800 W', '98 dB', '18"', '180oz']
-  },
-{
-    id: 'woof18lw',
-    nombre: '18LW2420+',
-    cat: 'Parlantes',
-    badge: 'Pro',
-    desc: 'Woofer profesional de 18" con imán de ferrita. 1300W RMS, 2600W programados, bobina 4", rango 30Hz–2500Hz.',
-    imgs: ['img/woof18lw-1.png'],
-    watermark: 'img/woof18lw-2.png',
-    specs: [
-      ['Modelo',             '18LW2420+'],
-      ['Diámetro',           '18 pulgadas (457 mm)'],
-      ['Impedancia',         '8 ohmios'],
-      ['Potencia Programada','2600 W'],
-      ['Potencia RMS',       '1300 W'],
-      ['Sensibilidad',       '98 dB'],
-      ['Frecuencia',         '30 Hz – 2500 Hz'],
-      ['Bobina',             '4 pulgadas'],
-      ['Material bobina',    'Til / Alambre Cobre'],
-      ['Capas',              '2 (Inside/Outside)'],
-      ['Imán',               'Ferrita compacto'],
-      ['Ventilación',        'Sistema posterior'],
-      ['Chasis',             'Antimonio'],
-    ],
-    apps: ['Subwoofers de alta potencia','Sistemas de sonido profesional','Cajas bass réflex','Conciertos en vivo','Teatros y auditorios','Clubes nocturnos'],
-    tags: ['2600 W', '98 dB', '18"', 'Ferrita']
-  },
-  {
-    id: 'pa8n600',
-    nombre: 'PA8N-600',
-    cat: 'Parlantes',
-    badge: 'Nuevo',
-    desc: 'Woofer profesional de 8 pulgadas con imán de neodimio. Diseño para rango medio y alta eficiencia. 600W programados, 300W RMS, bobina 2" IN-OUT.',
-    imgs: ['img/pa8n600.png'],
-    watermark: 'img/pa8n600-1.png',
-    specs: [
-      ['Modelo',             'PA8N-600'],
-      ['Diámetro Nominal',  '8 pulgadas'],
-      ['Impedancia',        '8 ohmios'],
-      ['Potencia Programada','600 W'],
-      ['Potencia RMS',      '300 W'],
-      ['Sensibilidad',      '97 dB'],
-      ['Rango de Frecuencia','70 Hz – 3000 Hz'],
-      ['Diámetro de Bobina','2 pulgadas'],
-      ['Capas de Bobina',   '2 capas (IN - OUT)'],
-    ],
-    apps: ['Cajas de dos vías','Sistemas line array','Monitores de escenarios','Cajas turbo','Sistema pickup','Car audio','Proyectos ligereza + potencia'],
-    tags: ['600 W', '97 dB', '8"', 'Neodimio']
-  },
-  {
-    id: 'pa12n1000',
-    nombre: 'PA12N-1000',
-    cat: 'Parlantes',
-    badge: 'Top',
-    desc: 'Woofer profesional de 12" con imán de neodimio. Máxima potencia con sensibilidad de 100dB. 1000W RMS, cono semi-impermeable, bobina 3" IN-OUT.',
-    imgs: ['img/pa12n1000.png'],
-    watermark: 'img/pa12n1000-1.png',
-    specs: [
-      ['Modelo',             'PA12N-1000'],
-      ['Diámetro Nominal',  '306mm (12 pulgadas)'],
-      ['Impedancia',        '8 ohmios'],
-      ['Potencia RMS',      '1000 W'],
-      ['Sensibilidad',      '100 dB'],
-      ['Rango de Frecuencia','50 Hz – 3500 Hz'],
-      ['Diámetro de Bobina','3 pulgadas'],
-      ['Capas de Bobina',   '2 capas (IN - OUT)'],
-      ['Cono',              'Semi-impermeable'],
-    ],
-    apps: ['Sistemas line array','Sistemas PA de alto rendimiento','Monitores de escenarios','Cajas turbo','Sistema pickup','Car audio','Proyectos ligereza + potencia'],
-    tags: ['1000 W', '100 dB', '12"', 'Neodimio']
-  },
-  {
-    id: 'sheffield12',
-    nombre: 'PA Sheffield 12',
-    cat: 'Parlantes',
-    badge: 'Pro',
-    desc: 'El parlante SHEFFIELD 12 es un componente pensado para sistemas profesionales que requieren graves más profundos y mayor cobertura de rango medio. Su bobina de 3" en kapton, imán de ferrita y chasis en lámina aseguran un rendimiento confiable, alta durabilidad y excelente disipación de calor.',
-    imgs: ['img/p12sheffield.png'],
-    watermark: 'img/pa12shieffield-1.png',
-    specs: [
-      ['Modelo',             'PA Sheffield 12'],
-      ['Diámetro Nominal',  '12 pulgadas'],
-      ['Impedancia',        '8 ohmios'],
-      ['Potencia RMS',      '500 W'],
-      ['Potencia Programada','1000 W'],
-      ['Sensibilidad',      '97 dB'],
-      ['Rango de Frecuencia','45 Hz – 2.5KHz'],
-      ['Diámetro de Bobina','3 pulgadas'],
-      ['Material de Bobina','Kapton / Alambre Cobre'],
-      ['Tipo de Imán',      'Ferrita'],
-      ['Tipo de Chasis',    'Lámina'],
-    ],
-    apps: ['Cajas convencionales','Sistemas full-range de alto desempeño','Equipos profesionales para música en vivo','Monitores de escenario de alta presión sonora','Reemplazos para proyectos de reparación'],
-    tags: ['1000 W', '97 dB', '12"', 'Ferrita']
-  },
-  {
-    id: 'sheffield10',
-    nombre: 'PA Sheffield 10',
-    cat: 'Parlantes',
-    badge: 'Nuevo',
-    desc: 'El parlante SHEFFIELD 10 es un componente de alta calidad diseñado para sistemas profesionales que requieren graves profundos y medios precisos. Con bobina de 3" en kapton, imán de ferrita y construcción robusta, ofrece un rendimiento confiable y duradero.',
-    imgs: ['img/pa10sheffield.png'],
-    watermark: 'img/pa10sheffield-1.png',
-    specs: [
-      ['Modelo',             'PA Sheffield 10'],
-      ['Diámetro Nominal',  '10 pulgadas'],
-      ['Impedancia',        '8 ohmios'],
-      ['Potencia RMS',      '400 W'],
-      ['Potencia Programada','800 W'],
-      ['Sensibilidad',      '96 dB'],
-      ['Rango de Frecuencia','50 Hz – 3KHz'],
-      ['Diámetro de Bobina','3 pulgadas'],
-      ['Material de Bobina','Kapton / Alambre Cobre'],
-      ['Tipo de Imán',      'Ferrita'],
-      ['Tipo de Chasis',    'Lámina'],
-    ],
-    apps: ['Cajas convencionales','Sistemas full-range','Equipos profesionales para música en vivo','Monitores de escenario','Proyectos de reparación','Cajas bass reflex'],
-    tags: ['800 W', '96 dB', '10"', 'Ferrita']
+let products = [];
+
+async function loadProducts() {
+
+  try {
+
+    const response = await fetch("data/products.json");
+    const data = await response.json();
+
+    products = data.map(p => ({
+      id: p.name.toLowerCase(),
+      name: p.name.toUpperCase(),
+      cat: "Parlantes",
+      badge: "Producto",
+      desc: "Producto de audio profesional",
+
+      imgs: [
+        p.images?.main || "",
+        p.images?.watermark || ""
+      ].filter(Boolean),
+
+      watermark: p.images?.watermark || null,
+
+      specs: [],
+      apps: [],
+      tags: [],
+
+      doc: p.document || null
+      }));
+
+    renderBanner();
+    renderProducts();
+
+  } catch (error) {
+    console.error("Error cargando products.json:", error);
   }
-];
+
+}
 
 // ========================================
 // BANNER CARRUSEL
@@ -691,18 +494,22 @@ const productos = [
  * @param {string} id - ID del producto
  */
 function onBannerItemClick(id) {
-  document.getElementById('productos').scrollIntoView({ behavior: 'smooth' });
+  document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
   setTimeout(() => abrirModal(id), 450);
 }
 
 /**
- * Renderiza el banner carrusel con las imágenes de productos
+ * Renderiza el banner carrusel con las imágenes de products
  */
 function renderBanner() {
   const track = document.getElementById('bannerTrack');
   if (!track) return;
 
-  const items = productos.flatMap(p => p.imgs.map(src => ({ src, alt: p.nombre, id: p.id })));
+    const items = products.map(p => ({
+    src: p.imgs[0],   // solo la imagen principal
+    alt: p.name,
+    id: p.id
+  }));
   /* Triplicar los items para evitar el salto visible del loop en pantallas anchas */
   const duplicated = [...items, ...items, ...items];
 
@@ -724,21 +531,21 @@ function renderBanner() {
  * @returns {string} Texto normalizado para búsqueda
  */
 function getProductSearchText(p) {
-  const parts = [p.nombre, p.cat, p.desc, (p.tags || []).join(' '), (p.apps || []).join(' ')];
+  const parts = [p.name, p.cat, p.desc, (p.tags || []).join(' '), (p.apps || []).join(' ')];
   return parts.join(' ').toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '');
 }
 
 /**
- * Filtra los productos según búsqueda y categoría seleccionados
- * @returns {Array} Array de productos filtrados
+ * Filtra los products según búsqueda y categoría seleccionados
+ * @returns {Array} Array de products filtrados
  */
-function getFilteredProductos() {
+function getFilteredproducts() {
   const searchEl = document.getElementById('catalogSearch');
   const categoryEl = document.getElementById('catalogCategory');
   const query = (searchEl && searchEl.value) ? searchEl.value.trim().toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '') : '';
   const category = (categoryEl && categoryEl.value) ? categoryEl.value.trim().toLowerCase() : '';
 
-  let list = productos;
+  let list = products;
   if (category) list = list.filter(p => (p.cat || '').toLowerCase().includes(category));
   if (query) list = list.filter(p => getProductSearchText(p).includes(query));
   return list;
@@ -746,23 +553,23 @@ function getFilteredProductos() {
 
 
 /**
- * Obtiene las categorías únicas de los productos
+ * Obtiene las categorías únicas de los products
  * ORDEN FIJO: Parlantes, Drivers, Cabinas, Line Array
- * @returns {Array} Array de nombres de categorías en orden específico
+ * @returns {Array} Array de names de categorías en orden específico
  */
 function getUniqueCategories() {
   // Categorías fijas requeridas por el proyecto (en orden específico)
   const fixedCategories = ['Parlantes', 'Drivers', 'Cabinas', 'Line Array'];
   
-  // Obtener categorías de productos existentes
+  // Obtener categorías de products existentes
   const productCategories = [];
-  productos.forEach(p => { 
+  products.forEach(p => { 
     if (p.cat && !productCategories.includes(p.cat)) {
       productCategories.push(p.cat);
     }
   });
   
-  // Combinar: primero las fijas, luego las adicionales de productos (sin duplicados)
+  // Combinar: primero las fijas, luego las adicionales de products (sin duplicados)
   const allCategories = [...new Set([...fixedCategories, ...productCategories])];
   
   return allCategories;
@@ -816,23 +623,23 @@ function escapeAttr(text) {
 }
 
 /**
- * Renderiza las tarjetas de productos en el grid con paginación
+ * Renderiza las tarjetas de products en el grid con paginación
  */
-function renderProductos() {
-  const filtered = getFilteredProductos();
-  const grid = document.getElementById('productosGrid');
+function renderProducts() {
+  const filtered = getFilteredproducts();
+  const grid = document.getElementById('productsGrid');
   if (!grid) return;
 
-  // Actualizar contador de productos
-  const productosCount = document.getElementById('productosCount');
-  if (productosCount) {
+  // Actualizar contador de products
+  const productsCount = document.getElementById('productsCount');
+  if (productsCount) {
     const total = filtered.length;
     // Calcular variables de paginación para el contador
     const itemsPerPage = PAGINATION_CONFIG.itemsPerPage;
     const currentPage = PAGINATION_CONFIG.currentPage;
     const startIndex = (currentPage - 1) * itemsPerPage;
-    // Formato: "Pag. 1. 8 / 8 de 9 productos"
-    productosCount.innerHTML = `Pag. ${currentPage}. ${Math.min(startIndex + itemsPerPage, total)} / ${startIndex + itemsPerPage} de ${total} productos`;
+    // Formato: "Pag. 1. 8 / 8 de 9 products"
+    productsCount.innerHTML = `Pag. ${currentPage}. ${Math.min(startIndex + itemsPerPage, total)} / ${startIndex + itemsPerPage} de ${total} products`;
   }
 
   // Obtener valores de los filtros activos
@@ -843,23 +650,23 @@ function renderProductos() {
   
   // Actualizar indicador de categoría activa
   const categoriaActiva = document.getElementById('categoriaActiva');
-  const categoriaNombre = document.getElementById('categoriaNombre');
-  if (categoriaActiva && categoriaNombre) {
+  const categorianame = document.getElementById('categorianame');
+  if (categoriaActiva && categorianame) {
     if (category) {
-      categoriaNombre.textContent = category;
+      categorianame.textContent = category;
       categoriaActiva.style.display = 'inline-flex';
     } else {
       categoriaActiva.style.display = 'none';
     }
   }
   
-  // Solo mostrar mensaje de "sin resultados" si hay filtros activos Y no hay productos
+  // Solo mostrar mensaje de "sin resultados" si hay filtros activos Y no hay products
   const hayFiltrosActivos = query !== '' || category !== '';
   
   if (filtered.length === 0 && hayFiltrosActivos) {
     grid.innerHTML = `
       <div class="catalog-empty" style="grid-column:1/-1;text-align:center;padding:3rem 2rem;background:var(--bg3);border:1px solid var(--borde);border-radius:12px;">
-        <p style="font-size:1rem;color:var(--texto);margin-bottom:.5rem;">No hay productos con los filtros seleccionados.</p>
+        <p style="font-size:1rem;color:var(--texto);margin-bottom:.5rem;">No hay products con los filtros seleccionados.</p>
         <p style="font-size:.85rem;color:var(--muted);">Cambia la categoría o el texto de búsqueda.</p>
       </div>
     `;
@@ -882,7 +689,7 @@ function renderProductos() {
     PAGINATION_CONFIG.currentPage = 1;
   }
   
-  // Obtener productos de la página actual
+  // Obtener products de la página actual
   const startIndex = (PAGINATION_CONFIG.currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const pageProducts = filtered.slice(startIndex, endIndex);
@@ -906,7 +713,7 @@ function renderProductos() {
       html += `
 <div class="prod-card" style="--card-delay: ${delay * 0.07}s" onclick="abrirModal('${p.id}')">
           <div class="prod-img-wrap">
-            <img src="${p.imgs[0]}" alt="${p.nombre}"/>
+            <img src="${p.imgs[0]}" alt="${p.name}"/>
             ${p.watermark ? `<img src="${p.watermark}" alt="" class="prod-watermark"/>` : ''}
             <!-- Escapar el badge para evitar inyección de código malicioso -->
             <span class="prod-badge">${escapeHtml(p.badge)}</span>
@@ -914,8 +721,8 @@ function renderProductos() {
           <div class="prod-body">
             <!-- Escapar la categoría para mostrarla de forma segura -->
             <div class="prod-cat">${escapeHtml(p.cat)}</div>
-            <!-- Escapar el nombre del producto para evitar XSS -->
-            <div class="prod-nombre">${escapeHtml(p.nombre)}</div>
+            <!-- Escapar el name del producto para evitar XSS -->
+            <div class="prod-name">${escapeHtml(p.name)}</div>
             <!-- Escapar la descripción para mostrarla de forma segura -->
             <div class="prod-desc">${escapeHtml(p.desc)}</div>
             <div class="prod-specs">${p.tags.map(t => `<span class="spec-tag">${t}</span>`).join('')}</div>
@@ -946,13 +753,13 @@ function renderPaginationControls(totalPages, currentPage) {
   
   // Si no existe el contenedor, crearlo
   if (!paginationContainer) {
-    const productosSection = document.getElementById('productos');
-    if (!productosSection) return;
+    const productsSection = document.getElementById('products');
+    if (!productsSection) return;
     
     paginationContainer = document.createElement('div');
     paginationContainer.id = 'paginationControls';
     paginationContainer.className = 'pagination-controls';
-    productosSection.appendChild(paginationContainer);
+    productsSection.appendChild(paginationContainer);
   }
   
   // Si solo hay una página, mostrar solo el indicador sin botones
@@ -991,18 +798,18 @@ function renderPaginationControls(totalPages, currentPage) {
  * @param {number} page - Número de página al que cambiar
  */
 function changePage(page) {
-  const filtered = getFilteredProductos();
+  const filtered = getFilteredproducts();
   const totalPages = Math.ceil(filtered.length / PAGINATION_CONFIG.itemsPerPage);
   
   if (page < 1 || page > totalPages) return;
   
   PAGINATION_CONFIG.currentPage = page;
-  renderProductos();
+  renderProducts();
   
-  // Scroll suave al inicio del grid de productos
-  const productosSection = document.getElementById('productos');
-  if (productosSection) {
-    productosSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  // Scroll suave al inicio del grid de products
+  const productsSection = document.getElementById('products');
+  if (productsSection) {
+    productsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 }
 
@@ -1027,16 +834,16 @@ function setupCatalogFilters() {
   if (searchEl) {
     searchEl.addEventListener('input', function() {
       PAGINATION_CONFIG.currentPage = 1; // Reiniciar a página 1 al buscar
-      renderProductos();
+      renderProducts();
       // No hacer scroll automáticamente al escribir
     });
     // Agregar soporte para tecla Enter en búsqueda de escritorio
     searchEl.addEventListener('keydown', function(e) {
       if (e.key === 'Enter') {
         e.preventDefault();
-        renderProductos();
-        // Scroll a productos solo al presionar Enter
-        document.getElementById('productos').scrollIntoView({ behavior: 'smooth' });
+        renderProducts();
+        // Scroll a products solo al presionar Enter
+        document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
       }
     });
   }
@@ -1044,16 +851,16 @@ function setupCatalogFilters() {
   // Evento de categoría en escritorio
   if (categoryEl) categoryEl.addEventListener('change', function() {
     PAGINATION_CONFIG.currentPage = 1; // Reiniciar a página 1 al cambiar categoría
-    renderProductos();
-    document.getElementById('productos').scrollIntoView({ behavior: 'smooth' });
+    renderProducts();
+    document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
   });
 
   // Evento para el selector de categorías en menú móvil
   if (mobileMenuCategory) mobileMenuCategory.addEventListener('change', function() {
     if (categoryEl) categoryEl.value = mobileMenuCategory.value;
     PAGINATION_CONFIG.currentPage = 1; // Reiniciar a página 1 al cambiar categoría
-    renderProductos();
-    document.getElementById('productos').scrollIntoView({ behavior: 'smooth' });
+    renderProducts();
+    document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
   });
 
 
@@ -1063,7 +870,7 @@ function setupCatalogFilters() {
       if (searchEl) {
         searchEl.value = mobileMenuSearch.value;
         PAGINATION_CONFIG.currentPage = 1; // Reiniciar a página 1 al buscar
-        renderProductos();
+        renderProducts();
         // No hacer scroll automáticamente al escribir - el usuario debe presionar Enter o buscar manualmente
       }
     });
@@ -1074,15 +881,15 @@ function setupCatalogFilters() {
         // Sincronizar valor antes de buscar
         if (searchEl) {
           searchEl.value = mobileMenuSearch.value;
-          renderProductos();
+          renderProducts();
         }
         // Cerrar el menú móvil si está abierto
         const navLinks = document.getElementById('navLinks');
         if (navLinks && navLinks.classList.contains('open')) {
           toggleMobileMenu();
         }
-        // Scroll a productos solo al presionar Enter
-        document.getElementById('productos').scrollIntoView({ behavior: 'smooth' });
+        // Scroll a products solo al presionar Enter
+        document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
       }
     });
   }
@@ -1120,7 +927,7 @@ function setupCatalogFilters() {
  * @param {string} id - ID del producto a mostrar
  */
 function abrirModal(id) {
-  const p = productos.find(x => x.id === id);
+  const p = products.find(x => x.id === id);
   if (!p) return;
 
   const mb = document.getElementById('modalBody');
@@ -1133,10 +940,10 @@ function abrirModal(id) {
     mb.appendChild(wm);
   }
 
-  document.getElementById('modalTitulo').textContent = p.nombre;
+  document.getElementById('modalTitulo').textContent = p.name;
   document.getElementById('modalImgMain').src = p.imgs[0];
   /* Asignar texto descriptivo al alt de la imagen para lectores de pantalla */
-  document.getElementById('modalImgMain').alt = 'Imagen de ' + p.nombre;
+  document.getElementById('modalImgMain').alt = 'Imagen de ' + p.name;
 
   document.getElementById('modalThumbs').innerHTML = p.imgs.map((img, i) => `
     <div class="modal-thumb ${i === 0 ? 'active' : ''}" onclick="cambiarImg('${img}', this)">
@@ -1147,7 +954,7 @@ function abrirModal(id) {
   document.getElementById('modalInfo').innerHTML = `
     <span class="modal-badge">${p.badge}</span>
     <div class="modal-cat">${p.cat}</div>
-    <div class="modal-nombre">${p.nombre}</div>
+    <div class="modal-name">${p.name}</div>
     <div class="modal-desc">${p.desc}</div>
     <table class="modal-tabla">
       ${p.specs.map(([k, v]) => `<tr><td>${k}</td><td>${v}</td></tr>`).join('')}
@@ -1156,7 +963,7 @@ function abrirModal(id) {
       <h4>Aplicaciones</h4>
       <ul>${p.apps.map(a => `<li>${a}</li>`).join('')}</ul>
     </div>
-<a href="${WP}?text=${encodeURIComponent('Hola, me interesa el ' + p.nombre + '. ¿Pueden darme información y precio?')}"
+<a href="${WP}?text=${encodeURIComponent('Hola, me interesa el ' + p.name + '. ¿Pueden darme información y precio?')}"
        target="_blank" rel="noopener noreferrer" class="modal-wp">
       ${WP_SVG} Consultar por WhatsApp
     </a>
@@ -1318,8 +1125,7 @@ document.addEventListener('DOMContentLoaded', function() {
   initCache();
   loadTheme();
   initIntroAudio();
-  renderBanner();
-  renderProductos();
+  loadProducts();
   setupCatalogFilters();
   initActiveMenuLink();
   initZoomControls();
