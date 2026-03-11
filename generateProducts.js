@@ -1,6 +1,4 @@
 const fs = require("fs");
-const pdf = require("pdf-parse");
-const Tesseract = require("tesseract.js");
 
 const imagesFolder = "./img/products";
 const docsFolder = "./doc/products";
@@ -28,85 +26,6 @@ function detectCategory(name){
   if(n.includes("sheffield")) return "Parlante";
 
   return "Audio";
-
-}
-
-async function readPDFText(path){
-
-  try{
-
-    const buffer = fs.readFileSync(path);
-    const data = await pdf(buffer);
-
-    if(data.text && data.text.length > 100){
-      return data.text.toLowerCase();
-    }
-
-  }catch(e){}
-
-  // OCR fallback
-  console.log("OCR leyendo:", path);
-
-  const result = await Tesseract.recognize(path,"eng");
-
-  return result.data.text.toLowerCase();
-
-}
-
-function find(text, labels){
-
-  for(const label of labels){
-
-    const r = new RegExp(label + "\\s*:?\\s*(.+)", "i");
-    const m = text.match(r);
-
-    if(m){
-      return m[1].split("\n")[0].trim();
-    }
-
-  }
-
-  return "";
-
-}
-
-async function extractSpecs(pdfPath){
-
-  const text = await readPDFText(pdfPath);
-
-  return [
-
-    ["Modelo", find(text,["modelo","model"])],
-
-    ["Tipo", find(text,["tipo","type"])],
-
-    ["Amplificador", find(text,["amplificador","amplifier"])],
-
-    ["Potencia total", find(text,[
-      "potencia total",
-      "power",
-      "program power",
-      "max power"
-    ])],
-
-    ["Potencia RMS", find(text,[
-      "rms",
-      "continuous power"
-    ])],
-
-    ["Frecuencia", find(text,[
-      "frecuencia",
-      "frequency response"
-    ])],
-
-    ["SPL máximo", find(text,[
-      "spl",
-      "max spl",
-      "sensitivity"
-    ])]
-
-  ];
-
 }
 
 const groupedImages = {};
@@ -125,11 +44,11 @@ images.forEach(img => {
 
 });
 
-async function generateProducts(){
+function generateProducts(){
 
   const products = [];
 
-  for(const [index, productName] of Object.keys(groupedImages).entries()){
+  Object.keys(groupedImages).forEach((productName,index)=>{
 
     const productImages = groupedImages[productName];
 
@@ -144,20 +63,6 @@ async function generateProducts(){
     const relatedDoc = docs.find(doc =>
       normalize(doc).includes(normalize(productName))
     );
-
-    let specs = [
-      ["Modelo", productName.toUpperCase()],
-      ["Tipo",""],
-      ["Amplificador",""],
-      ["Potencia total",""],
-      ["Potencia RMS",""],
-      ["Frecuencia",""],
-      ["SPL máximo",""]
-    ];
-
-    if(relatedDoc){
-      specs = await extractSpecs(`${docsFolder}/${relatedDoc}`);
-    }
 
     products.push({
 
@@ -178,11 +83,11 @@ async function generateProducts(){
         ? `doc/products/${relatedDoc}`
         : null,
 
-      specs: specs
+      specs: []
 
     });
 
-  }
+  });
 
   if(!fs.existsSync("./data")){
     fs.mkdirSync("./data");
@@ -193,7 +98,7 @@ async function generateProducts(){
     JSON.stringify(products,null,2)
   );
 
-  console.log("✅ products.json generado con OCR");
+  console.log("✅ products.json generado");
 
 }
 

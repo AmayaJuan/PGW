@@ -7,37 +7,8 @@
       "main": "img/products/hl10a-1.png",
       "watermark": "img/products/hl10a-2.png"
     },
-    "document": "doc/products/FICHA TECNICA PA HL 10A.pdf",
-    "specs": [
-      [
-        "Modelo",
-        ""
-      ],
-      [
-        "Tipo",
-        ""
-      ],
-      [
-        "Amplificador",
-        ""
-      ],
-      [
-        "Potencia total",
-        ""
-      ],
-      [
-        "Potencia RMS",
-        ""
-      ],
-      [
-        "Frecuencia",
-        ""
-      ],
-      [
-        "SPL máximo",
-        ""
-      ]
-    ]
+    "document": "doc/products/FICHA TECNICA PA HL 10A.docx",
+    "specs": []
   },
   {
     "id": 2,
@@ -47,77 +18,19 @@
       "main": "img/products/hl30a-1.png",
       "watermark": "img/products/hl30a-2.png"
     },
-    "document": "doc/products/FICHA TECNICA PA HL30A.pdf",
-    "specs": [
-      [
-        "Modelo",
-        ""
-      ],
-      [
-        "Tipo",
-        ""
-      ],
-      [
-        "Amplificador",
-        ""
-      ],
-      [
-        "Potencia total",
-        ""
-      ],
-      [
-        "Potencia RMS",
-        ""
-      ],
-      [
-        "Frecuencia",
-        ""
-      ],
-      [
-        "SPL máximo",
-        ""
-      ]
-    ]
+    "document": "doc/products/FICHA TECNICA PA HL30A.docx",
+    "specs": []
   },
   {
     "id": 3,
     "name": "lf18x",
-    "category": "Parlante",
+    "category": "Woofer",
     "images": {
       "main": "img/products/lf18x-1.png",
       "watermark": "img/products/lf18x-2.png"
     },
-    "document": "doc/products/FICHA TECNICA PARLANTE LF18X401+.pdf",
-    "specs": [
-      [
-        "Modelo",
-        ""
-      ],
-      [
-        "Tipo",
-        ""
-      ],
-      [
-        "Amplificador",
-        ""
-      ],
-      [
-        "Potencia total",
-        ""
-      ],
-      [
-        "Potencia RMS",
-        ""
-      ],
-      [
-        "Frecuencia",
-        ""
-      ],
-      [
-        "SPL máximo",
-        ""
-      ]
-    ]
+    "document": "doc/products/FICHA TECNICA PARLANTE LF18X401+.docx",
+    "specs": []
   },
   {
     "id": 4,
@@ -127,37 +40,8 @@
       "main": "img/products/pa10n-900-1.png",
       "watermark": "img/products/pa10n-900-2.png"
     },
-    "document": "doc/products/FICHA TECNICA PARLANTE 10 NEODIMIO(pa10n-900).pdf",
-    "specs": [
-      [
-        "Modelo",
-        ""
-      ],
-      [
-        "Tipo",
-        ""
-      ],
-      [
-        "Amplificador",
-        ""
-      ],
-      [
-        "Potencia total",
-        ""
-      ],
-      [
-        "Potencia RMS",
-        ""
-      ],
-      [
-        "Frecuencia",
-        ""
-      ],
-      [
-        "SPL máximo",
-        ""
-      ]
-    ]
+    "document": null,
+    "specs": []
   },
   {
     "id": 5,
@@ -167,37 +51,8 @@
       "main": "img/products/pa12n1000-1.png",
       "watermark": "img/products/pa12n1000-2.png"
     },
-    "document": "doc/products/FICHA TECNICA WOOFER PA12N1000.pdf",
-    "specs": [
-      [
-        "Modelo",
-        ""
-      ],
-      [
-        "Tipo",
-        ""
-      ],
-      [
-        "Amplificador",
-        ""
-      ],
-      [
-        "Potencia total",
-        ""
-      ],
-      [
-        "Potencia RMS",
-        ""
-      ],
-      [
-        "Frecuencia",
-        ""
-      ],
-      [
-        "SPL máximo",
-        ""
-      ]
-    ]
+    "document": null,
+    "specs": []
   },
   {
     "id": 6,
@@ -207,37 +62,8 @@
       "main": "img/products/pa8n600-1.png",
       "watermark": "img/products/pa8n600-2.png"
     },
-    "document": "doc/products/FICHA TECNICA WOOFER PA8N600.pdf",
-    "specs": [
-      [
-        "Modelo",
-        ""
-      ],
-      [
-        "Tipo",
-        ""
-      ],
-      [
-        "Amplificador",
-        ""
-      ],
-      [
-        "Potencia total",
-        ""
-      ],
-      [
-        "Potencia RMS",
-        ""
-      ],
-      [
-        "Frecuencia",
-        ""
-      ],
-      [
-        "SPL máximo",
-        ""
-      ]
-    ]
+    "document": null,
+    "specs": []
   },
   {
     "id": 7,
@@ -247,37 +73,8 @@
       "main": "img/products/parlante 10 sheffieeld-1.png",
       "watermark": "img/products/parlante 10 sheffieeld-2.png"
     },
-    "document": "doc/products/FICHA TECNICA PARLANTE 10 SHEFFIEELD.pdf",
-    "specs": [
-      [
-        "Modelo",
-        ""
-      ],
-      [
-        "Tipo",
-        ""
-      ],
-      [
-        "Amplificador",
-        ""
-      ],
-      [
-        "Potencia total",
-        ""
-      ],
-      [
-        "Potencia RMS",
-        ""
-      ],
-      [
-        "Frecuencia",
-        ""
-      ],
-      [
-        "SPL máximo",
-        ""
-      ]
-    ]
+    "document": null,
+    "specs": []
   },
   {
     "id": 8,
@@ -287,76 +84,18 @@
       "main": "img/products/parlante 12 sheffield-1.png",
       "watermark": "img/products/parlante 12 sheffield-2.png"
     },
-    "document": "doc/products/FICHA TECNICA PARLANTE 12 SHEFFIELD.pdf",
-    "specs": [
-      [
-        "Modelo",
-        ""
-      ],
-      [
-        "Tipo",
-        ""
-      ],
-      [
-        "Amplificador",
-        ""
-      ],
-      [
-        "Potencia total",
-        ""
-      ],
-      [
-        "Potencia RMS",
-        ""
-      ],
-      [
-        "Frecuencia",
-        ""
-      ],
-      [
-        "SPL máximo",
-        ""
-      ]
-    ]
+    "document": "doc/products/FICHA TECNICA PARLANTE 12 SHEFFIELD.docx",
+    "specs": []
   },
   {
     "id": 9,
     "name": "woofer18lw2420+",
-    "category": "Parlante",
+    "category": "Woofer",
     "images": {
       "main": "img/products/woofer18lw2420+-1.png",
       "watermark": "img/products/woofer18lw2420+-2.png"
     },
-    "document": "doc/products/FICHA TECNICA WOOFER 18LW2420+.pdf",
-    "specs": [
-      [
-        "Modelo",
-        ""
-      ],
-      [
-        "Tipo",
-        ""
-      ],
-      [
-        "Amplificador",
-        ""
-      ],
-      [
-        "Potencia total",
-        ""
-      ],
-      [
-        "Potencia RMS",
-        ""
-      ],
-      [
-        "Frecuencia",
-        ""
-      ],
-      [
-        "SPL máximo",
-        ""
-      ]
-    ]
+    "document": "doc/products/FICHA TECNICA WOOFER 18LW2420+.docx",
+    "specs": []
   }
 ]
