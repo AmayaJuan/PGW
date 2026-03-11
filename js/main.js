@@ -458,7 +458,7 @@ async function loadProducts() {
     products = data.map(p => ({
       id: p.name.toLowerCase(),
       name: p.name.toUpperCase(),
-      cat: "Parlantes",
+      cat: p.category || "Parlantes",
       badge: "Producto",
       desc: "Producto de audio profesional",
 
@@ -469,7 +469,7 @@ async function loadProducts() {
 
       watermark: p.images?.watermark || null,
 
-      specs: [],
+      specs: p.specs || [],
       apps: [],
       tags: [],
 
@@ -958,19 +958,17 @@ function openModal(id) {
     <div class="modal-name">${p.name}</div>
     <div class="modal-desc">${p.desc}</div>
     <table class="modal-tabla">
-      ${p.specs.map(([k, v]) => `<tr><td>${k}</td><td>${v}</td></tr>`).join('')}
-    </table>
-    
-    ${p.doc ? `
-      <div class="modal-doc"> 
-      <a href="${p.doc}" target="_blank" class="modal-doc-btn">
-       Ver ficha técnica
-      </div>
-      ` : ''}}
+  ${(p.specs || []).map(([k, v]) => `
+    <tr>
+      <td>${k}</td>
+      <td>${v || '-'}</td>
+    </tr>
+  `).join('')}
+</table>
 
     <div class="modal-apps">
       <h4>Aplicaciones</h4>
-      <ul>${p.apps.map(a => `<li>${a}</li>`).join('')}</ul>
+     <ul>${(p.apps || []).map(a => `<li>${a}</li>`).join('')}</ul>
     </div>
 <a href="${WP}?text=${encodeURIComponent('Hola, me interesa el ' + p.name + '. ¿Pueden darme información y precio?')}"
        target="_blank" rel="noopener noreferrer" class="modal-wp">

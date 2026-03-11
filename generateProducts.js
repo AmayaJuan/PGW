@@ -45,16 +45,26 @@ const products = Object.keys(groupedImages).map((productName, index) => {
     normalize(doc).includes(normalize(productName))
   );
 
-  return {
-    id: index + 1,
-    name: productName,
-    category: "audio",
-    images: {
-      main: `img/products/${mainImage}`,
-      watermark: watermark ? `img/products/${watermark}` : null
-    },
-    document: relatedDoc ? `doc/products/${relatedDoc}` : null
-  };
+ return {
+   id: index + 1,
+   name: productName,
+  category: "audio",
+  images: {
+    main: `img/products/${mainImage}`,
+    watermark: watermark ? `img/products/${watermark}` : null
+  },
+  document: relatedDoc ? `doc/products/${relatedDoc}` : null,
+
+  specs: [
+    ["Modelo", productName.toUpperCase()],
+    ["Tipo", ""],
+    ["Amplificador", ""],
+    ["Potencia total", ""],
+    ["Potencia RMS", ""],
+    ["Frecuencia", ""],
+    ["SPL máximo", ""]
+  ]
+};
 
 });
 

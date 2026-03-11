@@ -7,7 +7,37 @@
       "main": "img/products/hl10a-1.png",
       "watermark": "img/products/hl10a-2.png"
     },
-    "document": "doc/products/FICHA TECNICA PA HL 10A.pdf"
+    "document": "doc/products/FICHA TECNICA PA HL 10A.pdf",
+    "specs": [
+      [
+        "Modelo",
+        "HL10A"
+      ],
+      [
+        "Tipo",
+        ""
+      ],
+      [
+        "Amplificador",
+        ""
+      ],
+      [
+        "Potencia total",
+        ""
+      ],
+      [
+        "Potencia RMS",
+        ""
+      ],
+      [
+        "Frecuencia",
+        ""
+      ],
+      [
+        "SPL máximo",
+        ""
+      ]
+    ]
   },
   {
     "id": 2,
@@ -17,7 +47,37 @@
       "main": "img/products/hl30a-1.png",
       "watermark": "img/products/hl30a-2.png"
     },
-    "document": "doc/products/FICHA TECNICA PA HL30A.pdf"
+    "document": "doc/products/FICHA TECNICA PA HL30A.pdf",
+    "specs": [
+      [
+        "Modelo",
+        "HL30A"
+      ],
+      [
+        "Tipo",
+        ""
+      ],
+      [
+        "Amplificador",
+        ""
+      ],
+      [
+        "Potencia total",
+        ""
+      ],
+      [
+        "Potencia RMS",
+        ""
+      ],
+      [
+        "Frecuencia",
+        ""
+      ],
+      [
+        "SPL máximo",
+        ""
+      ]
+    ]
   },
   {
     "id": 3,
@@ -27,7 +87,37 @@
       "main": "img/products/lf18x-1.png",
       "watermark": "img/products/lf18x-2.png"
     },
-    "document": "doc/products/FICHA TECNICA PARLANTE LF18X401+.pdf"
+    "document": "doc/products/FICHA TECNICA PARLANTE LF18X401+.pdf",
+    "specs": [
+      [
+        "Modelo",
+        "LF18X"
+      ],
+      [
+        "Tipo",
+        ""
+      ],
+      [
+        "Amplificador",
+        ""
+      ],
+      [
+        "Potencia total",
+        ""
+      ],
+      [
+        "Potencia RMS",
+        ""
+      ],
+      [
+        "Frecuencia",
+        ""
+      ],
+      [
+        "SPL máximo",
+        ""
+      ]
+    ]
   },
   {
     "id": 4,
@@ -37,7 +127,37 @@
       "main": "img/products/pa10n-900-1.png",
       "watermark": "img/products/pa10n-900-2.png"
     },
-    "document": "doc/products/FICHA TECNICA PARLANTE 10 NEODIMIO(pa10n-900).pdf"
+    "document": "doc/products/FICHA TECNICA PARLANTE 10 NEODIMIO(pa10n-900).pdf",
+    "specs": [
+      [
+        "Modelo",
+        "PA10N"
+      ],
+      [
+        "Tipo",
+        ""
+      ],
+      [
+        "Amplificador",
+        ""
+      ],
+      [
+        "Potencia total",
+        ""
+      ],
+      [
+        "Potencia RMS",
+        ""
+      ],
+      [
+        "Frecuencia",
+        ""
+      ],
+      [
+        "SPL máximo",
+        ""
+      ]
+    ]
   },
   {
     "id": 5,
@@ -47,7 +167,37 @@
       "main": "img/products/pa12n1000-1.png",
       "watermark": "img/products/pa12n1000-2.png"
     },
-    "document": "doc/products/FICHA TECNICA WOOFER PA12N1000.pdf"
+    "document": "doc/products/FICHA TECNICA WOOFER PA12N1000.pdf",
+    "specs": [
+      [
+        "Modelo",
+        "PA12N1000"
+      ],
+      [
+        "Tipo",
+        ""
+      ],
+      [
+        "Amplificador",
+        ""
+      ],
+      [
+        "Potencia total",
+        ""
+      ],
+      [
+        "Potencia RMS",
+        ""
+      ],
+      [
+        "Frecuencia",
+        ""
+      ],
+      [
+        "SPL máximo",
+        ""
+      ]
+    ]
   },
   {
     "id": 6,
@@ -57,7 +207,37 @@
       "main": "img/products/pa8n600-1.png",
       "watermark": "img/products/pa8n600-2.png"
     },
-    "document": "doc/products/FICHA TECNICA WOOFER PA8N600.pdf"
+    "document": "doc/products/FICHA TECNICA WOOFER PA8N600.pdf",
+    "specs": [
+      [
+        "Modelo",
+        "PA8N600"
+      ],
+      [
+        "Tipo",
+        ""
+      ],
+      [
+        "Amplificador",
+        ""
+      ],
+      [
+        "Potencia total",
+        ""
+      ],
+      [
+        "Potencia RMS",
+        ""
+      ],
+      [
+        "Frecuencia",
+        ""
+      ],
+      [
+        "SPL máximo",
+        ""
+      ]
+    ]
   },
   {
     "id": 7,
@@ -67,7 +247,37 @@
       "main": "img/products/parlante 10 shefieeld-1.png",
       "watermark": "img/products/parlante 10 shefieeld-2.png"
     },
-    "document": "doc/products/FICHA TECNICA PARLANTE 10 SHEFIEELD.pdf"
+    "document": "doc/products/FICHA TECNICA PARLANTE 10 SHEFIEELD.pdf",
+    "specs": [
+      [
+        "Modelo",
+        "PARLANTE 10 SHEFIEELD"
+      ],
+      [
+        "Tipo",
+        ""
+      ],
+      [
+        "Amplificador",
+        ""
+      ],
+      [
+        "Potencia total",
+        ""
+      ],
+      [
+        "Potencia RMS",
+        ""
+      ],
+      [
+        "Frecuencia",
+        ""
+      ],
+      [
+        "SPL máximo",
+        ""
+      ]
+    ]
   },
   {
     "id": 8,
@@ -77,7 +287,37 @@
       "main": "img/products/parlante 12 sheffield-1.png",
       "watermark": "img/products/parlante 12 sheffield-2.png"
     },
-    "document": "doc/products/FICHA TECNICA PARLANTE 12 SHEFFIELD.pdf"
+    "document": "doc/products/FICHA TECNICA PARLANTE 12 SHEFFIELD.pdf",
+    "specs": [
+      [
+        "Modelo",
+        "PARLANTE 12 SHEFFIELD"
+      ],
+      [
+        "Tipo",
+        ""
+      ],
+      [
+        "Amplificador",
+        ""
+      ],
+      [
+        "Potencia total",
+        ""
+      ],
+      [
+        "Potencia RMS",
+        ""
+      ],
+      [
+        "Frecuencia",
+        ""
+      ],
+      [
+        "SPL máximo",
+        ""
+      ]
+    ]
   },
   {
     "id": 9,
@@ -87,6 +327,36 @@
       "main": "img/products/woofer18lw2420+-1.png",
       "watermark": "img/products/woofer18lw2420+-2.png"
     },
-    "document": "doc/products/FICHA TECNICA WOOFER 18LW2420+.pdf"
+    "document": "doc/products/FICHA TECNICA WOOFER 18LW2420+.pdf",
+    "specs": [
+      [
+        "Modelo",
+        "WOOFER18LW2420+"
+      ],
+      [
+        "Tipo",
+        ""
+      ],
+      [
+        "Amplificador",
+        ""
+      ],
+      [
+        "Potencia total",
+        ""
+      ],
+      [
+        "Potencia RMS",
+        ""
+      ],
+      [
+        "Frecuencia",
+        ""
+      ],
+      [
+        "SPL máximo",
+        ""
+      ]
+    ]
   }
 ]
