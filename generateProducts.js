@@ -1,3 +1,4 @@
+
 const fs = require("fs");
 const path = require("path");
 const mammoth = require("mammoth");
@@ -84,44 +85,37 @@ async function readPdf(filePath) {
   }
 }
 
-// Función para extraer la descripción
+// Función para extraer la descripción - MEJORADA
 function extractDescription(text, productName) {
   if (!text) return "Producto de audio profesional " + productName;
   
-  // Convertir a líneas y limpiar
   const lines = text.split('\n').map(function(l) { return l.trim(); }).filter(function(l) { return l.length > 0; });
   
-  // === PRIMER INTENTO: Buscar "Descripción:" (maneja mayúsculas/minúsculas) ===
-  for (let i = 0; i < lines.length; i++) {
+  // Buscar "Descripción:" al inicio (primera línea del documento)
+  for (let i = 0; i < Math.min(lines.length, 3); i++) {
     const line = lines[i];
     const lowerLine = line.toLowerCase();
     
-    // Coincidir con "descripción:", "descripcion:", "descripción" al inicio
     if (lowerLine.match(/^descripción\s*:?/i) || lowerLine.match(/^descripcion\s*:?/i)) {
       let descParts = [];
-      // Obtener texto después de "Descripción:"
       const afterDesc = line.replace(/^descripción\s*:*/i, "").replace(/^descripcion\s*:*/i, "").trim();
       if (afterDesc && afterDesc.length > 10) {
         descParts.push(afterDesc);
       }
       
-      // Continuar recopilando líneas hasta encontrar otra sección
+      // Collect siguientes líneas hasta specs
       for (let j = i + 1; j < lines.length; j++) {
         const nextLine = lines[j];
         const nextLower = nextLine.toLowerCase();
         
-        // Detener si llegamos a otra sección
         if (nextLower.includes("especificaciones") ||
             nextLower.includes("ítem") ||
             nextLower.includes("item") ||
-            nextLower.includes("aplicaciones") ||
-            nextLower.includes("gráfico") ||
-            nextLower.includes("características")) {
+            nextLower.includes("especificaciones técnicas")) {
           break;
         }
         
-        // Agregar líneas que parecen ser descripción
-        if (nextLine.length > 10) {
+        if (nextLine.length > 20) {
           descParts.push(nextLine);
         }
       }
@@ -136,9 +130,7 @@ function extractDescription(text, productName) {
     }
   }
   
-  // === SEGUNDO INTENTO: Para documentos tipo HL (descripción al final después de specs) ===
-  // El documento HL tiene: especificaciones -> [Color/Dimensiones] -> Descripción
-  // La descripción viene DESPUÉS de las specs y antes de otras secciones
+  // Segundo: después de specs para documentos HL
   let foundLastSpec = false;
   let descriptionLines = [];
   
@@ -146,37 +138,21 @@ function extractDescription(text, productName) {
     const line = lines[i];
     const lowerLine = line.toLowerCase();
     
-    // Detectar la línea que indica fin de specs (puede ser "Color / acabados" o "Dimensiones")
-    // Para HL30A: la línea es solo "Dimensiones" (sin valor)
-    // Para HL10A: la línea es "Color / acabados" (con valor)
-    // IMPORTANTE: Solo detectar si es el ÚLTIMO campo de specs (línea muy corta)
     if ((lowerLine.includes("color") && lowerLine.includes("acabados")) ||
         (lowerLine === "dimensiones" && lines[i].length < 20)) {
       foundLastSpec = true;
       continue;
     }
     
-    // Después del último campo de specs, collecting description
     if (foundLastSpec) {
-      // DETENER cuando llegamos a una sección de header (no contenido)
-      // NO romper en líneas cortas como "Peso neto" porque pueden ser descripciones
       if (lowerLine === "respuesta en frecuencia" || 
           lowerLine === "respuesta" ||
-          lowerLine.includes("gráfico de respuesta") ||
           lowerLine.includes("gráfico") ||
           lowerLine === "aplicaciones" || 
-          lowerLine.includes("aplicaciones recomendadas") ||
-          lowerLine.startsWith("entradas xlr") ||
-          lowerLine.startsWith("salida de") ||
-          lowerLine.startsWith("codificador") ||
-          lowerLine.startsWith("led de") ||
-          lowerLine.startsWith("pantalla de") ||
-          lowerLine.startsWith("alimentación")) {
+          lowerLine.includes("aplicaciones recomendadas")) {
         break;
       }
       
-      // Tomar líneas que parecen ser descripción (texto largo con puntuación)
-      // El contenido de descripción tiene párrafos largos
       if (line.length > 30 && (line.includes('.') || line.includes(','))) {
         descriptionLines.push(line);
       }
@@ -191,7 +167,7 @@ function extractDescription(text, productName) {
     return desc;
   }
   
-  // === TERCER INTENTO: Buscar después de "Características" (PDFs) ===
+  // Tercer: después de "Características" para PDFs
   let foundFeatures = false;
   let featureLines = [];
   
@@ -205,17 +181,15 @@ function extractDescription(text, productName) {
     }
     
     if (foundFeatures) {
-      // Detener si llegamos a especificaciones técnicas
       if (lowerLine.includes("especificaciones") ||
+          lowerLine.includes("especificaciones técnicas") ||
           lowerLine.includes("ítem") ||
           lowerLine.includes("aplicaciones")) {
         break;
       }
       
-      // Agregar líneas con bullets o texto descriptivo
-      if (line.length > 20 && (line.includes('') || line.includes('•') || line.includes('-'))) {
-        // Limpiar bullets
-        const cleanLine = line.replace(/^[•\-\*•\u2022\u2023\u25E6\u2043\u2219\s]+/, "").trim();
+      if (line.length > 15 && (line.includes('') || line.includes('•') || line.includes('-') || line.includes('✔'))) {
+        const cleanLine = line.replace(/^[•\-\*•\u2022\u2023\u25E6\u2043\u2219\s✔]+/, "").trim();
         if (cleanLine.length > 10) {
           featureLines.push(cleanLine);
         }
@@ -225,38 +199,7 @@ function extractDescription(text, productName) {
   
   if (featureLines.length > 0) {
     let desc = featureLines.join('. ').replace(/\s+/g, ' ').trim();
-    // Agregar punto final si no existe
     if (!desc.endsWith('.')) desc += '.';
-    if (desc.length > 500) {
-      desc = desc.substring(0, 497) + "...";
-    }
-    return desc;
-  }
-  
-  // === FALLBACK: Buscar cualquier texto largo después de la primera línea ===
-  // Útil para PDFs que tienen descripción al inicio
-  let longTextLines = [];
-  for (let i = 1; i < Math.min(lines.length, 20); i++) {
-    const line = lines[i];
-    const lowerLine = line.toLowerCase();
-    
-    // Saltar si es una línea de especificación o sección
-    if (lowerLine.includes("especificaciones") || 
-        lowerLine.includes("ítem") ||
-        lowerLine.includes("item") ||
-        lowerLine.includes("aplicaciones") ||
-        line.length < 30) {
-      continue;
-    }
-    
-    // Si la línea parece ser descripción (contiene varios espacios o texto largo)
-    if (line.length > 40 && (line.includes('.') || line.includes(','))) {
-      longTextLines.push(line);
-    }
-  }
-  
-  if (longTextLines.length > 0) {
-    let desc = longTextLines.join(' ').replace(/\s+/g, ' ').trim();
     if (desc.length > 500) {
       desc = desc.substring(0, 497) + "...";
     }
@@ -280,8 +223,8 @@ function extractSpecs(text) {
     const line = lines[i];
     const lowerLine = line.toLowerCase();
     
-    // Inicio de especificaciones
     if (lowerLine.includes("especificaciones") ||
+        lowerLine.includes("especificaciones técnicas") ||
         lowerLine.includes("ítem") ||
         lowerLine.includes("item") ||
         lowerLine.includes("especificación")) {
@@ -289,7 +232,6 @@ function extractSpecs(text) {
       continue;
     }
     
-    // Fin de especificaciones
     if (inSpecs && (lowerLine.includes("aplicaciones") ||
         lowerLine.includes("gráfico") ||
         lowerLine.includes("dimensiones"))) {
@@ -298,23 +240,19 @@ function extractSpecs(text) {
     
     if (!inSpecs) continue;
     
-    // Ignorar encabezados
     if (lowerLine.includes("ítem") || 
         lowerLine.includes("item") ||
         lowerLine.includes("descripcion") ||
         lowerLine.includes("especific") ||
+        lowerLine.includes("descripción") ||
         line.length < 3) {
       continue;
     }
     
-    // === MANEJO DE FORMATO PDF: "Key Value" en la misma línea ===
-    // Para PDFs el formato puede ser "Key Value" (sin dos puntos)
-    // Buscar si la línea tiene un patrón como "Palabra1 Paliguabrasiente" donde la primera parte es la key
-    if (line.includes(' ') && !line.includes(':') && line.length > 10 && line.length < 60) {
-      // Dividir por espacios múltiples o simples
-      const parts = line.split(/\s{2,}|\t+/);
+    // Manejo de formato PDF: "Key Value" en la misma línea
+    if (!line.includes(':') && line.length > 15 && line.length < 80) {
+      const parts = line.trim().split(/\s{2,}|\t+/);
       if (parts.length >= 2) {
-        // Primera parte es la key, resto es el valor
         let key = parts[0]
           .toLowerCase()
           .replace(/á/g, "a")
@@ -326,17 +264,16 @@ function extractSpecs(text) {
           .replace(/\s+/g, "_")
           .replace(/[^a-z0-9_]/g, "");
         
-        // El valor es todo lo demás
         let value = parts.slice(1).join(' ').replace(/\s+/g, ' ').trim();
+        value = value.replace(/^[•\-\*•\u2022\u2023\u25E6\u2043\u2219\s➢]+/, "").trim();
         
-        if (key.length > 2 && value.length > 0 && value.length < 50) {
+        if (key.length > 2 && value.length > 0 && value.length < 60) {
           specs[key] = value;
           continue;
         }
       }
     }
     
-    // Si tenemos clave pendiente, esta línea es el valor
     if (pendingKey) {
       let value = line.replace(/\s+/g, ' ').trim();
       if (value.length > 0 && value.length < 50) {
@@ -344,7 +281,6 @@ function extractSpecs(text) {
       }
       pendingKey = null;
     } else {
-      // Podría ser una clave
       if (line.length >= 3 && line.length < 35 && !/^\d+$/.test(line)) {
         let key = line
           .toLowerCase()
@@ -367,7 +303,7 @@ function extractSpecs(text) {
   return specs;
 }
 
-// Función para extraer aplicaciones
+// Función para extraer aplicaciones - MEJORADA para collectr más líneas
 function extractApplications(text) {
   if (!text) return "";
   
@@ -380,29 +316,31 @@ function extractApplications(text) {
     const lowerLine = line.toLowerCase();
     
     // Detectar inicio de aplicaciones
-    if ((lowerLine.includes("aplicaciones") || lowerLine.includes("aplicaciones recomendadas")) &&
-        !lowerLine.includes("especificaciones") &&
-        !lowerLine.includes("gráfico")) {
+    if (lowerLine === "aplicaciones" || 
+        lowerLine === "aplicaciones recomendadas:" ||
+        lowerLine.includes("aplicaciones recomendadas")) {
       inApps = true;
       continue;
     }
     
     if (inApps) {
-      // Detener si llegamos a otra sección
+      // Detener en otra sección
       if (lowerLine.includes("gráfico") ||
           lowerLine.includes("dimensiones") ||
-          lowerLine.includes("respuesta") ||
+          lowerLine.startsWith("respuesta") ||
+          lowerLine.includes("ficha técnica") ||
           line.length < 3) {
         break;
       }
       
-      // Limpiar bullets comunes
+      // Limpiar bullets - múltiples tipos
       const cleanLine = line
-        .replace(/^[•\-\*•\u2022\u2023\u25E6\u2043\u2219\u00BF\u00A0\s]+/, "")
+        .replace(/^[•\-\*•\u2022\u2023\u25E6\u2043\u2219\u00BF\u00A0➢\s]+/, "")
+        .replace(/^[✔✓●○■□◆◇★☆►◄‣‟"„\t]+/, "")
         .trim();
       
-      // Verificar que parece ser una aplicación válida
-      if (cleanLine && cleanLine.length > 3 && cleanLine.length < 60) {
+      // Verificar que es una aplicación válida
+      if (cleanLine && cleanLine.length > 3 && cleanLine.length < 80) {
         apps.push(cleanLine);
       }
     }
@@ -512,8 +450,9 @@ async function generateProducts() {
   products.forEach(function(p) {
     const descLen = p.description.length;
     const specsCount = Object.keys(p.specs).length;
+    const appsLen = p.specs.aplicaciones ? p.specs.aplicaciones.length : 0;
     const docStatus = p.document ? "OK" : "FALTA";
-    console.log("   " + docStatus + " " + p.name + ": desc=" + descLen + " chars, specs=" + specsCount + " campos");
+    console.log("   " + docStatus + " " + p.name + ": desc=" + descLen + " chars, specs=" + specsCount + " campos, apps=" + appsLen + " chars");
   });
 }
 

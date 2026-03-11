@@ -26,7 +26,8 @@
       "frecuencia_de_cruce_crossover": "800 Hz",
       "proteccion__limitadores": "Protección térmica, RMS; limitador suave",
       "alimentacion": "powerCON IN / powerCON OUT (para encadenamiento)",
-      "material": "polipropileno"
+      "material": "polipropileno",
+      "aplicaciones": "Conciertos en vivo, Iglesias, colegios, Teatros y auditorios, Eventos corporativos y conferencias, conciertos al aire libre (combinado con subwoofers), Sistemas de refuerzo sonoro para DJ y clubes, Instalaciones fijas: centros de convenciones, auditorios y hoteles"
     }
   },
   {
@@ -57,7 +58,8 @@
       "conectores_de_entrada": "XLR",
       "conector_de_salida_link": "Powercom",
       "entrada_de_alimentacion": "Powercom",
-      "material": "polipropileno"
+      "material": "polipropileno",
+      "aplicaciones": "Conciertos en vivo, Teatros y auditorios, Refuerzo sonoro en espacios medianos y grandes, Instalaciones fijas en establecimientos, Espectáculos móviles, Iglesias, colegios, Eventos corporativos, empresariales y culturales"
     }
   },
   {
@@ -85,7 +87,7 @@
       "material_del_cono": "Carton prensado con partículas de Fibra de vidrio",
       "diametro_total": "465 mm",
       "altura_total": "212 mm",
-      "aplicaciones": "ITEM, DESCRIPCION, Diámetro Nominal, 18 pulgadas (457 mm), Carga magnetica, 180 onzas, Impedancia Nominal, 8 ohmios, Potencia Programada, 3800 W, Potencia RMS, 1900 W, Sensibilidad, 98 dB, Rango de Frecuencia, 30 Hz – 1000 Hz, Excursión Máxima, 54 mm (2.13 pulgadas), Diámetro de Bobina, 4.5 pulgadas (114 mm), Material de Bobina, Til / Alambre Cobre, Número de Capas de Bobina, 2 capas (Inside/Outside), Material del Cono, Carton prensado con partículas de Fibra de vidrio, Diámetro Total, 465 mm, Altura Total, 212 mm"
+      "aplicaciones": "Instalaciones Fijas: Perfecto para teatros, auditorios y clubes nocturnos."
     }
   },
   {
@@ -96,7 +98,7 @@
       "main": "img/products/pa10n-900-1.png",
       "watermark": "img/products/pa10n-900-2.png"
     },
-    "description": "Diámetro Nominal 255mm (10 pulgadas) Impedancia Nominal Potencia Programada Potencia RMS Sensibilidad Rango de Frecuencia 50 Hz – 3500 Hz Diámetro de Bobina Capas de Bobina 2 capas (IN - OUT)",
+    "description": "El PA10N-900, es un Altavoz profesional de 10 pulgadas, diseñado para ofrecer un rendimiento superior en aplicaciones de Line Array, cajas tipo Turbo, equipos de sonido para Pickups y también para quienes buscan máxima presión y claridad en Car Audio. Su construcción avanzada garantiza respuesta rápida, alta sensibilidad y un audio limpio incluso en condiciones de alto estrés. Diseño robusto, canasta reforzada y motor optimizado para ofrecer estabilidad y durabilidad Respuesta profesional: Id...",
     "document": "doc/products/FICHA TECNICA PARLANTE 10 NEODIMIO.docx",
     "specs": {
       "255mm": "(10 pulgadas)",
@@ -106,7 +108,8 @@
       "500_w": "Sensibilidad",
       "99_db": "Rango de Frecuencia",
       "50_hz__3500_hz": "Diámetro de Bobina",
-      "3_pulgadas": "Capas de Bobina"
+      "3_pulgadas": "Capas de Bobina",
+      "aplicaciones": "Sistemas line array, Monitores de escenarios, Cajas turbo, Sistema pickup, Car audio, Proyectos donde se requiera ligereza más potencia"
     }
   },
   {
@@ -117,7 +120,7 @@
       "main": "img/products/pa12n1000-1.png",
       "watermark": "img/products/pa12n1000-2.png"
     },
-    "description": "Descubre un Woofer de 12\" diseñado para entregar máxima fuerza, precisión y eficiencia en cualquier aplicación profesional. Su impresionante sensibilidad de 100 dB lo convierte en un Woofer extremadamente eficiente, ideal para sistemas que requieren potencia real con una respuesta rápida y contundente.",
+    "description": "Descubre un Woofer de 12\" diseñado para entregar máxima fuerza, precisión y eficiencia en cualquier aplicación profesional. Su impresionante sensibilidad de 100 dB lo convierte en un Woofer extremadamente eficiente, ideal para sistemas que requieren potencia real con una respuesta rápida y contundente. Características destacadas  POTENCIA REAL DE 1000 W Construido con materiales de alta resistencia y un motor magnético robusto que garantiza potencia continua sin pérdidas ni compresión térmic...",
     "document": "doc/products/FICHA TECNICA WOOFER PA12N1000.pdf",
     "specs": {
       "diametro_nominal_306mm": "(12 pulgadas )",
@@ -135,13 +138,14 @@
       "main": "img/products/pa8n600-1.png",
       "watermark": "img/products/pa8n600-2.png"
     },
-    "description": "El PA8N-600 es un Woofer profesional de 8 pulgadas con imán de neodimio, diseñado para",
+    "description": "El PA8N-600 es un Woofer profesional de 8 pulgadas con imán de neodimio, diseñado para aplicaciones de refuerzo sonoro de rango medio y alta eficiencia. Su construcción robusta y bobina de 2 pulgadas IN-OUT permite una excelente respuesta térmica y un desempeño",
     "document": "doc/products/FICHA TECNICA WOOFER PA8N600.pdf",
     "specs": {
       "diametro_nominal_8_pulgadas": "Impedancia Nominal 8 ohmios",
       "potencia_programada_600_w": "Potencia RMS 300 W",
       "sensibilidad_97_db": "Rango de Frecuencia 70 Hz – 3000 Hz",
-      "diametro_de_bobina": "2 pulgadas"
+      "diametro_de_bobina": "2 pulgadas",
+      "aplicaciones": "Cajas de dos vías, Sistemas line array, Monitores de escenarios, Cajas turbo, Sistema pickup, Car audio, Proyectos donde se requiera ligereza mas potencia"
     }
   },
   {
@@ -152,7 +156,7 @@
       "main": "img/products/parlante 10 sheffieeld-1.png",
       "watermark": "img/products/parlante 10 sheffieeld-2.png"
     },
-    "description": "Diámetro Nominal 10 pulgadas Carga magnetica Impedancia Nominal Potencia Programada Potencia RMS Sensibilidad Rango de Frecuencia 50 Hz – 2.5KHz Diámetro de Bobina 3 pulgadas Material de Bobina Kapton / Alambre Cobre Tipo de chasis",
+    "description": "El parlante SHEFFIELD 10, es un altavoz diseñado para aplicaciones profesionales que requieren potencia constante, buena respuesta en medios y excelente comportamiento en sistemas de audio tipo refuerzo sonoro. Su imán de ferrita, bobina de 3’’ en kapton y chasis en lámina brindan estabilidad térmica, durabilidad y un rendimiento sólido en ambientes de trabajo exigentes. Es ideal para configuraciones tipo full-range, cajas de dos y tres vías, y proyectos de reemplazo de alto desempeño..",
     "document": "doc/products/FICHA TECNICA PARLANTE 10 SHEFIEELD.docx",
     "specs": {
       "diametro_nominal": "10 pulgadas",
@@ -166,7 +170,7 @@
       "material_de_bobina": "Kapton / Alambre Cobre",
       "tipo_iman": "Ferrita",
       "tipo_de_chasis": "Lamina",
-      "aplicaciones": "Especificaciones Técnicas, ITEM, DESCRIPCION, Diámetro Nominal, 10 pulgadas, Carga magnetica, 70 onzas, Impedancia Nominal, 8 ohmios, Potencia Programada, 800 W, Potencia RMS, 400 W, Sensibilidad, 97 dB, Rango de Frecuencia, 50 Hz – 2.5KHz, Diámetro de Bobina, 3  pulgadas, Material de Bobina, Kapton / Alambre Cobre, Tipo Iman, Ferrita, Tipo de chasis, Lamina"
+      "aplicaciones": "Monitores de piso, Reemplazo para proyectos de reparacion, refuerzo sonoro en eventos, Cajas convencionales"
     }
   },
   {
@@ -177,7 +181,7 @@
       "main": "img/products/parlante 12 sheffield-1.png",
       "watermark": "img/products/parlante 12 sheffield-2.png"
     },
-    "description": "El parlante SHEFFIELD 12 es un componente pensado para sistemas profesionales que requieren graves más profundos y mayor cobertura de rango medio. Su bobina de 3’’ en kapton, imán de ferrita y chasis en lámina aseguran un rendimiento confiable, alta durabilidad y excelente disipación de calor.",
+    "description": "El parlante SHEFFIELD 12 es un componente pensado para sistemas profesionales que requieren graves más profundos y mayor cobertura de rango medio. Su bobina de 3’’ en kapton, imán de ferrita y chasis en lámina aseguran un rendimiento confiable, alta durabilidad y excelente disipación de calor. Está diseñado para cajas acústicas de refuerzo sonoro, sistemas de rango extendido y aplicaciones de alto rendimiento en eventos y conciertos.",
     "document": "doc/products/FICHA TECNICA PARLANTE 12 SHEFFIELD.docx",
     "specs": {
       "diametro_nominal": "12 pulgadas",
@@ -190,7 +194,7 @@
       "material_de_bobina": "Kapton / Alambre Cobre",
       "tipo_iman": "Ferrita",
       "tipo_de_chasis": "Lamina",
-      "aplicaciones": "Especificaciones Técnicas, ITEM, DESCRIPCION, Diámetro Nominal, 12 pulgadas, Impedancia Nominal, 8 ohmios, Potencia RMS, 500 W, Potencia Programada, 1000 W, Sensibilidad, 97 dB, Rango de Frecuencia, 45 Hz – 2.5KHz, Diámetro de Bobina, 3 pulgadas, Material de Bobina, Kapton / Alambre Cobre, Tipo Iman, Ferrita, Tipo de chasis, Lamina"
+      "aplicaciones": "Cajas convencionales, Sistemas full-range de alto desempeño, Equipos profesionales para música en vivo, Monitores de escenario de alta presión sonora, Reemplazos para proyectos de reparación"
     }
   },
   {
@@ -212,7 +216,8 @@
       "diametro_de_bobina": "4 pulgadas",
       "material_de_bobina": "Til / Alambre Cobre",
       "diametro_nominal": "18 pulgadas (457 mm)",
-      "numero_de_capas_de_bobina": "2 capas (Inside/Outside)"
+      "numero_de_capas_de_bobina": "2 capas (Inside/Outside)",
+      "aplicaciones": "Instalaciones Fijas: Perfecto para teatros, auditorios y clubes nocturnos."
     }
   }
 ]
