@@ -1,5 +1,6 @@
 const fs = require("fs");
 const pdf = require("pdf-parse");
+const Tesseract = require("tesseract.js");
 
 const imagesFolder = "./img/products";
 const docsFolder = "./doc/products";
@@ -8,62 +9,106 @@ const outputFile = "./data/products.json";
 const images = fs.readdirSync(imagesFolder);
 const docs = fs.readdirSync(docsFolder);
 
-// normalizar nombres
 function normalize(name){
   return name
     .toLowerCase()
-    .replace(/\.(png|jpg|jpeg|pdf|docx)/g,"")
+    .replace(/\.(png|jpg|jpeg|pdf)/g,"")
     .replace(/-/g,"")
-    .replace(/\s/g,"")
-    .replace(/\d$/g,"");
+    .replace(/\s/g,"");
 }
 
-// detectar categoría
 function detectCategory(name){
 
   const n = name.toLowerCase();
 
   if(n.includes("hl")) return "Line Array";
   if(n.includes("woofer")) return "Woofer";
-  if(n.includes("pa")) return "Woofer";
+  if(n.includes("lf")) return "Woofer";
+  if(n.includes("pa")) return "Parlante";
   if(n.includes("sheffield")) return "Parlante";
 
   return "Audio";
 
 }
 
-// extraer datos del pdf
-async function extractSpecs(pdfPath){
+async function readPDFText(path){
 
   try{
 
-    const buffer = fs.readFileSync(pdfPath);
+    const buffer = fs.readFileSync(path);
     const data = await pdf(buffer);
-    const text = data.text.toLowerCase();
 
-    function find(label){
-      const r = new RegExp(label + "\\s*:?\\s*(.+)", "i");
-      const m = text.match(r);
-      return m ? m[1].split("\n")[0].trim() : "";
+    if(data.text && data.text.length > 100){
+      return data.text.toLowerCase();
     }
 
-    return [
-      ["Modelo", find("modelo")],
-      ["Tipo", find("tipo")],
-      ["Amplificador", find("amplificador")],
-      ["Potencia total", find("potencia")],
-      ["Potencia RMS", find("rms")],
-      ["Frecuencia", find("frecuencia")],
-      ["SPL máximo", find("spl")]
-    ];
+  }catch(e){}
 
-  }catch(e){
-    return [];
-  }
+  // OCR fallback
+  console.log("OCR leyendo:", path);
+
+  const result = await Tesseract.recognize(path,"eng");
+
+  return result.data.text.toLowerCase();
 
 }
 
-// agrupar imágenes por producto
+function find(text, labels){
+
+  for(const label of labels){
+
+    const r = new RegExp(label + "\\s*:?\\s*(.+)", "i");
+    const m = text.match(r);
+
+    if(m){
+      return m[1].split("\n")[0].trim();
+    }
+
+  }
+
+  return "";
+
+}
+
+async function extractSpecs(pdfPath){
+
+  const text = await readPDFText(pdfPath);
+
+  return [
+
+    ["Modelo", find(text,["modelo","model"])],
+
+    ["Tipo", find(text,["tipo","type"])],
+
+    ["Amplificador", find(text,["amplificador","amplifier"])],
+
+    ["Potencia total", find(text,[
+      "potencia total",
+      "power",
+      "program power",
+      "max power"
+    ])],
+
+    ["Potencia RMS", find(text,[
+      "rms",
+      "continuous power"
+    ])],
+
+    ["Frecuencia", find(text,[
+      "frecuencia",
+      "frequency response"
+    ])],
+
+    ["SPL máximo", find(text,[
+      "spl",
+      "max spl",
+      "sensitivity"
+    ])]
+
+  ];
+
+}
+
 const groupedImages = {};
 
 images.forEach(img => {
@@ -115,13 +160,18 @@ async function generateProducts(){
     }
 
     products.push({
+
       id: index + 1,
+
       name: productName,
+
       category: detectCategory(productName),
 
       images:{
         main:`img/products/${mainImage}`,
-        watermark: watermark ? `img/products/${watermark}` : null
+        watermark: watermark
+          ? `img/products/${watermark}`
+          : null
       },
 
       document: relatedDoc
@@ -129,6 +179,7 @@ async function generateProducts(){
         : null,
 
       specs: specs
+
     });
 
   }
@@ -142,7 +193,7 @@ async function generateProducts(){
     JSON.stringify(products,null,2)
   );
 
-  console.log("✅ products.json generado automáticamente");
+  console.log("✅ products.json generado con OCR");
 
 }
 
