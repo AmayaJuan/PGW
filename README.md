@@ -10,6 +10,8 @@ Sitio web oficial de **PA Acoustic**, empresa especializada en equipos de audio 
 
 | Fecha | Cambios | Archivos Afectados |
 |-------|---------|-------------------|
+| 11/03/2026 | Reorganizar sección contacto: mapa de Google Maps, dirección, país/ciudad y botón WhatsApp | index.html |
+| 11/03/2026 | Agregar mapa de Google en sección contacto: Cl 44 #66-75, Laureles - Estadio | index.html |
 | 11/03/2026 | Agregar dirección del almacén en sección contacto: Cl 44 #66-75, Laureles - Estadio | index.html |
 | 11/03/2026 | Mejoras visuales del catálogo: contador de productos, indicador de categoría y paginación con diseño profesional | css/styles.css, js/main.js, ANALISIS.md |
 | 10/03/2026 | Optimizar audio: cambiar preload="auto" a preload="metadata" para evitar errores de autoplay | index.html |
