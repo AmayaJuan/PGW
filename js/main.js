@@ -654,28 +654,27 @@ function renderProducts() {
     const currentPage = PAGINATION_CONFIG.currentPage;
     const totalPages = Math.ceil(total / itemsPerPage);
     
-    // Lógica: Página 1 muestra los ÚLTIMOS productos, Página 2 muestra los PRIMEROS
-    // Ejemplo con 9 productos:
-    // - Página 1: muestra producto 9 (rango: 8-8)
-    // - Página 2: muestra productos 1-8 (rango: 9-16)
+    // Lógica: Formato visual fijo
+    // Página 1: "8-8" (siempre 8)
+    // Página 2: "9-16" (siempre 9-16)
+    // Página 3: "17-24" (siempre 17-24), etc.
     
     let startItem, endItem;
     if (total <= itemsPerPage) {
-      // Solo hay una página o menos de 8 productos: muestra todos
+      // Menos de 8 productos: mostrar todos
       startItem = 1;
       endItem = total;
     } else {
-      // Hay más de 8 productos
+      // Más de 8 productos: formato visual fijo
       if (currentPage === 1) {
-        // Página 1: mostrar solo el ÚLTIMO producto (el producto 8 en este caso)
-        // El último producto está en posición (total - itemsPerPage + 1) = 9 - 8 + 1 = 2
-        // Pero el usuario quiere 8-8, así que startItem = endItem = itemsPerPage = 8
+        // Página 1: siempre muestra "8-8"
         startItem = itemsPerPage;
         endItem = itemsPerPage;
       } else {
-        // Página 2+: mostrar los PRIMEROS productos restantes
-        startItem = 1;
-        endItem = total - itemsPerPage;
+        // Página 2+: calcular rango acumulativo
+        // Página 2 = 9-16, Página 3 = 17-24, etc.
+        startItem = (currentPage - 1) * itemsPerPage + 1;
+        endItem = currentPage * itemsPerPage;
       }
     }
     
