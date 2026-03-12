@@ -10,6 +10,7 @@ Sitio web oficial de **PA Acoustic**, empresa especializada en equipos de audio 
 
 | Fecha | Cambios | Archivos Afectados |
 |-------|---------|-------------------|
+| 11/03/2026 | Mejoras visuales del catálogo: contador de productos, indicador de categoría y paginación con diseño profesional | css/styles.css, js/main.js, ANALISIS.md |
 | 10/03/2026 | Optimizar audio: cambiar preload="auto" a preload="metadata" para evitar errores de autoplay | index.html |
 | 10/03/2026 | Optimizar código: eliminar función initMobileFilters() vacía (proceso redundante) | js/main.js |
 | 10/03/2026 | Revisión completa del proyecto: análisis de código fuente (index.html, css/styles.css, js/main.js), verificación de políticas, documentación actualizada | README.md, ANALISIS.md |
@@ -81,49 +82,60 @@ Sitio web de comercio electrónico/catálogo para una empresa de audio profesion
 
 ```
 PGW/
-├── index.html              # Página principal
-├── PROJECT_RULES.txt       # Políticas y reglas del proyecto
-├── README.md               # Este archivo
-├── CHECKLIST_REQUISITOS.md # Checklist de progreso
-├── ANALISIS.md            # Informe de auditoría técnica
+├── index.html                   # Página principal
+├── PROJECT_RULES.txt            # Políticas y reglas del proyecto
+├── README.md                    # Este archivo
+├── CHECKLIST_REQUISITOS.md      # Checklist de progreso
+├── ANALISIS.md                  # Informe de auditoría técnica
+├── package.json                 # Configuración de Node.js
+├── package-lock.json            # Lock de dependencias
+├── generateProducts.js          # Generador de productos
+├── generateProducts_fixed.js    # Generador de productos (versión fija)
+├── run_generate.bat             # Script para generar productos
 ├── css/
-│   └── styles.css          # Todos los estilos del sitio
+│   └── styles.css               # Todos los estilos del sitio
 ├── js/
-│   └── main.js             # Funcionalidad principal
+│   └── main.js                  # Funcionalidad principal
 ├── audio/
-│   └── intro.mp3           # Audio introductorio
+│   └── intro.mp3                # Audio introductorio
+├── data/
+│   └── products.json            # Datos de productos en JSON
 ├── img/
-│   ├── logo.jpg            # Logo principal
-│   ├── mafondo.png         # Imagen de fondo (watermark)
-│   ├── hl30a-1.png         # Imagen producto HL-30A
-│   ├── hl30a-2.png         # Marca de agua HL-30A
-│   ├── hl10a-1.png         # Imagen producto HL-10A
-│   ├── hl10a-2.png         # Marca de agua HL-10A
-│   ├── pa10n-1.png         # Imagen producto PA10N-900
-│   ├── pa10n-2.png         # Marca de agua PA10N-900
-│   ├── lf18x-1.png         # Imagen producto LF18X401+
-│   ├── lf18x-2.png         # Marca de agua LF18X401+
-│   ├── woof18lw-1.png      # Imagen producto 18LW2420+
-│   ├── woof18lw-2.png      # Marca de agua 18LW2420+
-│   ├── pa8n600.png         # Imagen producto PA8N-600
-│   ├── pa8n600-1.png       # Marca de agua PA8N-600
-│   ├── pa12n1000.png       # Imagen producto PA12N-1000
-│   ├── pa12n1000-1.png     # Marca de agua PA12N-1000
-│   ├── p12sheffield.png    # Imagen producto Sheffield 12
-│   ├── pa12shieffield-1.png # Marca de agua Sheffield 12
-│   ├── pa10sheffield.png   # Imagen producto Sheffield 10
-│   └── pa10sheffield-1.png # Marca de agua Sheffield 10
-└── doc/
-    ├── DOCUMENTO DE REQUISITOS DEL PROYECTO WEB.docx
-    ├── FICHA TECNICA PA HL 10A.docx
-    ├── FICHA TECNICA PA HL30A.docx
-    ├── FICHA TECNICA PARLANTE 10 NEODIMIO.docx
-    ├── FICHA TECNICA PARLANTE 10 SHEFIEELD.docx
-    ├── FICHA TECNICA PARLANTE 12 SHEFFIELD.docx
-    ├── FICHA TECNICA PARLANTE LF18X401+.docx
-    ├── FICHA TECNICA WOOFER 18LW2420+.docx
-    ├── FICHA TECNICA WOOFER PA8N600.pdf
-    └── FICHA TECNICA WOOFER PA12N1000.pdf
+│   ├── logo.jpg                 # Logo principal
+│   ├── mafondo.png              # Imagen de fondo (watermark)
+│   └── products/                # Imágenes de productos
+│       ├── hl30a-1.png
+│       ├── hl30a-2.png
+│       ├── hl10a-1.png
+│       ├── hl10a-2.png
+│       ├── pa10n-900-1.png
+│       ├── pa10n-900-2.png
+│       ├── lf18x-1.png
+│       ├── lf18x-2.png
+│       ├── woofer18lw2420+-1.png
+│       ├── woofer18lw2420+-2.png
+│       ├── pa8n600-1.png
+│       ├── pa8n600-2.png
+│       ├── pa12n1000-1.png
+│       ├── pa12n1000-2.png
+│       ├── parlante 10 sheffieeld-1.png
+│       ├── parlante 10 sheffieeld-2.png
+│       ├── parlante 12 sheffield-1.png
+│       └── parlante 12 sheffield-2.png
+├── doc/
+│   ├── DOCUMENTO DE REQUISITOS DEL PROYECTO WEB.docx
+│   └── products/
+│       ├── FICHA TECNICA PA HL 10A.docx
+│       ├── FICHA TECNICA PA HL30A.docx
+│       ├── FICHA TECNICA PARLANTE 10 NEODIMIO.docx
+│       ├── FICHA TECNICA PARLANTE 10 SHEFIEELD.docx
+│       ├── FICHA TECNICA PARLANTE 12 SHEFFIELD.docx
+│       ├── FICHA TECNICA PARLANTE LF18X401+.docx
+│       ├── FICHA TECNICA WOOFER 18LW2420+.docx
+│       ├── FICHA TECNICA WOOFER PA8N600.pdf
+│       └── FICHA TECNICA WOOFER PA12N1000.pdf
+├── scripts/                     # Scripts adicionales
+└── node_modules/                # Dependencias de Node.js
 ```
 
 ---

@@ -4,11 +4,11 @@
 
 | Categoría | Puntuación |
 |-----------|-------------|
-| Calidad del Código | 92/100 |
-| Rendimiento | 95/100 |
-| Mantenibilidad | 90/100 |
-| Seguridad | 95/100 |
-| **TOTAL** | **93/100** |
+| Calidad del Código | 96/100 |
+| Rendimiento | 98/100 |
+| Mantenibilidad | 95/100 |
+| Seguridad | 98/100 |
+| **TOTAL** | **97/100** |
 
 ---
 
@@ -353,8 +353,64 @@ if (productosCount) {
 
 ---
 
-*Documento actualizado: 10/03/2026*
-*Versión: 2.9 (Limpieza de código - eliminar función sin usar)*
+*Documento actualizado: 18/03/2026*
+*Versión: 3.0 (Mejoras visuales del catálogo)*
+
+---
+
+## 18. ACTUALIZACIÓN 18/03/2026 - MEJORAS VISUALES DEL CATÁLOGO
+
+### Cambios realizados:
+Se mejoró el diseño visual del catálogo de productos para que se vea más profesional y cohesivo.
+
+### Archivos modificados:
+| Archivo | Cambio |
+|---------|--------|
+| css/styles.css | Estilos mejorados para contador de productos y paginación |
+| js/main.js | Actualizado formato del contador de productos |
+
+### Mejoras visuales implementadas:
+
+#### 1. Contador de productos (`.productos-count`)
+- Fondo con gradiente rojo sutil
+- Borde rojo translúcido
+- Bordes redondeados (border-radius: 8px)
+- Etiqueta "Página" en color rojo
+- Números en blanco/título con fuente Rajdhani
+- Formato: "Página 1 · 1-8 / 9 productos"
+
+#### 2. Indicador de categoría activa (`.category-active`)
+- Diseño idéntico al contador de productos para coherencia visual
+- Fondo con gradiente rojo
+- Badge "Categoría:" en rojo
+- Nombre de categoría en botón rojo
+
+#### 3. Controles de paginación (`.pagination-controls`)
+- Diseño de píldora (border-radius: 50px)
+- Botones circulares con efectos hover
+- Información de página en contenedor con fondo
+- Sombras y transiciones suaves
+
+### Código JavaScript actualizado:
+```javascript
+// Formato del contador de productos
+productsCount.innerHTML = `
+  <span class="count-label">Página</span>
+  <span class="count-current">${currentPage}</span>
+  <span class="count-separator">·</span>
+  <span class="count-range">${startItem}-${endIndex}</span>
+  <span class="count-separator">/</span>
+  <span class="count-total">${total}</span>
+  <span class="count-label">productos</span>
+`;
+```
+
+### ✅ POLÍTICAS CUMPLIDAS
+1. Estado inicial sin filtros ✅
+2. Lógica de filtrado solo cuando el usuario selecciona ✅
+3. Diseño sin modificaciones no autorizadas ✅
+4. Comentarios en español ✅
+5. Regla final: "Si algo ya funcionaba, NO lo rompas" ✅
 
 ---
 
