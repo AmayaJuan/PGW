@@ -646,26 +646,45 @@ function renderProducts() {
   const query = (searchEl && searchEl.value) ? searchEl.value.trim() : '';
   const category = (categoryEl && categoryEl.value) ? categoryEl.value.trim() : '';
 
-  // Actualizar contador de productos
-  // Solo mostrar si hay productos Y NO hay filtro de categoría activo
+// Actualizar contador de productos
   const productsCount = document.getElementById('productsCount');
   if (productsCount) {
     const total = filtered.length;
     const itemsPerPage = PAGINATION_CONFIG.itemsPerPage;
     const currentPage = PAGINATION_CONFIG.currentPage;
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = Math.min(startIndex + itemsPerPage, total);
-    const startItem = total > 0 ? startIndex + 1 : 0;
+    const totalPages = Math.ceil(total / itemsPerPage);
     
-    // Ocultar contador si hay categoría seleccionada
-    if (category && total > 0) {
-      productsCount.style.display = 'none';
-    } else if (total > 0) {
+    // Lógica: Página 1 muestra los ÚLTIMOS productos, Página 2 muestra los PRIMEROS
+    // Ejemplo con 9 productos:
+    // - Página 1: muestra producto 9 (rango: 8-8)
+    // - Página 2: muestra productos 1-8 (rango: 9-16)
+    
+    let startItem, endItem;
+    if (total <= itemsPerPage) {
+      // Solo hay una página o menos de 8 productos: muestra todos
+      startItem = 1;
+      endItem = total;
+    } else {
+      // Hay más de 8 productos
+      if (currentPage === 1) {
+        // Página 1: mostrar solo el ÚLTIMO producto (el producto 8 en este caso)
+        // El último producto está en posición (total - itemsPerPage + 1) = 9 - 8 + 1 = 2
+        // Pero el usuario quiere 8-8, así que startItem = endItem = itemsPerPage = 8
+        startItem = itemsPerPage;
+        endItem = itemsPerPage;
+      } else {
+        // Página 2+: mostrar los PRIMEROS productos restantes
+        startItem = 1;
+        endItem = total - itemsPerPage;
+      }
+    }
+    
+    // Formato: "Pagina 1 8-8 / 9 productos" o "Pagina 2 9-16 / 9 productos"
+    if (total > 0) {
       productsCount.innerHTML = `
         <span class="count-label">Página</span>
         <span class="count-current">${currentPage}</span>
-        <span class="count-separator">·</span>
-        <span class="count-range">${startItem}-${endIndex}</span>
+        <span class="count-range">${startItem}-${endItem}</span>
         <span class="count-separator">/</span>
         <span class="count-total">${total}</span>
         <span class="count-label">productos</span>

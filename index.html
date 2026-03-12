@@ -7,7 +7,7 @@
   Contiene la estructura completa de la página:
   - Navegación
   - Hero (sección principal)
-  - Banner de productos
+  - Banner de products
   - Catálogo de productos
   - Sección Nosotros
   - Sección Contacto
@@ -97,7 +97,7 @@
   <ul class="nav-links" id="navLinks">
     <!-- Buscador integrado en menú móvil -->
     <li class="nav-mobile-search">
-      <input type="search" id="mobileMenuSearch" class="nav-mobile-search-input" placeholder="Buscar productos..." autocomplete="off" aria-label="Buscar productos en el menú"/>
+      <input type="search" id="mobileMenuSearch" class="nav-mobile-search-input" placeholder="Buscar products..." autocomplete="off" aria-label="Buscar products en el menú"/>
     </li>
     <!-- Filtro de categoría integrado en menú móvil -->
     <li class="nav-mobile-category">
@@ -106,7 +106,7 @@
         <option value="">Todas las categorías</option>
       </select>
     </li>
-    <li><a href="#productos" class="nav-link" onclick="handleNavClick(event, 'productos')">Productos</a></li>
+    <li><a href="#products" class="nav-link" onclick="handleNavClick(event, 'products')">productos</a></li>
     <li><a href="#nosotros" class="nav-link" onclick="handleNavClick(event, 'nosotros')">Nosotros</a></li>
     <li><a href="#contacto" class="nav-link" onclick="handleNavClick(event, 'contacto')">Contacto</a></li>
 <li class="nav-wp-mobile"><a href="https://wa.me/573053402732?text=Hola,%20quiero%20más%20información" target="_blank" rel="noopener noreferrer">
@@ -123,9 +123,9 @@
       <button type="button" class="nav-search-trigger" id="navSearchTrigger" title="Buscar" aria-label="Abrir búsqueda" aria-expanded="false" aria-controls="catalogSearch">
         <span class="nav-search-icon" aria-hidden="true">🔍</span>
       </button>
-      <input type="search" id="catalogSearch" class="nav-search-input" placeholder="Buscar..." autocomplete="off" aria-label="Buscar productos"/>
+      <input type="search" id="catalogSearch" class="nav-search-input" placeholder="Buscar..." autocomplete="off" aria-label="Buscar products"/>
     </div>
-    <!-- Selector desplegable para filtrar productos por categoría -->
+    <!-- Selector desplegable para filtrar products por categoría -->
     <select id="catalogCategory" class="nav-category-select" title="Filtrar por categoría" aria-label="Filtrar por categoría">
       <option value="">Todas las categorías</option>
     </select>
@@ -176,7 +176,7 @@
     </h1>
     <p class="hero-sub">Line arrays, woofers y parlantes profesionales diseñados para eventos de gran formato, instalaciones fijas y sistemas de refuerzo sonoro de alto rendimiento.</p>
     <div class="hero-btns">
-      <a href="#productos" class="btn-rojo">Ver Productos</a>
+      <a href="#products" class="btn-rojo">Ver products</a>
 <a href="https://wa.me/573053402732?text=Hola,%20quiero%20más%20información" target="_blank" rel="noopener noreferrer" class="btn-outline">Cotizar por WhatsApp</a>
     </div>
   </div>
@@ -184,7 +184,7 @@
 
 <!-- ========================================
      BANNER DE FOTOS
-     Carrusel infinito con imágenes de productos
+     Carrusel infinito con imágenes de products
      que permite hacer clic para ver detalles
      ======================================== -->
 <div class="banner-wrap">
@@ -192,8 +192,8 @@
 </div>
 
 <!-- ========================================
-     CATÁLOGO DE PRODUCTOS
-     Grid de tarjetas de productos generados dinámicamente
+     Catálogo de productos
+     Grid de tarjetas de products generados dinámicamente
      por JavaScript. Cada tarjeta muestra:
      - Imagen del producto
      - Badge (etiqueta de categoría)
@@ -202,19 +202,19 @@
      - Botón para ver más detalles
      ======================================== -->
 <!-- aria-labelledby vincula la sección con su título para lectores de pantalla -->
-<section id="products" class="sec" aria-labelledby="titulo-productos">
+<section id="products" class="sec" aria-labelledby="titulo-products">
   <div class="reveal">
     <div class="sec-label">— Nuestros Equipos</div>
-    <h2 class="sec-titulo" id="titulo-productos">Catálogo de Productos</h2>
-    <!-- Contador de productos total -->
-    <div class="productos-count" id="productsCount"></div>
+    <h2 class="sec-titulo" id="titulo-products">Catálogo de productos</h2>
+    <!-- Contador de products total -->
+    <div class="products-count" id="productsCount"></div>
     <!-- Indicador de categoría activa - muestra la categoría seleccionada -->
     <div id="categoryActive" class="category-active" style="display: none;">
       <span class="categoria-badge">Categoría:</span>
       <span id="categoryName" class="category-name"></span>
     </div>
   </div>
-  <!-- Contenedor grid donde JavaScript inserta las tarjetas de productos -->
+  <!-- Contenedor grid donde JavaScript inserta las tarjetas de products -->
   <div class="products-grid" id="productsGrid"></div>
 </section>
 
@@ -234,7 +234,7 @@
     <div class="reveal">
       <div class="sec-label">— Quiénes Somos</div>
 <h2 class="nos-titulo" id="titulo-nosotros">Soluciones en <span>Audio Pro</span></h2>
-      <p class="nos-texto">Somos fabricantes y distribuidores de equipos de audio profesional de alta potencia. Nuestros productos están diseñados para cumplir las exigencias de los profesionales del sonido en eventos, instalaciones y producción en vivo.</p>
+      <p class="nos-texto">Somos fabricantes y distribuidores de equipos de audio profesional de alta potencia. Nuestros products están diseñados para cumplir las exigencias de los profesionales del sonido en eventos, instalaciones y producción en vivo.</p>
       <p class="nos-texto">Cada equipo es desarrollado con tecnología de punta, componentes de neodimio y amplificación clase D para garantizar el máximo rendimiento con la mayor eficiencia energética.</p>
       <!-- Lista de características de la empresa -->
       <div class="nos-items">

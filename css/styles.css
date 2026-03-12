@@ -1149,8 +1149,8 @@ body[data-theme="light"] .modal-watermark {
   justify-content: center;
 }
 
-/* Contador de productos - Estilo igual al indicador de categoría */
-.productos-count {
+/* Contador de products - Estilo igual al indicador de categoría */
+.products-count {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
@@ -1162,7 +1162,7 @@ body[data-theme="light"] .modal-watermark {
   flex-wrap: wrap;
 }
 
-.productos-count .count-label {
+.products-count .count-label {
   color: var(--rojo);
   font-size: 0.7rem;
   font-weight: 600;
@@ -1170,7 +1170,7 @@ body[data-theme="light"] .modal-watermark {
   letter-spacing: 0.08em;
 }
 
-.productos-count .count-current {
+.products-count .count-current {
   color: var(--titulo);
   font-weight: 700;
   font-size: 0.95rem;
@@ -1179,26 +1179,26 @@ body[data-theme="light"] .modal-watermark {
   text-align: center;
 }
 
-.productos-count .count-separator {
+.products-count .count-separator {
   color: var(--muted);
   margin: 0 0.1rem;
   font-weight: 400;
 }
 
-.productos-count .count-range {
+.products-count .count-range {
   color: var(--texto);
   font-weight: 600;
   font-size: 0.9rem;
 }
 
-.productos-count .count-total {
+.products-count .count-total {
   color: var(--titulo);
   font-weight: 700;
   font-size: 0.9rem;
   font-family: 'Rajdhani', sans-serif;
 }
 
-.productos-count .count-suffix {
+.products-count .count-suffix {
   color: var(--muted);
   font-size: 0.75rem;
   font-weight: 500;
