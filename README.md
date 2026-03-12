@@ -241,12 +241,14 @@ El desarrollo de este proyecto sigue reglas estrictas definidas en `PROJECT_RULE
 
 © 2026 PA Acoustic - Audio Profesional Medellín - Colombia
 
-Desarrollado por: **Juan Pablo Vélez** - Web Developer
+Desarrollado por: **Juan Pablo Vélez Ammaya** - Web Developer
 
 ---
 
 ## 📞 Contacto
 
 - **WhatsApp**: +57 305 340 2732
-- **Ubicación**: Medellín, Colombia
 - **Horario**: Lun – Vie: 8:45 – 18:00 · Sáb: 8:45 – 15:00
+- **Dirección**: Cl 44 #66-75, Laureles - Estadio, Medellín
+- **País**: Colombia
+- **Mapa**: Google Maps integrado en la sección contacto del sitio web
