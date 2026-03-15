@@ -10,8 +10,8 @@ Sitio web oficial de **PA Acoustic**, empresa especializada en equipos de audio 
 
 | Fecha | Cambios | Archivos Afectados |
 |-------|---------|-------------------|
-| 14/03/2026 | Cloudinary HL10A (main+watermark) + comentarios index.html 100% + limpieza scripts generadores | data/products.json, index.html, README.md |
-| 14/03/2026 | Revisión exhaustiva del código fuente + comentarios detallados en CSS + migración inicial Cloudinary | css/styles.css, index.html, TODO.md |
+| 14/03/2026 | Revisión políticas + comentarios CSS/HTML 100% + migración Cloudinary + commit Git | css/styles.css, index.html, js/main.js, data/products.json, README.md |
+
 | 11/03/2026 | Reorganizar sección contacto: mapa de Google Maps, dirección, país/ciudad y botón WhatsApp | index.html |
 | 11/03/2026 | Agregar mapa de Google en sección contacto: Cl 44 #66-75, Laureles - Estadio | index.html |
 | 11/03/2026 | Agregar dirección del almacén en sección contacto: Cl 44 #66-75, Laureles - Estadio | index.html |
