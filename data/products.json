@@ -8,17 +8,15 @@
       "watermark": "https://res.cloudinary.com/djlr3wszq/image/upload/v1773502279/hl10a-2_wxcrkg.png"
     },
     "description": "El PA HL10-A es un sistema line array activo bi-amplificado de 2 vías, diseñado para aplicaciones profesionales de refuerzo sonoro de formato pequeño y mediano. Integra dos parlantes de 8” con iman de neodimio y un motor de compresión con iman de neodimio y una bobina de 2.5”, ofreciendo una respuesta en frecuencia de 65 Hz a 20 kHz y un SPL máximo de hasta 133 dB.",
-    "document": "doc/products/FICHA TECNICA PA HL 10A.docx",
+    "document": "https://res.cloudinary.com/djlr3wszq/image/upload/v1773531017/FICHA_TECNICA_PA_HL_10A_1_kyplax.pdf",
 
     "specs": {
       "100": "Cobertura vertical",
-      "modelo": "PA HL-10A",
       "modulo activo": "2 vías, bi amplificado",
       "tipo": "Potencia pico",
       "1400 w": "Potencia RMS",
       "700 w": "Potencia LF (parlantes)",
       "1000 w pico  500 w rms": "Potencia HF (driver compresor)",
-      "400 w pico  200 w rms": "Respuesta en frecuencia",
       "65 hz  20 khz": "SPL máximo (1 m)",
       "133 db": "Cobertura horizontal",
       "conectores de entrada": "XLR / TRS combo balanceado / no balanceado",

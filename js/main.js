@@ -484,7 +484,7 @@ async function loadProducts() {
       tags: [],
 
       doc: p.document || null
-      }));
+    }));
 
     renderBanner();
     renderProducts();
@@ -1019,6 +1019,9 @@ function openModal(id) {
       <h4>Aplicaciones</h4>
      <ul>${(p.apps || []).map(a => `<li>${a}</li>`).join('')}</ul>
     </div>
+    ${p.doc ? `<a href="${p.doc}" target="_blank" rel="noopener noreferrer" class="modal-pdf-btn" style="display: block; margin: 1rem 0; padding: 0.8rem 1.2rem; background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; text-decoration: none; text-align: center; border-radius: 8px; font-weight: 600;" onclick="event.stopPropagation();">
+      📄 Ver Ficha Técnica ${p.name}
+    </a>` : ''}
 <a href="${WP}?text=${encodeURIComponent('Hola, me interesa el ' + p.name + '. ¿Pueden darme información y precio?')}"
        target="_blank" rel="noopener noreferrer" class="modal-wp">
       ${WP_SVG} Consultar por WhatsApp
