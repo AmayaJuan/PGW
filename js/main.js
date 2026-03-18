@@ -776,7 +776,6 @@ function renderProducts() {
             <div class="prod-desc">${escapeHtml(p.desc)}</div>
             <div class="prod-specs">${p.tags.map(t => `<span class="spec-tag">${t}</span>`).join('')}</div>
             <div class="prod-footer">
-              <span style="font-size:0.65rem;color:var(--muted)">Click para ver ficha</span>
               <button class="prod-btn">Ver más →</button>
             </div>
           </div>
