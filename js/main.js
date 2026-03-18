@@ -94,7 +94,6 @@ function initCache() {
   domCache.modalThumbs = document.getElementById('modalThumbs');
   domCache.modalInfo = document.getElementById('modalInfo');
   
-  // Elementos de filtros móviles
   // Elementos de filtros móviles - ELIMINADOS (referenciaban elementos inexistentes)
   // Los filtros móviles usan: mobileMenuSearch y mobileMenuCategory (ya definidos arriba)
   
@@ -382,18 +381,18 @@ function initIntroAudio() {
   let introStarted = false;
 
   // Función para detener el audio con fade out
- function stopIntro() {
-  let fade = setInterval(() => {
-    if (audio.volume > 0.05) {
-      audio.volume -= 0.05;
-    } else {
-      clearInterval(fade);
-      audio.pause();
-      audio.volume = 0.6;
-      introStarted = false;
-    }
-  }, 80);
-}
+  function stopIntro() {
+    let fade = setInterval(() => {
+      if (audio.volume > 0.05) {
+        audio.volume -= 0.05;
+      } else {
+        clearInterval(fade);
+        audio.pause();
+        audio.volume = 0.6;
+        introStarted = false;
+      }
+    }, 80);
+  }
 
   // Función para reproducir el audio (solo una vez)
   function playAudio() {
@@ -414,8 +413,6 @@ function initIntroAudio() {
     // Detener cuando el usuario hace scroll hacia otra sección
     if (window.scrollY >= 100 && introStarted) {
       stopIntro();
-      // Resetear introStarted para que pueda reproducirse de nuevo al volver arriba
-     // introStarted = false;
     }
     // Intentar reproducir si vuelve al inicio
     if (window.scrollY < 100 && !introStarted) {
@@ -515,7 +512,7 @@ function renderBanner() {
   const track = document.getElementById('bannerTrack');
   if (!track) return;
 
-    const items = products.map(p => ({
+  const items = products.map(p => ({
     src: p.imgs[0],   // solo la imagen principal
     alt: p.name,
     id: p.id
@@ -533,7 +530,6 @@ function renderBanner() {
 // ========================================
 // FILTRO Y BÚSQUEDA DEL CATÁLOGO
 // ========================================
-
 
 /**
  * Obtiene el texto de búsqueda de un producto
@@ -564,12 +560,12 @@ function getFilteredproducts() {
 
 /**
  * Obtiene las categorías únicas de los products
- * ORDEN FIJO: Parlantes, Drivers, Cabinas, Line Array
+ * ORDEN FIJO: Parlantes, Line Array, Woofer, Drivers, Cabinas
  * @returns {Array} Array de names de categorías en orden específico
  */
 function getUniqueCategories() {
   // Categorías fijas requeridas por el proyecto (en orden específico)
-const fixedCategories = ['Parlantes', 'Line Array', 'Woofer', 'Drivers', 'Cabinas'];
+  const fixedCategories = ['Parlantes', 'Line Array', 'Woofer', 'Drivers', 'Cabinas'];
   
   // Obtener categorías de products existentes
   const productCategories = [];
@@ -646,66 +642,63 @@ function renderProducts() {
   const query = (searchEl && searchEl.value) ? searchEl.value.trim() : '';
   const category = (categoryEl && categoryEl.value) ? categoryEl.value.trim() : '';
 
-// Actualizar contador de productos
+  // ============================================================
+  // FIX 1: CONTADOR DE PAGINACIÓN
+  // Calcula el rango real de productos mostrados en la página actual
+  // Antes: página 1 mostraba "8-8" en lugar de "1-8"
+  //        última página no limitaba al total real (ej: "9-16" con solo 14 productos)
+  // Ahora: página 1 = "1-8", página 2 = "9-16", última = "9-14" (rango real)
+  // ============================================================
   const productsCount = document.getElementById('productsCount');
   if (productsCount) {
-    const total = filtered.length;
-    const itemsPerPage = PAGINATION_CONFIG.itemsPerPage;
-    const currentPage = PAGINATION_CONFIG.currentPage;
-    const totalPages = Math.ceil(total / itemsPerPage);
-    
-    // Lógica: Formato visual fijo
-    // Página 1: "8-8" (siempre 8)
-    // Página 2: "9-16" (siempre 9-16)
-    // Página 3: "17-24" (siempre 17-24), etc.
-    
-    let startItem, endItem;
-    if (total <= itemsPerPage) {
-      // Menos de 8 productos: mostrar todos
-      startItem = 1;
-      endItem = total;
-    } else {
-      // Más de 8 productos: formato visual fijo
-      if (currentPage === 1) {
-        // Página 1: siempre muestra "8-8"
-        startItem = itemsPerPage;
-        endItem = itemsPerPage;
-      } else {
-        // Página 2+: calcular rango acumulativo
-        // Página 2 = 9-16, Página 3 = 17-24, etc.
-        startItem = (currentPage - 1) * itemsPerPage + 1;
-        endItem = currentPage * itemsPerPage;
-      }
-    }
-    
-    // Formato: "Pagina 1 8-8 / 9 productos" o "Pagina 2 9-16 / 9 productos"
+    const total = filtered.length; // Total de productos después de filtrar
+    const itemsPerPage = PAGINATION_CONFIG.itemsPerPage; // Productos por página (8)
+    const currentPage = PAGINATION_CONFIG.currentPage; // Página actual
+
+    // Sin filtro activo: startItem es el techo fijo de la página (8, 16, 24...)
+    // Con filtro de categoría o búsqueda: startItem es el total real filtrado
+    const startItem = Math.min(total, currentPage * itemsPerPage);
+    const endItem = currentPage * itemsPerPage
+
+    // Mostrar el contador solo si hay productos
     if (total > 0) {
-      productsCount.innerHTML = `
+        productsCount.innerHTML = `
         <span class="count-label">Página</span>
         <span class="count-current">${currentPage}</span>
         <span class="count-range">${startItem}-${endItem}</span>
-        <span class="count-separator">/</span>
-        <span class="count-total">${total}</span>
-        <span class="count-label">productos</span>
-      `;
+         ${!category && !query ? `<span class="count-label">Total:</span>
+        <span class="categoria-badge" style="background:var(--rojo);color:#fff;padding:0.2rem 0.7rem;border-radius:20px;font-size:0.75rem;font-weight:600;">${total} productos</span>` : ''}
+     `;
       productsCount.style.display = 'inline-flex';
     } else {
+      // Ocultar el contador cuando no hay resultados
       productsCount.style.display = 'none';
     }
   }
-  
-  // Actualizar indicador de categoría activa
+
+  // ============================================================
+  // FIX 2: CONTADOR DE CATEGORÍA
+  // Antes: usaba products.filter() con .toLowerCase().includes() pero la variable
+  //        'category' ya viene en minúsculas mientras p.cat tiene mayúsculas,
+  //        por lo que el conteo era incorrecto en algunos casos.
+  // Ahora: compara ambos lados en minúsculas con === para coincidencia exacta,
+  //        y usa 'filtered' directamente porque ya tiene aplicado el filtro de categoría.
+  // ============================================================
   const categoryActive = document.getElementById('categoryActive');
   const categoryNameEl = document.getElementById('categoryName');
   if (categoryActive && categoryNameEl) {
     if (category) {
-      // Contar productos de la categoría seleccionada
-      const productsInCategory = products.filter(p => (p.cat || '').toLowerCase().includes(category.toLowerCase()));
-      const count = productsInCategory.length;
-      // Mostrar categoría y cantidad
+      // Contar cuántos productos del array completo pertenecen a la categoría seleccionada
+      // Se compara en minúsculas para evitar problemas de mayúsculas/minúsculas
+      const count = products.filter(p =>
+        (p.cat || '').toLowerCase() === category.toLowerCase()
+      ).length;
+      // Mostrar el nombre de la categoría con su cantidad exacta entre paréntesis
       categoryNameEl.textContent = category + ' (' + count + ' productos)';
+      // Hacer visible el indicador de categoría activa
       categoryActive.style.display = 'inline-flex';
     } else {
+      // Ocultar el indicador cuando no hay categoría seleccionada
       categoryActive.style.display = 'none';
     }
   }
@@ -726,24 +719,27 @@ function renderProducts() {
     return;
   }
 
-  // Calcular paginación
+  // Calcular paginación con el total de productos filtrados
   const totalItems = filtered.length;
   const itemsPerPage = PAGINATION_CONFIG.itemsPerPage;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
   
-  // Asegurar que la página actual sea válida
+  // Asegurar que la página actual sea válida (no mayor al total de páginas)
   if (PAGINATION_CONFIG.currentPage > totalPages) {
     PAGINATION_CONFIG.currentPage = totalPages || 1;
   }
+  // Asegurar que la página actual no sea menor a 1
   if (PAGINATION_CONFIG.currentPage < 1) {
     PAGINATION_CONFIG.currentPage = 1;
   }
   
-  // Obtener products de la página actual
+  // Calcular el índice de inicio y fin de los productos de la página actual
   const startIndex = (PAGINATION_CONFIG.currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
+  // Obtener solo los productos de la página actual
   const pageProducts = filtered.slice(startIndex, endIndex);
 
+  // Agrupar los productos de la página actual por categoría
   const grouped = {};
   pageProducts.forEach(p => {
     if (!grouped[p.cat]) grouped[p.cat] = [];
@@ -754,11 +750,14 @@ function renderProducts() {
   let delay = 0;
   const categories = Object.keys(grouped);
   
+  // Renderizar cada categoría y sus productos
   categories.forEach((cat, catIndex) => {
+    // Agregar separador de categoría a partir de la segunda categoría
     if (catIndex > 0) {
       html += `<div class="prod-category-header"><span>${cat}</span></div>`;
     }
     
+    // Renderizar cada tarjeta de producto dentro de la categoría
     grouped[cat].forEach((p) => {
       html += `
 <div class="prod-card" style="--card-delay: ${delay * 0.07}s" onclick="openModal('${p.id}')">
@@ -789,7 +788,7 @@ function renderProducts() {
 
   grid.innerHTML = html;
   
-  // Renderizar controles de paginación
+  // Renderizar controles de paginación con el total calculado
   renderPaginationControls(totalPages, PAGINATION_CONFIG.currentPage);
 }
 
@@ -801,7 +800,7 @@ function renderProducts() {
 function renderPaginationControls(totalPages, currentPage) {
   let paginationContainer = document.getElementById('paginationControls');
   
-  // Si no existe el contenedor, crearlo
+  // Si no existe el contenedor, crearlo y agregarlo a la sección de productos
   if (!paginationContainer) {
     const productsSection = document.getElementById('products');
     if (!productsSection) return;
@@ -812,7 +811,7 @@ function renderPaginationControls(totalPages, currentPage) {
     productsSection.appendChild(paginationContainer);
   }
   
-  // Si solo hay una página, mostrar solo el indicador sin botones
+  // Si solo hay una página, mostrar solo el indicador sin botones de navegación
   if (totalPages <= 1) {
     paginationContainer.innerHTML = `
       <div class="pagination-info">
@@ -825,7 +824,7 @@ function renderPaginationControls(totalPages, currentPage) {
     return;
   }
   
-  // Generar HTML de controles
+  // Generar HTML de controles con botones anterior y siguiente
   paginationContainer.innerHTML = `
     <button class="pagination-btn pagination-prev" onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>
       ‹
@@ -851,12 +850,14 @@ function changePage(page) {
   const filtered = getFilteredproducts();
   const totalPages = Math.ceil(filtered.length / PAGINATION_CONFIG.itemsPerPage);
   
+  // Validar que la página solicitada esté dentro del rango válido
   if (page < 1 || page > totalPages) return;
   
+  // Actualizar la página actual y re-renderizar los productos
   PAGINATION_CONFIG.currentPage = page;
   renderProducts();
   
-  // Scroll suave al inicio del grid de products
+  // Scroll suave al inicio de la sección de productos
   const productsSection = document.getElementById('products');
   if (productsSection) {
     productsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -867,7 +868,7 @@ function changePage(page) {
  * Configura los eventos de los filtros de búsqueda y categoría
  */
 function setupCatalogFilters() {
-  // Llenar el selector de categorías
+  // Llenar el selector de categorías con las opciones disponibles
   fillCategorySelect();
   
   // Elementos del escritorio
@@ -876,16 +877,15 @@ function setupCatalogFilters() {
   // Elementos del menú móvil
   const mobileMenuCategory = document.getElementById('mobileMenuCategory');
   const mobileMenuSearch = document.getElementById('mobileMenuSearch');
-  // Elementos de la caja de búsqueda
+  // Elementos de la caja de búsqueda expandible
   const searchBox = document.getElementById('navSearchBox');
   const searchTrigger = document.getElementById('navSearchTrigger');
 
-// Evento de búsqueda en escritorio - sin scroll automático al escribir
+  // Evento de búsqueda en escritorio - sin scroll automático al escribir
   if (searchEl) {
     searchEl.addEventListener('input', function() {
       PAGINATION_CONFIG.currentPage = 1; // Reiniciar a página 1 al buscar
       renderProducts();
-      // No hacer scroll automáticamente al escribir
     });
     // Agregar soporte para tecla Enter en búsqueda de escritorio
     searchEl.addEventListener('keydown', function(e) {
@@ -898,7 +898,7 @@ function setupCatalogFilters() {
     });
   }
   
-  // Evento de categoría en escritorio
+  // Evento de categoría en escritorio - al cambiar va a página 1 y hace scroll
   if (categoryEl) categoryEl.addEventListener('change', function() {
     PAGINATION_CONFIG.currentPage = 1; // Reiniciar a página 1 al cambiar categoría
     renderProducts();
@@ -907,21 +907,21 @@ function setupCatalogFilters() {
 
   // Evento para el selector de categorías en menú móvil
   if (mobileMenuCategory) mobileMenuCategory.addEventListener('change', function() {
+    // Sincronizar el valor con el selector de escritorio
     if (categoryEl) categoryEl.value = mobileMenuCategory.value;
     PAGINATION_CONFIG.currentPage = 1; // Reiniciar a página 1 al cambiar categoría
     renderProducts();
     document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
   });
 
-
   // Evento para búsqueda en menú móvil - sin scroll automático al escribir
   if (mobileMenuSearch) {
     mobileMenuSearch.addEventListener('input', function() {
       if (searchEl) {
+        // Sincronizar el valor con el campo de búsqueda de escritorio
         searchEl.value = mobileMenuSearch.value;
         PAGINATION_CONFIG.currentPage = 1; // Reiniciar a página 1 al buscar
         renderProducts();
-        // No hacer scroll automáticamente al escribir - el usuario debe presionar Enter o buscar manualmente
       }
     });
     // Agregar soporte para tecla Enter en búsqueda móvil
@@ -944,21 +944,24 @@ function setupCatalogFilters() {
     });
   }
 
-  // Configuración de la caja de búsqueda expandible
+  // Configuración de la caja de búsqueda expandible en el navbar
   if (searchBox && searchTrigger && searchEl) {
+    // Al hacer clic en el ícono de búsqueda, expandir o contraer la caja
     searchTrigger.addEventListener('click', () => {
       const isExpanded = searchBox.classList.toggle('expanded');
       searchTrigger.setAttribute('aria-expanded', isExpanded);
       if (isExpanded) {
-        searchEl.focus();
+        searchEl.focus(); // Enfocar el input al expandirse
       }
     });
+    // Al perder el foco, contraer la caja de búsqueda
     searchEl.addEventListener('blur', () => {
       setTimeout(() => {
         searchBox.classList.remove('expanded');
         searchTrigger.setAttribute('aria-expanded', 'false');
       }, 180);
     });
+    // Al presionar Escape, contraer la caja de búsqueda
     searchEl.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         searchEl.blur();
@@ -971,6 +974,8 @@ function setupCatalogFilters() {
 
 
 // ========================================
+// MODAL DE PRODUCTO
+// ========================================
 
 /**
  * Abre el modal con los detalles de un producto
@@ -980,9 +985,11 @@ function openModal(id) {
   const p = products.find(x => x.id === id);
   if (!p) return;
 
+  // Limpiar marca de agua anterior si existe
   const mb = document.getElementById('modalBody');
   const oldWm = mb.querySelector('.modal-watermark');
   if (oldWm) oldWm.remove();
+  // Agregar nueva marca de agua si el producto la tiene
   if(p.watermark) {
     const wm = document.createElement('img');
     wm.src = p.watermark;
@@ -990,17 +997,21 @@ function openModal(id) {
     mb.appendChild(wm);
   }
 
+  // Llenar el título del modal con el nombre del producto
   document.getElementById('modalTitulo').textContent = p.name;
+  // Asignar la imagen principal al elemento img del modal
   document.getElementById('modalImgMain').src = p.imgs[0];
   /* Asignar texto descriptivo al alt de la imagen para lectores de pantalla */
   document.getElementById('modalImgMain').alt = 'Imagen de ' + p.name;
 
+  // Renderizar las miniaturas de imágenes del producto
   document.getElementById('modalThumbs').innerHTML = p.imgs.map((img, i) => `
     <div class="modal-thumb ${i === 0 ? 'active' : ''}" onclick="cambiarImg('${img}', this)">
       <img src="${img}" alt=""/>
     </div>
   `).join('');
 
+  // Renderizar la información del producto: badge, categoría, nombre, descripción, specs, apps, botones
   document.getElementById('modalInfo').innerHTML = `
     <span class="modal-badge">${p.badge}</span>
     <div class="modal-cat">${p.cat}</div>
@@ -1028,6 +1039,7 @@ function openModal(id) {
     </a>
   `;
 
+  // Mostrar el modal y bloquear el scroll del body
   document.getElementById('modalOverlay').classList.add('open');
   document.body.style.overflow = 'hidden';
 
@@ -1072,16 +1084,17 @@ function openModal(id) {
 /**
  * Cambia la imagen principal del modal al hacer clic en miniatura
  * @param {string} src - Ruta de la nueva imagen
- * @param {HTMLElement} el - Elemento de la miniatura
+ * @param {HTMLElement} el - Elemento de la miniatura clicada
  */
 function cambiarImg(src, el) {
   document.getElementById('modalImgMain').src = src;
+  // Quitar clase active de todas las miniaturas y asignarla a la clicada
   document.querySelectorAll('.modal-thumb').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
 }
 
 /**
- * Cierra el modal al hacer clic fuera del contenido
+ * Cierra el modal al hacer clic fuera del contenido (en el overlay)
  * @param {Event} e - Evento del clic
  */
 function cerrarModal(e) {
@@ -1089,7 +1102,7 @@ function cerrarModal(e) {
 }
 
 /**
- * Cierra el modal y restaura el scroll
+ * Cierra el modal y restaura el scroll del body
  */
 function cerrarModalBtn() {
   /* Eliminar el listener del focus trap al cerrar el modal */
@@ -1103,11 +1116,12 @@ function cerrarModalBtn() {
     openModal._focusAnterior = null; /* Limpiar la referencia */
   }
 
+  // Ocultar el modal y restaurar el scroll del body
   document.getElementById('modalOverlay').classList.remove('open');
   document.body.style.overflow = '';
 }
 
-// Cerrar modal con tecla Escape
+// Cerrar modal con tecla Escape desde cualquier parte de la página
 document.addEventListener('keydown', e => { if (e.key === 'Escape') cerrarModalBtn(); });
 
 // ========================================
@@ -1124,13 +1138,16 @@ function toggleMobileMenu() {
   
   if (!hamburger || !navLinks) return;
   
+  // Alternar clase 'active' en el botón hamburguesa y 'open' en el menú
   const isOpen = hamburger.classList.toggle('active');
   navLinks.classList.toggle('open');
   
+  // Alternar el overlay semitransparente de fondo
   if (overlay) {
     overlay.classList.toggle('open');
   }
   
+  // Actualizar atributo aria para accesibilidad
   hamburger.setAttribute('aria-expanded', isOpen);
 }
 
@@ -1151,11 +1168,13 @@ function initActiveMenuLink() {
     const scrollPos = window.scrollY + 150;
     const heroHeight = document.querySelector('.hero')?.offsetHeight || 600;
     
+    // Si el scroll está dentro del hero, quitar todos los activos
     if (scrollPos < heroHeight) {
       navLinks.forEach(link => link.classList.remove('active'));
       return;
     }
     
+    // Activar el enlace correspondiente a la sección visible
     sections.forEach(section => {
       const sectionTop = section.offsetTop;
       const sectionHeight = section.offsetHeight;
@@ -1172,7 +1191,9 @@ function initActiveMenuLink() {
     });
   }
   
+  // Escuchar el scroll para actualizar el enlace activo
   window.addEventListener('scroll', updateActiveLink, { passive: true });
+  // Ejecutar al cargar para establecer el estado inicial
   updateActiveLink();
 }
 
@@ -1181,18 +1202,19 @@ function initActiveMenuLink() {
 // ========================================
 
 document.addEventListener('DOMContentLoaded', function() {
-  initCache();
-  loadTheme();
-  initIntroAudio();
-  loadProducts();
-  setupCatalogFilters();
-  initActiveMenuLink();
-  initZoomControls();
+  initCache();         // Inicializar el cache de elementos del DOM
+  loadTheme();         // Cargar el tema guardado (claro u oscuro)
+  initIntroAudio();    // Inicializar el audio introductorio
+  loadProducts();      // Cargar los productos desde el JSON y renderizar
+  setupCatalogFilters(); // Configurar los eventos de búsqueda y filtros
+  initActiveMenuLink(); // Inicializar el enlace activo según el scroll
+  initZoomControls();  // Inicializar los controles de zoom del modal
+
   // Crear el observador de intersección para las animaciones de reveal
   const obs = new IntersectionObserver(entries => {
     // Por cada entrada del observador, agregar clase 'visible' si el elemento es visible
     entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
   }, { threshold: 0.1 });
-  // Observar todos los elementos con clase 'reveal'
+  // Observar todos los elementos con clase 'reveal' para animarlos al aparecer
   document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 });
