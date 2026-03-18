@@ -552,7 +552,7 @@ function getFilteredproducts() {
   const category = (categoryEl && categoryEl.value) ? categoryEl.value.trim().toLowerCase() : '';
 
   let list = products;
-  if (category) list = list.filter(p => (p.cat || '').toLowerCase().includes(category));
+  if (category) list = list.filter(p => (p.cat || '').toLowerCase() === category.toLowerCase()); // Filtrado EXACTO por categoría
   if (query) list = list.filter(p => getProductSearchText(p).includes(query));
   return list;
 }
