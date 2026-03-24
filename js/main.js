@@ -1029,7 +1029,7 @@ function openModal(id) {
       <h4>Aplicaciones</h4>
      <ul>${(p.apps || []).map(a => `<li>${a}</li>`).join('')}</ul>
     </div>
-    ${p.doc ? `<button class="modal-pdf-btn" onclick="event.stopPropagation(); abrirPDF('${escapeAttr(p.doc)}', '${escapeAttr(p.name)}')">
+${p.doc ? `<button class="modal-pdf-btn" onclick="event.stopPropagation(); abrirPDF('${p.doc}', '${p.name}')">
       📄 Ver Ficha Técnica ${escapeHtml(p.name)}
     </button>` : ''}
     <a href="${WP}?text=${encodeURIComponent('Hola, me interesa el ' + p.name + '. ¿Pueden darme información y precio?')}"
@@ -1161,21 +1161,32 @@ function abrirPDF(url, nombre) {
     document.body.appendChild(pdfOverlay);
   }
 
-  // Construir el visor con encabezado y iframe de Google Docs
+  // Detectar si el usuario está en dispositivo móvil
+  // En móvil los iframes con PDF tienen problemas, por eso se usa Google Docs Viewer
+  const esMobile = /Android|iPhone|iPad|iPod|Opera Mini|IEMobile/i.test(navigator.userAgent);
+
+  // En desktop se usa el PDF directo; en móvil se usa Google Docs Viewer como proxy
+  const srcIframe = esMobile
+    ? 'https://docs.google.com/viewer?url=' + encodeURIComponent(url) + '&embedded=true'
+    : url;
+
+  // Construir el visor con encabezado, iframe y botón de descarga como respaldo
   pdfOverlay.innerHTML = `
     <div style="width:100%;max-width:960px;display:flex;flex-direction:column;height:100%;">
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:0.75rem 1rem;margin-bottom:0.75rem;background:var(--bg3);border:1px solid var(--borde);border-radius:10px;flex-shrink:0;">
-        <span style="font-family:'Rajdhani',sans-serif;font-size:1rem;font-weight:700;color:var(--titulo);">
-          📄 Ficha Técnica — ${nombre}
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:0.75rem 1rem;margin-bottom:0.75rem;background:var(--bg3);border:1px solid var(--borde);border-radius:10px;flex-shrink:0;gap:0.75rem;">
+        <span style="font-family:'Rajdhani',sans-serif;font-size:0.95rem;font-weight:700;color:var(--titulo);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
+          📄 ${nombre}
         </span>
-        <button
-          onclick="cerrarPDF()"
-          style="width:36px;height:36px;border-radius:8px;border:1px solid var(--borde);background:transparent;color:var(--texto);font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;"
-          aria-label="Cerrar visor PDF"
-        >✕</button>
+        <div style="justify-content:flex-end;">
+          <button
+            onclick="cerrarPDF()"
+            style="width:36px;height:36px;border-radius:8px;border:1px solid var(--borde);background:transparent;color:var(--texto);font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;"
+            aria-label="Cerrar visor PDF"
+          >✕</button>
+        </div>
       </div>
       <iframe
-        src="https://docs.google.com/viewer?url=${encodeURIComponent(url)}&embedded=true"
+        src="${srcIframe}"
         style="flex:1;width:100%;border:none;border-radius:10px;background:#fff;min-height:0;"
         title="Ficha Técnica ${nombre}"
       ></iframe>
