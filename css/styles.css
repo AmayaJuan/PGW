@@ -665,22 +665,23 @@ body[data-theme="light"] .prod-watermark {
 }
 .banner-wrap:hover .banner-track { animation-play-state: paused; }
 .banner-item {
-  width: 300px;            /* Ancho fijo del cuadro del banner */
-  height: 220px;           /* Alto del cuadro del banner */
+  width: 300px;            
+  height: 220px;           
   background: #1e2a40;
-  /* ▼ CAMBIO: borde rojo de marca en lugar de gris azulado */
-  border: 1px solid rgba(196, 30, 58, 0.3);
+  border: 1px solid rgba(255, 45, 85, 0.25);
   border-radius: 12px;
   display: flex; align-items: center; justify-content: center;
   padding: 1rem;
-  box-shadow: 0 0 20px rgba(196, 30, 58, 0.15), inset 0 0 30px rgba(196, 30, 58, 0.03);
+  box-shadow: 0 0 0 1px rgba(255, 45, 85, 0.08), 
+              0 4px 24px rgba(0, 0, 0, 0.4);
   transition: border-color .3s, box-shadow .3s;
   cursor: pointer;
 }
 .banner-item:hover {
-  /* ▼ CAMBIO: hover rojo de marca en lugar de gris azulado */
-  border-color: rgba(196, 30, 58, 0.6);
-  box-shadow: 0 0 30px rgba(196, 30, 58, 0.3), 0 0 50px rgba(196, 30, 58, 0.15), inset 0 0 40px rgba(196, 30, 58, 0.05);
+  border-color: rgba(255, 45, 87, 0.7);
+  box-shadow: 0 0 20px rgba(255, 45, 85, 0.25), 
+              0 0 40px rgba(255, 45, 85, 0.1), 
+              inset 0 0 20px rgba(255, 45, 85, 0.04);
 }
 .banner-item img {
   width: 100%; height: 100%;
