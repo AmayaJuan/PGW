@@ -1125,23 +1125,7 @@ body[data-theme="light"] .modal-watermark {
   .modal-wp svg { width: 16px; height: 16px; }
   
   /* Grids */
-  .nos-grid, .con-grid { grid-template-columns: 1fr; gap: 2rem; }
-  .products-grid { grid-template-columns: 1fr; gap: 1.25rem; }
-  
-  /* Footer */
-  footer { padding: 2rem 1.5rem 5rem; flex-direction: column; text-align: center; gap: 1.5rem; }
-  
-  /* WP Float - adjust position */
-  .wp-float { bottom: 5.5rem; right: 1.5rem; width: 50px; height: 50px; }
-  .wp-float svg { width: 24px; height: 24px; }
-  
-  /* Touch targets */
-  .prod-card { cursor: pointer; -webkit-tap-highlight-color: transparent; }
-  .prod-btn { padding: 0.55rem 1rem; min-height: 36px; }
-  .banner-wrap { padding: 1.25rem 0; }
-  .banner-item { cursor: pointer; }
-  .hero-btns a { min-height: 44px; -webkit-tap-highlight-color: transparent; }
-}
+  .nos-grid, .con-grid { grid-template-columns: 1fr; gap: 2rem; }\n  /* Catálogo de productos optimizado para móvil */\n  .products-grid { \n    display: grid;\n    grid-template-columns: 1fr;\n    gap: 1.75rem;\n    justify-items: center;\n    padding: 0 1rem;\n    max-width: 380px;\n    margin: 0 auto;\n  }\n  .prod-card {\n    max-width: 100%;\n    width: 320px;\n  }\n  \n  /* Footer */\n  footer { padding: 2rem 1.5rem 5rem; flex-direction: column; text-align: center; gap: 1.5rem; }\n  \n  /* WP Float - adjust position */\n  .wp-float { bottom: 5.5rem; right: 1.5rem; width: 50px; height: 50px; }\n  .wp-float svg { width: 24px; height: 24px; }\n  \n  /* Touch targets */\n  .prod-card { cursor: pointer; -webkit-tap-highlight-color: transparent; }\n  .prod-btn { padding: 0.55rem 1rem; min-height: 36px; }\n  .banner-wrap { padding: 1.25rem 0; }\n  .banner-item { cursor: pointer; }\n  .hero-btns a { min-height: 44px; -webkit-tap-highlight-color: transparent; }\n}
 
 /* Extra small devices */
 @media (max-width: 360px) {
