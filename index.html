@@ -1,173 +1,99 @@
 <!DOCTYPE html>
-<!-- 
-  ========================================
-  PA ACOUSTIC - Sitio Web de Audio Profesional
-  ========================================
-  Este es el archivo principal HTML del sitio.
-  Contiene la estructura completa de la página:
-  - Navegación
-  - Hero (sección principal)
-  - Banner de products
-  - Catálogo de productos
-  - Sección Nosotros
-  - Sección Contacto
-  - Footer
-  - Modal de detalles de producto
--->
 <html lang="es">
 <head>
-  <!-- Script inline para cargar el tema inmediatamente sin flash -->
-  <!-- MOVIDO al final del body para evitar error null document.body -->
-  <!-- Codificación de caracteres UTF-8 para soporte de tildes y caracteres especiales -->
   <meta charset="UTF-8"/>
-  <!-- Configuración de viewport para diseño responsivo en dispositivos móviles -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <!-- Etiquetas SEO esenciales -->
   <meta name="description" content="PA Acoustic — Fabricantes y distribuidores de equipos de audio profesional en Medellín, Colombia. Line arrays activos, woofers y parlantes de alta potencia para eventos e instalaciones."/>
   <meta name="keywords" content="audio profesional, line array activo, woofer 18, parlantes profesionales, Medellín, Colombia, PA Acoustic"/>
   <meta name="author" content="PA Acoustic"/>
-  <meta name="theme-color" content="#ff2d55"/>
+  <meta name="theme-color" content="#c41e3a"/>
   <meta property="og:title" content="PA Acoustic — Audio Profesional"/>
   <meta property="og:description" content="Equipos de audio de alta potencia: line arrays, woofers y parlantes profesionales. Envíos a todo Colombia."/>
   <meta property="og:type" content="website"/>
   <meta property="og:locale" content="es_CO"/>
-  <!-- Favicon -->
   <link rel="icon" type="image/png" href="https://res.cloudinary.com/djlr3wszq/image/upload/v1773503923/logo_uvmjma.jpg"/>
-  <!-- Título de la página que aparece en la pestaña del navegador -->
   <title>PA Acoustic — Audio Profesional</title>
-  
-  <!-- Preconnect para Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <!-- Carga de fuentes de Google Fonts: Rajdhani (títulos) y Nunito (texto) -->
   <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Nunito:wght@300;400;500;600&display=swap" rel="stylesheet"/>
-  <!-- Enlace al archivo de estilos CSS principal -->
-<link rel="stylesheet" href="css/styles.css"/>
-<link rel="stylesheet" href="css/pdf-btn.css"/>
-  
+  <link rel="stylesheet" href="css/styles.css"/>
+  <link rel="stylesheet" href="css/pdf-btn.css"/>
 </head>
-<body>
+<body data-theme="light">
 
-<!-- ========================================
-     DEFINICIÓN DE SVG REUTILIZABLE PARA WHATSAPP
-     Se define el icono de WhatsApp una sola vez como símbolo
-     y se reutiliza en todo el documento mediante la etiqueta <use>
-     Esto evita duplicar el código SVG y mejora el rendimiento
-     ======================================== -->
+<!-- SVG WHATSAPP -->
 <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
   <symbol id="ico-wp" viewBox="0 0 24 24">
-    <!-- Ruta del icono oficial de WhatsApp -->
     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
   </symbol>
+</svg>
 
-<!-- ========================================
-     MARCA DE AGUA DE FONDO (PAGE WATERMARK)
-     Imagen de fondo que aparece en toda la página
-     como elemento decorativo de la marca
-     ======================================== -->
 <div class="page-watermark"></div>
 
-<!-- ========================================
-     BOTÓN FLOTANTE DE WHATSAPP
-     Botón de contacto fijo en la esquina inferior derecha
-     que permite iniciar una conversación de WhatsApp
-     ======================================== -->
+<!-- WP FLOTANTE -->
 <a class="wp-float" href="https://wa.me/573053402732?text=Hola,%20quiero%20más%20información" target="_blank" rel="noopener noreferrer">
-  <!-- Referencia al símbolo SVG definido arriba, evita duplicar el código -->
   <svg viewBox="0 0 24 24"><use href="#ico-wp"/></svg>
 </a>
 
-<!-- ========================================
-     NAVEGACIÓN PRINCIPAL
-     Barra de navegación fija en la parte superior
-     Incluye: logo, menú de enlaces, búsqueda, 
-     selector de categorías y botón de tema claro/oscuro
-     ======================================== -->
+<!-- NAVEGACIÓN -->
 <nav aria-label="Navegación principal">
-  <!-- Logo del sitio que funciona como enlace al inicio -->
   <div class="nav-logo">
     <a href="#" onclick="handleLogoClick(event); return false;">
       <img src="https://res.cloudinary.com/djlr3wszq/image/upload/v1773503923/logo_uvmjma.jpg" alt="PA Acoustic"/>
     </a>
   </div>
-  
-  <!-- Overlay semitransparente para el menú móvil -->
+
   <div class="nav-mobile-overlay" id="navMobileOverlay" onclick="toggleMobileMenu()"></div>
-  
-  <!-- Menú de navegación con enlaces a las secciones principales -->
+
   <ul class="nav-links" id="navLinks">
-    <!-- Buscador integrado en menú móvil -->
     <li class="nav-mobile-search">
-      <input type="search" id="mobileMenuSearch" class="nav-mobile-search-input" placeholder="Buscar products..." autocomplete="off" aria-label="Buscar products en el menú"/>
+      <input type="search" id="mobileMenuSearch" class="nav-mobile-search-input" placeholder="Buscar productos..." autocomplete="off" aria-label="Buscar productos"/>
     </li>
-    <!-- Filtro de categoría integrado en menú móvil -->
     <li class="nav-mobile-category">
       <label class="nav-mobile-category-label">Filtrar por categoría</label>
       <select id="mobileMenuCategory" class="nav-mobile-category-select">
         <option value="">Todas las categorías</option>
       </select>
     </li>
-    <li><a href="#products" class="nav-link" onclick="handleNavClick(event, 'products')">productos</a></li>
-    <li><a href="#nosotros" class="nav-link" onclick="handleNavClick(event, 'nosotros')">Nosotros</a></li>
-    <li><a href="#contacto" class="nav-link" onclick="handleNavClick(event, 'contacto')">Contacto</a></li>
-<li class="nav-wp-mobile"><a href="https://wa.me/573053402732?text=Hola,%20quiero%20más%20información" target="_blank" rel="noopener noreferrer">
-      <!-- Referencia al símbolo SVG definido arriba, evita duplicar el código -->
-      <svg viewBox="0 0 24 24"><use href="#ico-wp"/></svg>
-      WhatsApp
-    </a></li>
+    <li><a href="#products" class="nav-link" onclick="handleNavClick(event,'products')">Productos</a></li>
+    <li><a href="#nosotros" class="nav-link" onclick="handleNavClick(event,'nosotros')">Nosotros</a></li>
+    <li><a href="#contacto" class="nav-link" onclick="handleNavClick(event,'contacto')">Contacto</a></li>
+    <li class="nav-wp-mobile">
+      <a href="https://wa.me/573053402732?text=Hola,%20quiero%20más%20información" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24"><use href="#ico-wp"/></svg>
+        WhatsApp
+      </a>
+    </li>
   </ul>
-  
-  <!-- Controles del catálogo: búsqueda y filtro de categorías -->
+
   <div class="nav-catalog-controls">
-    <!-- Cuadro de búsqueda expandible -->
     <div class="nav-search-box" id="navSearchBox">
       <button type="button" class="nav-search-trigger" id="navSearchTrigger" title="Buscar" aria-label="Abrir búsqueda" aria-expanded="false" aria-controls="catalogSearch">
         <span class="nav-search-icon" aria-hidden="true">🔍</span>
       </button>
-      <input type="search" id="catalogSearch" class="nav-search-input" placeholder="Buscar..." autocomplete="off" aria-label="Buscar products"/>
+      <input type="search" id="catalogSearch" class="nav-search-input" placeholder="Buscar..." autocomplete="off" aria-label="Buscar productos"/>
     </div>
-    <!-- Selector desplegable para filtrar products por categoría -->
     <select id="catalogCategory" class="nav-category-select" title="Filtrar por categoría" aria-label="Filtrar por categoría">
       <option value="">Todas las categorías</option>
     </select>
   </div>
-  
-  <!-- Botón para cambiar entre tema claro y oscuro -->
-  <button type="button" class="theme-toggle" onclick="toggleTheme()">
-    <span class="theme-toggle-ico">☾</span>
-    <span class="theme-toggle-label">Tema</span>
-  </button>
-  
-  <!-- Botón de hamburguesa para menú móvil -->
+
+  <!-- SIN botón de tema -->
+
   <button type="button" class="nav-hamburger" id="navHamburger" onclick="toggleMobileMenu()" aria-label="Abrir menú" aria-expanded="false">
-    <span></span>
-    <span></span>
-    <span></span>
+    <span></span><span></span><span></span>
   </button>
-  
-  <!-- Enlace directo a WhatsApp en la barra de navegación -->
-<a class="nav-wp" href="https://wa.me/573053402732?text=Hola,%20quiero%20más%20información" target="_blank" rel="noopener noreferrer">
-    <!-- Referencia al símbolo SVG definido arriba, evita duplicar el código -->
+
+  <a class="nav-wp" href="https://wa.me/573053402732?text=Hola,%20quiero%20más%20información" target="_blank" rel="noopener noreferrer">
     <svg viewBox="0 0 24 24"><use href="#ico-wp"/></svg>
     WhatsApp
   </a>
 </nav>
 
-<!-- ========================================
-     SECCIÓN HERO
-     Sección principal de bienvenida con:
-     - Imagen de fondo
-     - Logo
-     - Título principal
-     - Subtítulo descriptivo
-     - Botones de llamada a la acción
-     ======================================== -->
+<!-- HERO -->
 <section class="hero">
-  <!-- Fondo con degradado radial -->
   <div class="hero-bg"></div>
-  <!-- Grid decorativo de líneas -->
   <div class="hero-grid"></div>
-  <!-- Contenido principal del hero -->
   <div class="hero-content">
     <img src="https://res.cloudinary.com/djlr3wszq/image/upload/v1773503923/logo_uvmjma.jpg" alt="PA Acoustic" class="hero-logo-img"/>
     <div class="hero-tag">Audio Profesional Medellin - Colombia</div>
@@ -176,60 +102,33 @@
       <span class="linea2">Alta Potencia</span>
     </h1>
     <p class="hero-sub">Line arrays, woofers y parlantes profesionales diseñados para eventos de gran formato, instalaciones fijas y sistemas de refuerzo sonoro de alto rendimiento.</p>
-<!-- Botones CTA del hero: Ver Catálogo y WhatsApp cotización -->
-  <div class="hero-btns">
-    <!-- Botón primario rojo: scroll a catálogo -->
-    <a href="#products" class="btn-rojo" onclick="handleNavClick(event, 'products')">Ver productos</a>
-    <!-- Botón secundario outline: WhatsApp directo con pre-texto -->
-    <a href="https://wa.me/573053402732?text=Hola,%20quiero%20más%20información%20sobre%20PA%20Acoustic" target="_blank" rel="noopener noreferrer" class="btn-outline">Cotizar por WhatsApp</a>
-  </div>
+    <div class="hero-btns">
+      <a href="#products" class="btn-rojo" onclick="handleNavClick(event,'products')">Ver productos</a>
+      <a href="https://wa.me/573053402732?text=Hola,%20quiero%20más%20información%20sobre%20PA%20Acoustic" target="_blank" rel="noopener noreferrer" class="btn-outline">Cotizar por WhatsApp</a>
+    </div>
   </div>
 </section>
 
-<!-- ========================================
-     BANNER DE FOTOS
-     Carrusel infinito con imágenes de products
-     que permite hacer clic para ver detalles
-     ======================================== -->
+<!-- BANNER -->
 <div class="banner-wrap">
   <div class="banner-track" id="bannerTrack"></div>
 </div>
 
-<!-- ========================================
-     Catálogo de productos
-     Grid de tarjetas de products generados dinámicamente
-     por JavaScript. Cada tarjeta muestra:
-     - Imagen del producto
-     - Badge (etiqueta de categoría)
-     - Nombre y descripción
-     - Especificaciones
-     - Botón para ver más detalles
-     ======================================== -->
-<!-- aria-labelledby vincula la sección con su título para lectores de pantalla -->
+<!-- CATÁLOGO -->
 <section id="products" class="sec" aria-labelledby="titulo-products">
   <div class="reveal">
     <div class="sec-label">— Nuestros Equipos</div>
     <h2 class="sec-titulo" id="titulo-products">Catálogo de productos</h2>
-    <!-- Contador de products total -->
     <div class="products-count" id="productsCount"></div>
-    <!-- Indicador de categoría activa - muestra la categoría seleccionada -->
-    <div id="categoryActive" class="category-active" style="display: none;">
+    <div id="categoryActive" class="category-active" style="display:none;">
       <span class="categoria-badge">Categoría:</span>
       <span id="categoryName" class="category-name"></span>
     </div>
   </div>
-  <!-- Contenedor grid donde JavaScript inserta las tarjetas de products -->
   <div class="products-grid" id="productsGrid"></div>
 </section>
 
-<!-- ========================================
-     SECCIÓN NOSOTROS
-     Información sobre la empresa:
-     - Logo
-     - Título y descripción
-     - Lista de características/beneficios
-     ======================================== -->
-<!-- aria-labelledby vincula la sección con su título para lectores de pantalla -->
+<!-- NOSOTROS -->
 <section id="nosotros" class="sec-alt" aria-labelledby="titulo-nosotros">
   <div class="nos-grid">
     <div class="nos-logo-box reveal">
@@ -237,92 +136,48 @@
     </div>
     <div class="reveal">
       <div class="sec-label">— Quiénes Somos</div>
-<h2 class="nos-titulo" id="titulo-nosotros">Soluciones en <span>Audio Pro</span></h2>
-      <p class="nos-texto">Somos fabricantes y distribuidores de equipos de audio profesional de alta potencia. Nuestros products están diseñados para cumplir las exigencias de los profesionales del sonido en eventos, instalaciones y producción en vivo.</p>
+      <h2 class="nos-titulo" id="titulo-nosotros">Soluciones en <span>Audio Pro</span></h2>
+      <p class="nos-texto">Somos fabricantes y distribuidores de equipos de audio profesional de alta potencia. Nuestros productos están diseñados para cumplir las exigencias de los profesionales del sonido en eventos, instalaciones y producción en vivo.</p>
       <p class="nos-texto">Cada equipo es desarrollado con tecnología de punta, componentes de neodimio y amplificación clase D para garantizar el máximo rendimiento con la mayor eficiencia energética.</p>
-      <!-- Lista de características de la empresa -->
       <div class="nos-items">
-        <div class="nos-item">
-          <div class="nos-ico">⚡</div>
-          <div><h4>Alta Potencia</h4><p>Sistemas desde 700W hasta 2200W RMS para cualquier escala de evento.</p></div>
-        </div>
-        <div class="nos-item">
-          <div class="nos-ico">🎯</div>
-          <div><h4>Precisión Acústica</h4><p>DSP integrado, cobertura controlada y SPL máximo de hasta 137 dB.</p></div>
-        </div>
-        <div class="nos-item">
-          <div class="nos-ico">🛡️</div>
-          <div><h4>Garantía y Soporte</h4><p>Respaldo técnico especializado y garantía en todos nuestros equipos.</p></div>
-        </div>
-        <div class="nos-item">
-          <div class="nos-ico">🚚</div>
-          <div><h4>Envíos a Colombia</h4><p>Despachamos a cualquier ciudad con empaque seguro.</p></div>
-        </div>
+        <div class="nos-item"><div class="nos-ico">⚡</div><div><h4>Alta Potencia</h4><p>Sistemas desde 700W hasta 2200W RMS para cualquier escala de evento.</p></div></div>
+        <div class="nos-item"><div class="nos-ico">🎯</div><div><h4>Precisión Acústica</h4><p>DSP integrado, cobertura controlada y SPL máximo de hasta 137 dB.</p></div></div>
+        <div class="nos-item"><div class="nos-ico">🛡️</div><div><h4>Garantía y Soporte</h4><p>Respaldo técnico especializado y garantía en todos nuestros equipos.</p></div></div>
+        <div class="nos-item"><div class="nos-ico">🚚</div><div><h4>Envíos a Colombia</h4><p>Despachamos a cualquier ciudad con empaque seguro.</p></div></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ========================================
-     SECCIÓN CONTACTO
-     Información de contacto y formulario:
-     - Título y descripción
-     - Datos de contacto (WhatsApp, horario, ubicación)
-     - Botón de WhatsApp
-     - Tarjeta con información adicional
-     ======================================== -->
-<!-- aria-labelledby vincula la sección con su título para lectores de pantalla -->
+<!-- CONTACTO -->
 <section id="contacto" class="sec" aria-labelledby="titulo-contacto">
   <div class="reveal" style="margin-bottom:2.5rem">
     <div class="sec-label">— Estamos para ayudarte</div>
-<h2 class="sec-titulo" id="titulo-contacto">Contáctanos</h2>
+    <h2 class="sec-titulo" id="titulo-contacto">Contáctanos</h2>
   </div>
-<!-- Grid responsive: info contacto izquierda, tarjeta derecha -->
   <div class="con-grid">
-    <!-- Columna izquierda: datos contacto + mapa -->
     <div class="reveal">
-      <!-- Título sección contacto -->
       <h3 class="con-titulo">Hablemos de <span>Tu Proyecto</span></h3>
-      <!-- Subtítulo explicativo -->
       <p class="con-sub">¿Necesitas un equipo específico o asesoría técnica? Escríbenos por WhatsApp y te respondemos de inmediato.</p>
-      <!-- Lista de datos de contacto: WhatsApp, horario, dirección, país -->
       <div class="con-items">
-        <div class="con-item">
-          <div class="con-ico">📱</div>
-          <div><div class="con-lbl">WhatsApp</div><div class="con-val">+57 305 340 2732</div></div>
-        </div>
-        <div class="con-item">
-          <div class="con-ico">🕐</div>
-          <div><div class="con-lbl">Horario</div><div class="con-val">Lun – Vie: 8:45 – 18:00 · Sáb: 8:45 – 15:00</div></div>
-        </div>
-        <div class="con-item">
-          <div class="con-ico">📍</div>
-          <div><div class="con-lbl">Dirección</div><div class="con-val">Cl 44 #66-75, Laureles - Estadio</div></div>
-        </div>
+        <div class="con-item"><div class="con-ico">📱</div><div><div class="con-lbl">WhatsApp</div><div class="con-val">+57 305 340 2732</div></div></div>
+        <div class="con-item"><div class="con-ico">🕐</div><div><div class="con-lbl">Horario</div><div class="con-val">Lun – Vie: 8:45 – 18:00 · Sáb: 8:45 – 15:00</div></div></div>
+        <div class="con-item"><div class="con-ico">📍</div><div><div class="con-lbl">Dirección</div><div class="con-val">Cl 44 #66-75, Laureles - Estadio</div></div></div>
       </div>
-      <!-- Mapa de ubicación -->
-      <iframe 
-        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3341.245075972068!2d-75.5875842259037!3d6.248611926298559!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e4429a80156c9a7%3A0xf59872fe7db7070b!2sCl%2044%20%2366-75%2C%20Laureles%20-%20Estadio%2C%20Medell%C3%ADn%2C%20Laureles%2C%20Medell%C3%ADn%2C%20Antioquia!5e1!3m2!1ses-419!2sco!4v1773288774904!5m2!1ses-419!2sco" 
-        width="100%" 
-        height="250" 
-        style="border:0;border-radius:12px;margin:1rem 0" 
-        allowfullscreen="" 
-        loading="lazy" 
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3341.245075972068!2d-75.5875842259037!3d6.248611926298559!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e4429a80156c9a7%3A0xf59872fe7db7070b!2sCl%2044%20%2366-75%2C%20Laureles%20-%20Estadio%2C%20Medell%C3%ADn%2C%20Laureles%2C%20Medell%C3%ADn%2C%20Antioquia!5e1!3m2!1ses-419!2sco!4v1773288774904!5m2!1ses-419!2sco"
+        width="100%" height="250"
+        style="border:0;border-radius:12px;margin:1rem 0"
+        allowfullscreen="" loading="lazy"
         referrerpolicy="no-referrer-when-downgrade"
         title="Ubicación de PA Acoustic">
       </iframe>
-      <!-- País / ciudad -->
-      <div class="con-item">
-        <div class="con-ico">🇨🇴</div>
-        <div><div class="con-lbl">País / ciudad</div><div class="con-val">Colombia / Medellín</div></div>
-      </div>
+      <div class="con-item"><div class="con-ico">🇨🇴</div><div><div class="con-lbl">País / ciudad</div><div class="con-val">Colombia / Medellín</div></div></div>
     </div>
-    <!-- Tarjeta lateral con información adicional -->
     <div class="reveal con-card">
       <img src="https://res.cloudinary.com/djlr3wszq/image/upload/v1773503923/logo_uvmjma.jpg" alt="PA Acoustic" style="width:120px;margin-bottom:1.5rem;display:block"/>
       <p style="font-size:0.82rem;color:var(--muted);line-height:1.8;margin-bottom:1rem">Especialistas en sistemas de audio profesional de alta potencia. Contáctanos para recibir asesoría técnica personalizada y cotización de nuestros equipos.</p>
       <p style="font-size:0.78rem;color:var(--rojo);font-weight:600">📦 Envíos a todo Colombia</p>
-      <!-- Botón grande de WhatsApp -->
       <a href="https://wa.me/573053402732?text=Hola,%20quiero%20más%20información" target="_blank" rel="noopener noreferrer" class="btn-wp-grande" style="margin-top:1.5rem">
         <svg viewBox="0 0 24 24"><use href="#ico-wp"/></svg>
         Escribir por WhatsApp Ahora
@@ -331,10 +186,7 @@
   </div>
 </section>
 
-<!-- ========================================
-     PIE DE PÁGINA (FOOTER)
-     Información de copyright y logo
-     ======================================== -->
+<!-- FOOTER -->
 <footer>
   <div class="footer-logo"><img src="https://res.cloudinary.com/djlr3wszq/image/upload/v1773503923/logo_uvmjma.jpg" alt="PA Acoustic"/></div>
   <div class="footer-info">
@@ -343,30 +195,16 @@
   </div>
 </footer>
 
-<!-- ========================================
-     MODAL DE DETALLES DE PRODUCTO
-     Ventana emergente que muestra información
-     detallada del producto seleccionado:
-     - Imágenes (principal y miniaturas)
-     - Especificaciones técnicas
-     - Aplicaciones
-     - Botón de contacto por WhatsApp
-     ======================================== -->
+<!-- MODAL -->
 <div class="modal-overlay" id="modalOverlay" onclick="cerrarModal(event)">
   <div class="modal" id="modal">
     <div class="modal-header">
       <div class="modal-titulo" id="modalTitulo"></div>
-<!-- Botón cerrar modal -->
-<button class="modal-close" onclick="cerrarModalBtn()" aria-label="Cerrar modal">✕</button>
+      <button class="modal-close" onclick="cerrarModalBtn()" aria-label="Cerrar modal">✕</button>
     </div>
     <div class="modal-body" id="modalBody">
-<!-- Galería imágenes producto: principal + miniaturas -->
       <div class="modal-imgs">
-        <!-- Imagen principal con zoom (wheel/pinch) -->
-        <div class="modal-img-main">
-          <img id="modalImgMain" src="" alt="" role="img" />
-        </div>
-        <!-- Miniaturas navegables (click para cambiar principal) -->
+        <div class="modal-img-main"><img id="modalImgMain" src="" alt="" role="img"/></div>
         <div class="modal-img-thumbs" id="modalThumbs" role="tablist"></div>
       </div>
       <div class="modal-info" id="modalInfo"></div>
@@ -374,50 +212,12 @@
   </div>
 </div>
 
-<!-- ========================================
-     AUDIO INTRODUCTORIO
-     Archivo de audio que se reproduce al cargar
-     la página (si el usuario está en el inicio)
-     ======================================== -->
+<!-- AUDIO -->
 <audio id="introAudio" preload="metadata">
   <source src="audio/intro.mp3" type="audio/mpeg">
 </audio>
 
-<!-- ========================================
-     CONTROLES DE CATÁLOGO MÓVIL
-     Eliminados según solicitud del cliente
-     ======================================== -->
-<!-- Botón único para buscar y filtrar en móvil - ELIMINADO -->
-<!-- Panel unificado de búsqueda y filtros móvil - ELIMINADO -->
-
-<!-- ========================================
-     SCRIPTS JAVASCRIPT
-     Carga del archivo JavaScript principal que
-     maneja toda la funcionalidad interactiva
-     ======================================== -->
 <script src="js/main.js"></script>
-
-<!-- ========================================
-     SCRIPT FIX NAVBAR (ya no necesario con position: sticky)
-     El espacio superior se maneja con padding del .hero en CSS
-     ======================================== -->
-<!-- <script src="js/navbar-fix.js"></script> -->
-
-<!-- ========================================
-     SCRIPT DEL TEMA (CLARO/OSCURO)
-     Movido aquí para ejecutarse después de que el body exista
-     Evita error "Cannot read properties of null"
-     ======================================== -->
-<script>
-  (function() {
-    var theme = localStorage.getItem('paTheme');
-    if (theme === 'light' || theme === 'dark') {
-      document.body.setAttribute('data-theme', theme);
-    } else {
-      document.body.setAttribute('data-theme', 'dark');
-    }
-  })();
-</script>
 
 </body>
 </html>

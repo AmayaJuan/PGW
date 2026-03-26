@@ -1,282 +1,103 @@
 /**
 ======================================================================
 PA ACOUSTIC — main.js
-
-REGLAS CRÍTICAS DEL PROYECTO (OBLIGATORIO LEER):
--------------------------------------------------
-1. ESTADO INICIAL: Sin filtros activos, mostrar TODOS los products.
-2. FILTRADO: Solo ejecutar cuando el usuario seleccione categoría O escriba búsqueda.
-3. MENSAJE "Sin resultados": Solo mostrar cuando filtered.length === 0.
-4. DISEÑO: No modificar sin autorización. No agregar/eliminar animaciones.
-5. COMENTARIOS (OBLIGATORIO): Comentar CADA línea de código explicando qué hace.
-   Escribir comentarios claros, simples y útiles. NO omitir por considerarlos "obvios".
-6. REGLA FINAL: "Si algo ya funcionaba, NO lo rompas. Si no se pidió, NO lo haces."
-
-Este archivo contiene toda la funcionalidad JavaScript del sitio web.
-Incluye:
-- Gestión del tema claro/oscuro
-- Datos de products
-- Renderizado del catálogo
-- Búsqueda y filtros
-- Modal de detalles de producto
-- Banner carrusel
-- Menú móvil
-- Audio introductorio
-- Animaciones de scroll
-
-NOTAS DE MARCAS DE AGUA (WATERMARKS):
-- Cada producto tiene una marca de agua en la propiedad 'watermark'
-- Archivos configurados:
-  HL-30A:     img/hl30a-2.png
-  HL-10A:     img/hl10a-2.png
-  PA10N-900:  img/pa10n-2.png
-  LF18X401+:  img/lf18x-2.png
- 18LW2420+:  img/woof18lw-2.png
-  PA8N-600:   img/pa8n600-1.png
-  PA12N-1000: img/pa12n1000-1.png
-  Sheffield12: img/pa12shieffield-1.png
-  Sheffield10: img/pa10sheffield-1.png
-- Estilos en css/styles.css:
-  .prod-watermark (catálogo) y .modal-watermark (modal)
+TEMA CLARO PERMANENTE - Sin modo oscuro ni toggle
 ======================================================================
-
 **/
 
-
-// URL base de WhatsApp para enlaces de contacto
 const WP = 'https://wa.me/573053402732';
-
-// SVG del icono de WhatsApp (para usar dentro del modal)
 const WP_SVG = `<svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>`;
 
-// Clave para guardar el tema en localStorage
-const THEME_KEY = 'paTheme';
-
 // ========================================
-// SISTEMA DE CACHE DOM
+// CACHE DOM
 // ========================================
-
-/**
- * Objeto cache para almacenar referencias a elementos del DOM
- * Evita llamadas repetidas a getElementById
- */
 const domCache = {};
-
-/**
- * Inicializa el cache con los elementos más usados del sitio
- * Se llama una sola vez al cargar la página
- */
 function initCache() {
-  // Elementos del navbar
-  domCache.navHamburger = document.getElementById('navHamburger');
-  domCache.navLinks = document.getElementById('navLinks');
-  domCache.navMobileOverlay = document.getElementById('navMobileOverlay');
-  domCache.catalogSearch = document.getElementById('catalogSearch');
-  domCache.catalogCategory = document.getElementById('catalogCategory');
-  domCache.navSearchBox = document.getElementById('navSearchBox');
-  domCache.navSearchTrigger = document.getElementById('navSearchTrigger');
-  domCache.mobileMenuCategory = document.getElementById('mobileMenuCategory');
-  domCache.mobileMenuSearch = document.getElementById('mobileMenuSearch');
-  
-  // Elementos del catálogo
-  domCache.productsGrid = document.getElementById('productsGrid');
-  domCache.products = document.getElementById('products');
-  domCache.categoryActive = document.getElementById('categoryActive');
-  domCache.categoryname = document.getElementById('categoryname');
-  domCache.bannerTrack = document.getElementById('bannerTrack');
-  
-  // Elementos del modal
-  domCache.modalOverlay = document.getElementById('modalOverlay');
-  domCache.modal = document.getElementById('modal');
-  domCache.modalBody = document.getElementById('modalBody');
-  domCache.modalTitulo = document.getElementById('modalTitulo');
-  domCache.modalImgMain = document.getElementById('modalImgMain');
-  domCache.modalThumbs = document.getElementById('modalThumbs');
-  domCache.modalInfo = document.getElementById('modalInfo');
-  
-  // Elementos de filtros móviles - ELIMINADOS (referenciaban elementos inexistentes)
-  // Los filtros móviles usan: mobileMenuSearch y mobileMenuCategory (ya definidos arriba)
-  
-  // Audio
-  domCache.introAudio = document.getElementById('introAudio');
+  domCache.navHamburger      = document.getElementById('navHamburger');
+  domCache.navLinks          = document.getElementById('navLinks');
+  domCache.navMobileOverlay  = document.getElementById('navMobileOverlay');
+  domCache.catalogSearch     = document.getElementById('catalogSearch');
+  domCache.catalogCategory   = document.getElementById('catalogCategory');
+  domCache.navSearchBox      = document.getElementById('navSearchBox');
+  domCache.navSearchTrigger  = document.getElementById('navSearchTrigger');
+  domCache.mobileMenuCategory= document.getElementById('mobileMenuCategory');
+  domCache.mobileMenuSearch  = document.getElementById('mobileMenuSearch');
+  domCache.productsGrid      = document.getElementById('productsGrid');
+  domCache.products          = document.getElementById('products');
+  domCache.categoryActive    = document.getElementById('categoryActive');
+  domCache.bannerTrack       = document.getElementById('bannerTrack');
+  domCache.modalOverlay      = document.getElementById('modalOverlay');
+  domCache.modal             = document.getElementById('modal');
+  domCache.modalBody         = document.getElementById('modalBody');
+  domCache.modalTitulo       = document.getElementById('modalTitulo');
+  domCache.modalImgMain      = document.getElementById('modalImgMain');
+  domCache.modalThumbs       = document.getElementById('modalThumbs');
+  domCache.modalInfo         = document.getElementById('modalInfo');
+  domCache.introAudio        = document.getElementById('introAudio');
 }
-
-/**
- * Función helper para obtener elementos del DOM con cache
- * @param {string} id - ID del elemento
- * @returns {HTMLElement|null}
- */
 function $(id) {
-  if (!domCache[id]) {
-    domCache[id] = document.getElementById(id);
-  }
+  if (!domCache[id]) domCache[id] = document.getElementById(id);
   return domCache[id];
 }
 
 // ========================================
-// BANDERAS DE ESTADO
+// PAGINACIÓN
 // ========================================
-
-// Configuración de paginación
-const PAGINATION_CONFIG = {
-  itemsPerPage: 8,  // products por página
-  currentPage: 1    // Página actual
-};
+const PAGINATION_CONFIG = { itemsPerPage: 8, currentPage: 1 };
 
 // ========================================
-// CONTROL DE ZOOM
+// ZOOM
 // ========================================
+const ZOOM_CONFIG = { minZoom: 1, maxZoom: 3, currentZoom: 1 };
 
-/**
- * Variables de estado para el control de zoom
- * minZoom: nivel mínimo (1 = sin zoom)
- * maxZoom: nivel máximo (3 = zoom 3x)
- * currentZoom: nivel actual de zoom
- */
-const ZOOM_CONFIG = {
-  minZoom: 1,
-  maxZoom: 3,
-  currentZoom: 1
-};
-
-/**
- * Realiza zoom in si no se ha alcanzado el máximo
- * @returns {boolean} true si el zoom se ejecutó, false si ya está en máximo
- */
 function zoomIn() {
   if (ZOOM_CONFIG.currentZoom < ZOOM_CONFIG.maxZoom) {
     ZOOM_CONFIG.currentZoom = Math.min(ZOOM_CONFIG.currentZoom + 0.5, ZOOM_CONFIG.maxZoom);
-    applyZoomToImages();
-    return true;
+    applyZoomToImages(); return true;
   }
   return false;
 }
-
-/**
- * Realiza zoom out solo si el nivel actual es mayor que el mínimo
- * y si previamente se ha hecho zoom in
- * @returns {boolean} true si el zoom se ejecutó, false si está en nivel mínimo
- */
 function zoomOut() {
-  // Solo permitir zoom out si el nivel actual es mayor que el mínimo Y
-  // el usuario ha hecho zoom in previamente (currentZoom > minZoom)
   if (ZOOM_CONFIG.currentZoom > ZOOM_CONFIG.minZoom) {
     ZOOM_CONFIG.currentZoom = Math.max(ZOOM_CONFIG.currentZoom - 0.5, ZOOM_CONFIG.minZoom);
-    applyZoomToImages();
-    return true;
+    applyZoomToImages(); return true;
   }
-  // Si está en nivel mínimo, bloquear zoom out
   return false;
 }
-
-/**
- * Aplica el nivel de zoom actual a todas las imágenes del modal
- */
 function applyZoomToImages() {
-  const modalImgMain = document.getElementById('modalImgMain');
-  if (modalImgMain) {
-    modalImgMain.style.transform = 'scale(' + ZOOM_CONFIG.currentZoom + ')';
-    modalImgMain.style.transition = 'transform 0.3s ease';
-  }
-  
-  // Aplicar también a miniaturas si existen
-  const thumbs = document.querySelectorAll('.modal-thumb img');
-  thumbs.forEach(thumb => {
-    thumb.style.transform = 'scale(' + ZOOM_CONFIG.currentZoom + ')';
-    thumb.style.transition = 'transform 0.3s ease';
-  });
+  const img = document.getElementById('modalImgMain');
+  if (img) { img.style.transform = 'scale(' + ZOOM_CONFIG.currentZoom + ')'; img.style.transition = 'transform 0.3s ease'; }
+  document.querySelectorAll('.modal-thumb img').forEach(t => { t.style.transform = 'scale(' + ZOOM_CONFIG.currentZoom + ')'; t.style.transition = 'transform 0.3s ease'; });
 }
-
-/**
- * Maneja el evento de rueda del mouse para zoom
- * Solo activa zoom cuando el cursor está sobre la imagen principal del modal
- * Si el cursor NO está sobre la imagen, permite scroll normal
- * @param {WheelEvent} e - Evento de rueda
- */
 function handleWheelZoom(e) {
-  // Solo activar si el modal está abierto
-  const modalOverlay = document.getElementById('modalOverlay');
-  if (!modalOverlay || !modalOverlay.classList.contains('open')) return;
-  
-  // Obtener la imagen principal del modal
-  const modalImgMain = document.getElementById('modalImgMain');
-  if (!modalImgMain) return;
-  
-  // Verificar si el cursor está sobre la imagen principal
-  const imgRect = modalImgMain.getBoundingClientRect();
-  const isOverImage = (
-    e.clientX >= imgRect.left &&
-    e.clientX <= imgRect.right &&
-    e.clientY >= imgRect.top &&
-    e.clientY <= imgRect.bottom
-  );
-  
-  // Si el cursor NO está sobre la imagen, permitir scroll normal (no prevenir default)
-  if (!isOverImage) {
-    return; // Sale de la función sin preventDefault, permitiendo scroll normal
-  }
-  
-  // Si el cursor está sobre la imagen, aplicar zoom
+  const overlay = document.getElementById('modalOverlay');
+  if (!overlay || !overlay.classList.contains('open')) return;
+  const img = document.getElementById('modalImgMain');
+  if (!img) return;
+  const r = img.getBoundingClientRect();
+  if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) return;
   e.preventDefault();
-  
-  if (e.deltaY < 0) {
-    // Scroll hacia arriba = zoom in
-    zoomIn();
-  } else {
-    // Scroll hacia abajo = zoom out
-    zoomOut();
-  }
+  if (e.deltaY < 0) zoomIn(); else zoomOut();
 }
-
-/**
- * Inicializa los eventos de zoom para el modal
- */
 function initZoomControls() {
-  // Agregar listener para zoom con rueda del mouse
   document.addEventListener('wheel', handleWheelZoom, { passive: false });
-  
-  // Agregar eventos táctiles para pinch-to-zoom en móviles
-  let initialDistance = 0;
-  let initialZoom = ZOOM_CONFIG.currentZoom;
-  
+  let initialDistance = 0, initialZoom = 1;
   document.addEventListener('touchstart', function(e) {
-    const modalOverlay = document.getElementById('modalOverlay');
-    if (!modalOverlay || !modalOverlay.classList.contains('open')) return;
-    
+    const overlay = document.getElementById('modalOverlay');
+    if (!overlay || !overlay.classList.contains('open')) return;
     if (e.touches.length === 2) {
-      initialDistance = Math.hypot(
-        e.touches[0].clientX - e.touches[1].clientX,
-        e.touches[0].clientY - e.touches[1].clientY
-      );
+      initialDistance = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
       initialZoom = ZOOM_CONFIG.currentZoom;
     }
   }, { passive: true });
-  
   document.addEventListener('touchmove', function(e) {
-    const modalOverlay = document.getElementById('modalOverlay');
-    if (!modalOverlay || !modalOverlay.classList.contains('open')) return;
-    
+    const overlay = document.getElementById('modalOverlay');
+    if (!overlay || !overlay.classList.contains('open')) return;
     if (e.touches.length === 2) {
       e.preventDefault();
-      
-      const currentDistance = Math.hypot(
-        e.touches[0].clientX - e.touches[1].clientX,
-        e.touches[0].clientY - e.touches[1].clientY
-      );
-      
-      // Calcular el factor de cambio
-      const scale = currentDistance / initialDistance;
-      let newZoom = initialZoom * scale;
-      
-      // Limitar el zoom entre minZoom y maxZoom
-      newZoom = Math.max(ZOOM_CONFIG.minZoom, Math.min(newZoom, ZOOM_CONFIG.maxZoom));
-      
-      // Solo permitir zoom out si el nivel actual es mayor que el mínimo
-      if (newZoom < ZOOM_CONFIG.currentZoom && ZOOM_CONFIG.currentZoom <= ZOOM_CONFIG.minZoom) {
-        // Bloquear zoom out si ya está en nivel mínimo
-        return;
-      }
-      
+      const d = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+      let newZoom = Math.max(ZOOM_CONFIG.minZoom, Math.min(initialZoom * (d / initialDistance), ZOOM_CONFIG.maxZoom));
+      if (newZoom < ZOOM_CONFIG.currentZoom && ZOOM_CONFIG.currentZoom <= ZOOM_CONFIG.minZoom) return;
       ZOOM_CONFIG.currentZoom = newZoom;
       applyZoomToImages();
     }
@@ -284,1020 +105,406 @@ function initZoomControls() {
 }
 
 // ========================================
-// GESTIÓN DEL TEMA (CLARO/OSCURO)
-// ========================================
-
-/**
- * Aplica el tema especificado al body del documento
- * @param {string} theme - 'light' o 'dark'
- */
-function applyTheme(theme) {
-  document.body.setAttribute('data-theme', theme);
-}
-
-/**
- * Carga el tema guardado en localStorage o usa 'dark' por defecto
- */
-function loadTheme() {
-  // Obtener tema guardado en localStorage
-  const saved = window.localStorage.getItem(THEME_KEY);
-  // Validar que sea un tema válido, si no usar 'dark'
-  const theme = saved === 'light' || saved === 'dark' ? saved : 'dark';
-  applyTheme(theme);
-}
-
-/**
- * Alterna entre tema claro y oscuro
- * Guarda la preferencia en localStorage
- */
-function toggleTheme() {
-  // Obtener tema actual
-  const current = document.body.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
-  // Calcular siguiente tema
-  const next = current === 'light' ? 'dark' : 'light';
-  // Aplicar y guardar
-  applyTheme(next);
-  window.localStorage.setItem(THEME_KEY, next);
-}
-
-// ========================================
 // NAVEGACIÓN
 // ========================================
-
-/**
- * Maneja el clic en el logo - scroll al inicio de la página
- * @param {Event} e - Evento del clic
- */
 function handleLogoClick(e) {
-  e.preventDefault(); // Prevenir comportamiento por defecto del enlace
-  // Scroll suave al inicio
+  e.preventDefault();
   window.scrollTo({ top: 0, behavior: 'smooth' });
-  // Quitar selección del menú
   clearNavActive();
 }
-
-/**
- * Maneja el clic en enlaces de navegación
- * Cierra el menú móvil solo si está abierto y actualiza el enlace activo
- * @param {Event} e - Evento del clic
- * @param {string} sectionId - ID de la sección destino
- */
 function handleNavClick(e, sectionId) {
-  // Cerrar menú móvil SOLO si está abierto
-  const navLinks = document.getElementById('navLinks');
-  const isMobileMenuOpen = navLinks && navLinks.classList.contains('open');
-  
-  if (isMobileMenuOpen) {
-    toggleMobileMenu();
-  }
-  
-  // Quitar selección activa después de un breve momento para permitir el scroll
-  setTimeout(() => {
-    clearNavActive();
-  }, 100);
+  const nl = document.getElementById('navLinks');
+  if (nl && nl.classList.contains('open')) toggleMobileMenu();
+  setTimeout(() => clearNavActive(), 100);
 }
-
-/**
- * Quita la clase 'active' de todos los enlaces de navegación
- */
 function clearNavActive() {
-  const navLinks = document.querySelectorAll('.nav-link');
-  navLinks.forEach(link => link.classList.remove('active'));
+  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
 }
 
 // ========================================
-// AUDIO INTRODUCTORIO
+// AUDIO
 // ========================================
-
-/**
- * Controla la reproducción del audio introductorio
- * Solo se reproduce una vez al cargar la página cuando está en el inicio
- * Se detiene al hacer scroll hacia otra sección y no vuelve a reproducirse
- */
 function initIntroAudio() {
   const audio = document.getElementById('introAudio');
   if (!audio) return;
-
-  let introStarted = false;
-
-  // Función para detener el audio con fade out
-  function stopIntro() {
+  let started = false;
+  function stop() {
     let fade = setInterval(() => {
-      if (audio.volume > 0.05) {
-        audio.volume -= 0.05;
-      } else {
-        clearInterval(fade);
-        audio.pause();
-        audio.volume = 0.6;
-        introStarted = false;
-      }
+      if (audio.volume > 0.05) audio.volume -= 0.05;
+      else { clearInterval(fade); audio.pause(); audio.volume = 0.6; started = false; }
     }, 80);
   }
-
-  // Función para reproducir el audio (solo una vez)
-  function playAudio() {
-    // Solo reproducir si está en el inicio (scrollY < 100)
-    if (introStarted || window.scrollY >= 100) return;
-    
-    introStarted = true;
+  function play() {
+    if (started || window.scrollY >= 100) return;
+    started = true;
     audio.volume = 0.5;
-    audio.play()
-      .catch(function (err) {
-        console.log('Audio bloqueado por el navegador');
-        introStarted = false;
-      });
+    audio.play().catch(() => { started = false; });
   }
-
-  // Función que maneja el scroll
-  function onScroll() {
-    // Detener cuando el usuario hace scroll hacia otra sección
-    if (window.scrollY >= 100 && introStarted) {
-      stopIntro();
-    }
-    // Intentar reproducir si vuelve al inicio
-    if (window.scrollY < 100 && !introStarted) {
-      playAudio();
-    }
-  }
-
-  // Escuchar scroll para detener/reanudar audio
-  window.addEventListener('scroll', onScroll, { passive: true });
-  
-  // Intentar reproducir al cargar si está en el inicio
-  playAudio();
-
-  // Si el navegador bloquea el autoplay, intentar en el primer clic del usuario
-  document.addEventListener('click', function firstInteraction() {
-    if (window.scrollY < 100) {
-      playAudio();
-    }
-    document.removeEventListener('click', firstInteraction);
-  }, { once: true });
+  window.addEventListener('scroll', () => {
+    if (window.scrollY >= 100 && started) stop();
+    if (window.scrollY < 100 && !started) play();
+  }, { passive: true });
+  play();
+  document.addEventListener('click', function f() { if (window.scrollY < 100) play(); document.removeEventListener('click', f); }, { once: true });
 }
 
 // ========================================
-// DATOS DE products
+// PRODUCTOS
 // ========================================
-
-/**
- * Array de objetos con los datos de cada producto
- * Para agregar un producto: copiar un objeto, cambiar los datos e imágenes
- */
 let products = [];
 
 async function loadProducts() {
-
   try {
-
     const response = await fetch("data/products.json");
     const data = await response.json();
-
     products = data.map(p => ({
       id: p.name.toLowerCase(),
       name: p.name.toUpperCase(),
       cat: p.category || "Parlantes",
       badge: "Producto",
-      // Extraer la descripción del campo description (nivel superior)
       desc: p.description || "Producto de audio profesional",
-
-      // Solo mostrar la imagen principal (no la marca de agua como miniatura)
-      imgs: [
-        p.images?.main || ""
-      ],
-
+      imgs: [p.images?.main || ""],
       watermark: p.images?.watermark || null,
-
-      // Extraer las especificaciones del campo specs (son directamente las specs, no hay specs.specifications)
-      // Convertir el objeto de especificaciones a array de pares [key, value]
-      specs: p.specs ? Object.entries(p.specs).filter(([key]) => key !== 'aplicaciones') : [],
-      
-      // Extraer las aplicaciones del campo specs.aplicaciones
-      apps: p.specs?.aplicaciones ? 
-            (typeof p.specs.aplicaciones === 'string' ? 
-              p.specs.aplicaciones.split(',').map(s => s.trim()) : 
-              p.specs.aplicaciones) 
-            : [],
-
+      specs: p.specs ? Object.entries(p.specs).filter(([k]) => k !== 'aplicaciones') : [],
+      apps: p.specs?.aplicaciones ? (typeof p.specs.aplicaciones === 'string' ? p.specs.aplicaciones.split(',').map(s => s.trim()) : p.specs.aplicaciones) : [],
       tags: [],
-
       doc: p.document || null
     }));
-
     renderBanner();
     renderProducts();
-
-  } catch (error) {
-    console.error("Error cargando products.json:", error);
-  }
-
+  } catch (e) { console.error("Error cargando products.json:", e); }
 }
 
 // ========================================
-// BANNER CARRUSEL
+// BANNER
 // ========================================
-
-/**
- * Maneja el clic en un item del banner
- * @param {string} id - ID del producto
- */
 function onBannerItemClick(id) {
   document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
   setTimeout(() => openModal(id), 450);
 }
-
-/**
- * Renderiza el banner carrusel con las imágenes de products
- */
 function renderBanner() {
   const track = document.getElementById('bannerTrack');
   if (!track) return;
-
-  const items = products.map(p => ({
-    src: p.imgs[0],   // solo la imagen principal
-    alt: p.name,
-    id: p.id
-  }));
-  /* Triplicar los items para evitar el salto visible del loop en pantallas anchas */
-  const duplicated = [...items, ...items, ...items];
-
-  track.innerHTML = duplicated.map(({ src, alt, id }) => `
+  const items = products.map(p => ({ src: p.imgs[0], alt: p.name, id: p.id }));
+  const dup = [...items, ...items, ...items];
+  track.innerHTML = dup.map(({ src, alt, id }) => `
     <div class="banner-item" onclick="onBannerItemClick('${id}')" role="button" tabindex="0">
       <img src="${src}" alt="${alt}" />
-    </div>
-  `).join('');
+    </div>`).join('');
 }
 
 // ========================================
-// FILTRO Y BÚSQUEDA DEL CATÁLOGO
+// FILTROS
 // ========================================
-
-/**
- * Obtiene el texto de búsqueda de un producto
- * @param {Object} p - Objeto del producto
- * @returns {string} Texto normalizado para búsqueda
- */
 function getProductSearchText(p) {
-  const parts = [p.name, p.cat, p.desc, (p.tags || []).join(' '), (p.apps || []).join(' ')];
-  return parts.join(' ').toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '');
+  return [p.name, p.cat, p.desc, (p.tags||[]).join(' '), (p.apps||[]).join(' ')].join(' ').toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '');
 }
-
-/**
- * Filtra los products según búsqueda y categoría seleccionados
- * @returns {Array} Array de products filtrados
- */
 function getFilteredproducts() {
-  const searchEl = document.getElementById('catalogSearch');
-  const categoryEl = document.getElementById('catalogCategory');
-  const query = (searchEl && searchEl.value) ? searchEl.value.trim().toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '') : '';
-  const category = (categoryEl && categoryEl.value) ? categoryEl.value.trim().toLowerCase() : '';
-
+  const se = document.getElementById('catalogSearch');
+  const ce = document.getElementById('catalogCategory');
+  const q = se?.value ? se.value.trim().toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '') : '';
+  const c = ce?.value ? ce.value.trim().toLowerCase() : '';
   let list = products;
-  if (category) list = list.filter(p => (p.cat || '').toLowerCase() === category.toLowerCase()); // Filtrado EXACTO por categoría
-  if (query) list = list.filter(p => getProductSearchText(p).includes(query));
+  if (c) list = list.filter(p => (p.cat||'').toLowerCase() === c);
+  if (q) list = list.filter(p => getProductSearchText(p).includes(q));
   return list;
 }
-
-
-/**
- * Obtiene las categorías únicas de los products
- * ORDEN FIJO: Parlantes, Line Array, Woofer, Drivers, Cabinas
- * @returns {Array} Array de names de categorías en orden específico
- */
 function getUniqueCategories() {
-  // Categorías fijas requeridas por el proyecto (en orden específico)
-  const fixedCategories = ['Parlantes', 'Line Array', 'Woofer', 'Drivers', 'Cabinas'];
-  
-  // Obtener categorías de products existentes
-  const productCategories = [];
-  products.forEach(p => { 
-    if (p.cat && !productCategories.includes(p.cat)) {
-      productCategories.push(p.cat);
-    }
-  });
-  
-  // Combinar: primero las fijas, luego las adicionales de products (sin duplicados)
-  const allCategories = [...new Set([...fixedCategories, ...productCategories])];
-  
-  return allCategories;
+  const fixed = ['Parlantes','Line Array','Woofer','Drivers','Cabinas'];
+  const from = [];
+  products.forEach(p => { if (p.cat && !from.includes(p.cat)) from.push(p.cat); });
+  return [...new Set([...fixed, ...from])];
 }
-
-/**
- * Llena el selector de categorías con las opciones disponibles
- */
 function fillCategorySelect() {
   const sel = document.getElementById('catalogCategory');
-  const mobileMenuCategory = document.getElementById('mobileMenuCategory');
-  const current = sel ? sel.value : '';
-  const categories = getUniqueCategories();
-  
-  const optionsHTML = '<option value="">Todas las categorías</option>' +
-    categories.map(c => `<option value="${escapeAttr(c)}">${escapeHtml(c)}</option>`).join('');
-  
-  if (sel) {
-    sel.innerHTML = optionsHTML;
-    if (categories.includes(current)) sel.value = current;
-  }
-  
-  // Llenar el selector de categorías en el menú móvil si existe
-  if (mobileMenuCategory) {
-    mobileMenuCategory.innerHTML = optionsHTML;
-  }
+  const mob = document.getElementById('mobileMenuCategory');
+  const cur = sel?.value || '';
+  const cats = getUniqueCategories();
+  const html = '<option value="">Todas las categorías</option>' + cats.map(c => `<option value="${escapeAttr(c)}">${escapeHtml(c)}</option>`).join('');
+  if (sel) { sel.innerHTML = html; if (cats.includes(cur)) sel.value = cur; }
+  if (mob) mob.innerHTML = html;
 }
+function escapeHtml(t) { const d = document.createElement('div'); d.textContent = t||''; return d.innerHTML; }
+function escapeAttr(t) { return String(t||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
-/**
- * Escapa caracteres HTML en texto para mostrar de forma segura
- * @param {string} text - Texto a escapar
- * @returns {string} Texto escapado
- */
-function escapeHtml(text) {
-  const div = document.createElement('div');
-  div.textContent = text || '';
-  return div.innerHTML;
-}
-
-/**
- * Escapa caracteres para atributos HTML
- * @param {string} text - Texto a escapar
- * @returns {string} Texto escapado para atributos
- */
-function escapeAttr(text) {
-  return String(text || '')
-  .replace(/&/g, '&amp;')
-  .replace(/"/g, '&quot;')
-  .replace(/</g, '&lt;')
-  .replace(/>/g, '&gt;');
-}
-
-/**
- * Renderiza las tarjetas de products en el grid con paginación
- */
 function renderProducts() {
   const filtered = getFilteredproducts();
   const grid = document.getElementById('productsGrid');
   if (!grid) return;
 
-  // Obtener valores de los filtros activos
-  const searchEl = document.getElementById('catalogSearch');
-  const categoryEl = document.getElementById('catalogCategory');
-  const query = (searchEl && searchEl.value) ? searchEl.value.trim() : '';
-  const category = (categoryEl && categoryEl.value) ? categoryEl.value.trim() : '';
+  const se = document.getElementById('catalogSearch');
+  const ce = document.getElementById('catalogCategory');
+  const query = se?.value ? se.value.trim() : '';
+  const category = ce?.value ? ce.value.trim() : '';
 
-  // ============================================================
-  // FIX 1: CONTADOR DE PAGINACIÓN
-  // Calcula el rango real de productos mostrados en la página actual
-  // Antes: página 1 mostraba "8-8" en lugar de "1-8"
-  //        última página no limitaba al total real (ej: "9-16" con solo 14 productos)
-  // Ahora: página 1 = "1-8", página 2 = "9-16", última = "9-14" (rango real)
-  // ============================================================
-  const productsCount = document.getElementById('productsCount');
-  if (productsCount) {
-    const total = filtered.length; // Total de productos después de filtrar
-    const itemsPerPage = PAGINATION_CONFIG.itemsPerPage; // Productos por página (8)
-    const currentPage = PAGINATION_CONFIG.currentPage; // Página actual
-
-    // Sin filtro activo: startItem es el techo fijo de la página (8, 16, 24...)
-    // Con filtro de categoría o búsqueda: startItem es el total real filtrado
-    const startItem = Math.min(total, currentPage * itemsPerPage);
-    const endItem = currentPage * itemsPerPage
-
-    // Mostrar el contador solo si hay productos
+  // Contador
+  const pc = document.getElementById('productsCount');
+  if (pc) {
+    const total = filtered.length;
+    const ip = PAGINATION_CONFIG.itemsPerPage;
+    const cp = PAGINATION_CONFIG.currentPage;
+    const start = Math.min(total, cp * ip);
+    const end = cp * ip;
     if (total > 0) {
-        productsCount.innerHTML = `
-        <span class="count-label">Página</span>
-        <span class="count-current">${currentPage}</span>
-        <span class="count-range">${startItem}-${endItem}</span>
-         ${!category && !query ? `<span class="count-label">Total:</span>
-        <span class="categoria-badge" style="background:var(--rojo);color:#fff;padding:0.2rem 0.7rem;border-radius:20px;font-size:0.75rem;font-weight:600;">${total} productos</span>` : ''}
-     `;
-      productsCount.style.display = 'inline-flex';
-    } else {
-      // Ocultar el contador cuando no hay resultados
-      productsCount.style.display = 'none';
-    }
+      pc.innerHTML = `<span class="count-label">Página</span><span class="count-current">${cp}</span><span class="count-range">${start}-${end}</span>${!category && !query ? `<span class="count-label">Total:</span><span class="categoria-badge" style="background:var(--rojo);color:#fff;padding:0.2rem 0.7rem;border-radius:20px;font-size:0.75rem;font-weight:600;">${total} productos</span>` : ''}`;
+      pc.style.display = 'inline-flex';
+    } else { pc.style.display = 'none'; }
   }
 
-  // ============================================================
-  // FIX 2: CONTADOR DE CATEGORÍA
-  // Antes: usaba products.filter() con .toLowerCase().includes() pero la variable
-  //        'category' ya viene en minúsculas mientras p.cat tiene mayúsculas,
-  //        por lo que el conteo era incorrecto en algunos casos.
-  // Ahora: compara ambos lados en minúsculas con === para coincidencia exacta,
-  //        y usa 'filtered' directamente porque ya tiene aplicado el filtro de categoría.
-  // ============================================================
-  const categoryActive = document.getElementById('categoryActive');
-  const categoryNameEl = document.getElementById('categoryName');
-  if (categoryActive && categoryNameEl) {
+  // Categoría activa
+  const ca = document.getElementById('categoryActive');
+  const cn = document.getElementById('categoryName');
+  if (ca && cn) {
     if (category) {
-      // Contar cuántos productos del array completo pertenecen a la categoría seleccionada
-      // Se compara en minúsculas para evitar problemas de mayúsculas/minúsculas
-      const count = products.filter(p =>
-        (p.cat || '').toLowerCase() === category.toLowerCase()
-      ).length;
-      // Mostrar el nombre de la categoría con su cantidad exacta entre paréntesis
-      categoryNameEl.textContent = category + ' (' + count + ' productos)';
-      // Hacer visible el indicador de categoría activa
-      categoryActive.style.display = 'inline-flex';
-    } else {
-      // Ocultar el indicador cuando no hay categoría seleccionada
-      categoryActive.style.display = 'none';
-    }
+      const count = products.filter(p => (p.cat||'').toLowerCase() === category.toLowerCase()).length;
+      cn.textContent = category + ' (' + count + ' productos)';
+      ca.style.display = 'inline-flex';
+    } else { ca.style.display = 'none'; }
   }
-  
-  // Solo mostrar mensaje de "sin resultados" si hay filtros activos Y no hay products
-  const hayFiltrosActivos = query !== '' || category !== '';
-  
-  if (filtered.length === 0 && hayFiltrosActivos) {
-    grid.innerHTML = `
-      <div class="catalog-empty" style="grid-column:1/-1;text-align:center;padding:3rem 2rem;background:var(--bg3);border:1px solid var(--borde);border-radius:12px;">
-        <p style="font-size:1rem;color:var(--texto);margin-bottom:.5rem;">No hay products con los filtros seleccionados.</p>
-        <p style="font-size:.85rem;color:var(--muted);">Cambia la categoría o el texto de búsqueda.</p>
-      </div>
-    `;
-    // Ocultar controles de paginación
-    const paginationControls = document.getElementById('paginationControls');
-    if (paginationControls) paginationControls.style.display = 'none';
+
+  // Sin resultados
+  if (filtered.length === 0 && (query || category)) {
+    grid.innerHTML = `<div class="catalog-empty" style="grid-column:1/-1;text-align:center;padding:3rem 2rem;background:var(--bg3);border:1px solid var(--borde);border-radius:12px;"><p style="font-size:1rem;color:var(--texto);margin-bottom:.5rem;">No hay productos con los filtros seleccionados.</p><p style="font-size:.85rem;color:var(--muted);">Cambia la categoría o el texto de búsqueda.</p></div>`;
+    const pgc = document.getElementById('paginationControls');
+    if (pgc) pgc.style.display = 'none';
     return;
   }
 
-  // Calcular paginación con el total de productos filtrados
-  const totalItems = filtered.length;
-  const itemsPerPage = PAGINATION_CONFIG.itemsPerPage;
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
-  
-  // Asegurar que la página actual sea válida (no mayor al total de páginas)
-  if (PAGINATION_CONFIG.currentPage > totalPages) {
-    PAGINATION_CONFIG.currentPage = totalPages || 1;
-  }
-  // Asegurar que la página actual no sea menor a 1
-  if (PAGINATION_CONFIG.currentPage < 1) {
-    PAGINATION_CONFIG.currentPage = 1;
-  }
-  
-  // Calcular el índice de inicio y fin de los productos de la página actual
-  const startIndex = (PAGINATION_CONFIG.currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  // Obtener solo los productos de la página actual
-  const pageProducts = filtered.slice(startIndex, endIndex);
+  const total = filtered.length;
+  const ip = PAGINATION_CONFIG.itemsPerPage;
+  const tp = Math.ceil(total / ip);
+  if (PAGINATION_CONFIG.currentPage > tp) PAGINATION_CONFIG.currentPage = tp || 1;
+  if (PAGINATION_CONFIG.currentPage < 1) PAGINATION_CONFIG.currentPage = 1;
 
-  // Agrupar los productos de la página actual por categoría
+  const start = (PAGINATION_CONFIG.currentPage - 1) * ip;
+  const page = filtered.slice(start, start + ip);
   const grouped = {};
-  pageProducts.forEach(p => {
-    if (!grouped[p.cat]) grouped[p.cat] = [];
-    grouped[p.cat].push(p);
-  });
+  page.forEach(p => { if (!grouped[p.cat]) grouped[p.cat] = []; grouped[p.cat].push(p); });
 
-  let html = '';
-  let delay = 0;
-  const categories = Object.keys(grouped);
-  
-  // Renderizar cada categoría y sus productos
-  categories.forEach((cat, catIndex) => {
-    // Agregar separador de categoría a partir de la segunda categoría
-    if (catIndex > 0) {
-      html += `<div class="prod-category-header"><span>${cat}</span></div>`;
-    }
-    
-    // Renderizar cada tarjeta de producto dentro de la categoría
-    grouped[cat].forEach((p) => {
-      html += `
-<div class="prod-card" style="--card-delay: ${delay * 0.07}s" onclick="openModal('${p.id}')">
-          <div class="prod-img-wrap">
-            <img src="${p.imgs[0]}" alt="${p.name}"/>
-            ${p.watermark ? `<img src="${p.watermark}" alt="" class="prod-watermark"/>` : ''}
-            <!-- Escapar el badge para evitar inyección de código malicioso -->
-            <span class="prod-badge">${escapeHtml(p.badge)}</span>
-          </div>
-          <div class="prod-body">
-            <!-- Escapar la categoría para mostrarla de forma segura -->
-            <div class="prod-cat">${escapeHtml(p.cat)}</div>
-            <!-- Escapar el name del producto para evitar XSS -->
-            <div class="prod-name">${escapeHtml(p.name)}</div>
-            <!-- Escapar la descripción para mostrarla de forma segura -->
-            <div class="prod-desc">${escapeHtml(p.desc)}</div>
-            <div class="prod-specs">${p.tags.map(t => `<span class="spec-tag">${t}</span>`).join('')}</div>
-            <div class="prod-footer">
-              <button class="prod-btn">Ver más →</button>
-            </div>
-          </div>
+  let html = ''; let delay = 0;
+  Object.keys(grouped).forEach((cat, i) => {
+    if (i > 0) html += `<div class="prod-category-header"><span>${cat}</span></div>`;
+    grouped[cat].forEach(p => {
+      html += `<div class="prod-card" style="--card-delay:${delay*0.07}s" onclick="openModal('${p.id}')">
+        <div class="prod-img-wrap">
+          <img src="${p.imgs[0]}" alt="${p.name}"/>
+          ${p.watermark ? `<img src="${p.watermark}" alt="" class="prod-watermark"/>` : ''}
+          <span class="prod-badge">${escapeHtml(p.badge)}</span>
         </div>
-      `;
+        <div class="prod-body">
+          <div class="prod-cat">${escapeHtml(p.cat)}</div>
+          <div class="prod-name">${escapeHtml(p.name)}</div>
+          <div class="prod-desc">${escapeHtml(p.desc)}</div>
+          <div class="prod-specs">${p.tags.map(t=>`<span class="spec-tag">${t}</span>`).join('')}</div>
+          <div class="prod-footer"><button class="prod-btn">Ver más →</button></div>
+        </div>
+      </div>`;
       delay++;
     });
   });
-
   grid.innerHTML = html;
-  
-  // Renderizar controles de paginación con el total calculado
-  renderPaginationControls(totalPages, PAGINATION_CONFIG.currentPage);
+  renderPaginationControls(tp, PAGINATION_CONFIG.currentPage);
 }
 
-/**
- * Renderiza los controles de paginación
- * @param {number} totalPages - Total de páginas
- * @param {number} currentPage - Página actual
- */
 function renderPaginationControls(totalPages, currentPage) {
-  let paginationContainer = document.getElementById('paginationControls');
-  
-  // Si no existe el contenedor, crearlo y agregarlo a la sección de productos
-  if (!paginationContainer) {
-    const productsSection = document.getElementById('products');
-    if (!productsSection) return;
-    
-    paginationContainer = document.createElement('div');
-    paginationContainer.id = 'paginationControls';
-    paginationContainer.className = 'pagination-controls';
-    productsSection.appendChild(paginationContainer);
+  let pg = document.getElementById('paginationControls');
+  if (!pg) {
+    const sec = document.getElementById('products');
+    if (!sec) return;
+    pg = document.createElement('div');
+    pg.id = 'paginationControls';
+    pg.className = 'pagination-controls';
+    sec.appendChild(pg);
   }
-  
-  // Si solo hay una página, mostrar solo el indicador sin botones de navegación
   if (totalPages <= 1) {
-    paginationContainer.innerHTML = `
-      <div class="pagination-info">
-        <span class="pagination-current">1</span>
-        <span class="pagination-separator">/</span>
-        <span class="pagination-total">1</span>
-      </div>
-    `;
-    paginationContainer.style.display = 'flex';
-    return;
+    pg.innerHTML = `<div class="pagination-info"><span class="pagination-current">1</span><span class="pagination-separator">/</span><span class="pagination-total">1</span></div>`;
+    pg.style.display = 'flex'; return;
   }
-  
-  // Generar HTML de controles con botones anterior y siguiente
-  paginationContainer.innerHTML = `
-    <button class="pagination-btn pagination-prev" onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>
-      ‹
-    </button>
-    <div class="pagination-info">
-      <span class="pagination-current">${currentPage}</span>
-      <span class="pagination-separator">/</span>
-      <span class="pagination-total">${totalPages}</span>
-    </div>
-    <button class="pagination-btn pagination-next" onclick="changePage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>
-      ›
-    </button>
-  `;
-  
-  paginationContainer.style.display = 'flex';
+  pg.innerHTML = `
+    <button class="pagination-btn" onclick="changePage(${currentPage-1})" ${currentPage===1?'disabled':''}>‹</button>
+    <div class="pagination-info"><span class="pagination-current">${currentPage}</span><span class="pagination-separator">/</span><span class="pagination-total">${totalPages}</span></div>
+    <button class="pagination-btn" onclick="changePage(${currentPage+1})" ${currentPage===totalPages?'disabled':''}>›</button>`;
+  pg.style.display = 'flex';
 }
 
-/**
- * Cambia de página en la paginación
- * @param {number} page - Número de página al que cambiar
- */
 function changePage(page) {
-  const filtered = getFilteredproducts();
-  const totalPages = Math.ceil(filtered.length / PAGINATION_CONFIG.itemsPerPage);
-  
-  // Validar que la página solicitada esté dentro del rango válido
-  if (page < 1 || page > totalPages) return;
-  
-  // Actualizar la página actual y re-renderizar los productos
+  const f = getFilteredproducts();
+  const tp = Math.ceil(f.length / PAGINATION_CONFIG.itemsPerPage);
+  if (page < 1 || page > tp) return;
   PAGINATION_CONFIG.currentPage = page;
   renderProducts();
-  
-  // Scroll suave al inicio de la sección de productos
-  const productsSection = document.getElementById('products');
-  if (productsSection) {
-    productsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
+  const sec = document.getElementById('products');
+  if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-/**
- * Configura los eventos de los filtros de búsqueda y categoría
- */
 function setupCatalogFilters() {
-  // Llenar el selector de categorías con las opciones disponibles
   fillCategorySelect();
-  
-  // Elementos del escritorio
-  const searchEl = document.getElementById('catalogSearch');
-  const categoryEl = document.getElementById('catalogCategory');
-  // Elementos del menú móvil
-  const mobileMenuCategory = document.getElementById('mobileMenuCategory');
-  const mobileMenuSearch = document.getElementById('mobileMenuSearch');
-  // Elementos de la caja de búsqueda expandible
-  const searchBox = document.getElementById('navSearchBox');
-  const searchTrigger = document.getElementById('navSearchTrigger');
+  const se = document.getElementById('catalogSearch');
+  const ce = document.getElementById('catalogCategory');
+  const mob_c = document.getElementById('mobileMenuCategory');
+  const mob_s = document.getElementById('mobileMenuSearch');
+  const sb = document.getElementById('navSearchBox');
+  const st = document.getElementById('navSearchTrigger');
 
-  // Evento de búsqueda en escritorio - sin scroll automático al escribir
-  if (searchEl) {
-    searchEl.addEventListener('input', function() {
-      PAGINATION_CONFIG.currentPage = 1; // Reiniciar a página 1 al buscar
-      renderProducts();
-    });
-    // Agregar soporte para tecla Enter en búsqueda de escritorio
-    searchEl.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter') {
+  if (se) {
+    se.addEventListener('input', () => { PAGINATION_CONFIG.currentPage = 1; renderProducts(); });
+    se.addEventListener('keydown', e => { if (e.key==='Enter') { e.preventDefault(); renderProducts(); document.getElementById('products').scrollIntoView({behavior:'smooth'}); } });
+  }
+  if (ce) ce.addEventListener('change', () => { PAGINATION_CONFIG.currentPage=1; renderProducts(); document.getElementById('products').scrollIntoView({behavior:'smooth'}); });
+  if (mob_c) mob_c.addEventListener('change', () => { if (ce) ce.value=mob_c.value; PAGINATION_CONFIG.currentPage=1; renderProducts(); document.getElementById('products').scrollIntoView({behavior:'smooth'}); });
+  if (mob_s) {
+    mob_s.addEventListener('input', () => { if (se) { se.value=mob_s.value; PAGINATION_CONFIG.currentPage=1; renderProducts(); } });
+    mob_s.addEventListener('keydown', e => {
+      if (e.key==='Enter') {
         e.preventDefault();
-        renderProducts();
-        // Scroll a products solo al presionar Enter
-        document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
+        if (se) { se.value=mob_s.value; renderProducts(); }
+        const nl = document.getElementById('navLinks');
+        if (nl && nl.classList.contains('open')) toggleMobileMenu();
+        document.getElementById('products').scrollIntoView({behavior:'smooth'});
       }
     });
   }
-  
-  // Evento de categoría en escritorio - al cambiar va a página 1 y hace scroll
-  if (categoryEl) categoryEl.addEventListener('change', function() {
-    PAGINATION_CONFIG.currentPage = 1; // Reiniciar a página 1 al cambiar categoría
-    renderProducts();
-    document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
-  });
-
-  // Evento para el selector de categorías en menú móvil
-  if (mobileMenuCategory) mobileMenuCategory.addEventListener('change', function() {
-    // Sincronizar el valor con el selector de escritorio
-    if (categoryEl) categoryEl.value = mobileMenuCategory.value;
-    PAGINATION_CONFIG.currentPage = 1; // Reiniciar a página 1 al cambiar categoría
-    renderProducts();
-    document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
-  });
-
-  // Evento para búsqueda en menú móvil - sin scroll automático al escribir
-  if (mobileMenuSearch) {
-    mobileMenuSearch.addEventListener('input', function() {
-      if (searchEl) {
-        // Sincronizar el valor con el campo de búsqueda de escritorio
-        searchEl.value = mobileMenuSearch.value;
-        PAGINATION_CONFIG.currentPage = 1; // Reiniciar a página 1 al buscar
-        renderProducts();
-      }
-    });
-    // Agregar soporte para tecla Enter en búsqueda móvil
-    mobileMenuSearch.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        // Sincronizar valor antes de buscar
-        if (searchEl) {
-          searchEl.value = mobileMenuSearch.value;
-          renderProducts();
-        }
-        // Cerrar el menú móvil si está abierto
-        const navLinks = document.getElementById('navLinks');
-        if (navLinks && navLinks.classList.contains('open')) {
-          toggleMobileMenu();
-        }
-        // Scroll a products solo al presionar Enter
-        document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
-      }
-    });
-  }
-
-  // Configuración de la caja de búsqueda expandible en el navbar
-  if (searchBox && searchTrigger && searchEl) {
-    // Al hacer clic en el ícono de búsqueda, expandir o contraer la caja
-    searchTrigger.addEventListener('click', () => {
-      const isExpanded = searchBox.classList.toggle('expanded');
-      searchTrigger.setAttribute('aria-expanded', isExpanded);
-      if (isExpanded) {
-        searchEl.focus(); // Enfocar el input al expandirse
-      }
-    });
-    // Al perder el foco, contraer la caja de búsqueda
-    searchEl.addEventListener('blur', () => {
-      setTimeout(() => {
-        searchBox.classList.remove('expanded');
-        searchTrigger.setAttribute('aria-expanded', 'false');
-      }, 180);
-    });
-    // Al presionar Escape, contraer la caja de búsqueda
-    searchEl.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        searchEl.blur();
-        searchBox.classList.remove('expanded');
-        searchTrigger.setAttribute('aria-expanded', 'false');
-      }
-    });
+  if (sb && st && se) {
+    st.addEventListener('click', () => { const exp = sb.classList.toggle('expanded'); st.setAttribute('aria-expanded',exp); if (exp) se.focus(); });
+    se.addEventListener('blur', () => { setTimeout(() => { sb.classList.remove('expanded'); st.setAttribute('aria-expanded','false'); }, 180); });
+    se.addEventListener('keydown', e => { if (e.key==='Escape') { se.blur(); sb.classList.remove('expanded'); st.setAttribute('aria-expanded','false'); } });
   }
 }
 
-
 // ========================================
-// MODAL DE PRODUCTO
+// MODAL
 // ========================================
-
-/**
- * Abre el modal con los detalles de un producto
- * @param {string} id - ID del producto a mostrar
- */
 function openModal(id) {
   const p = products.find(x => x.id === id);
   if (!p) return;
 
-  // Limpiar marca de agua anterior si existe
   const mb = document.getElementById('modalBody');
   const oldWm = mb.querySelector('.modal-watermark');
   if (oldWm) oldWm.remove();
-  // Agregar nueva marca de agua si el producto la tiene
-  if(p.watermark) {
-    const wm = document.createElement('img');
-    wm.src = p.watermark;
-    wm.className = 'modal-watermark';
-    mb.appendChild(wm);
-  }
+  if (p.watermark) { const wm = document.createElement('img'); wm.src=p.watermark; wm.className='modal-watermark'; mb.appendChild(wm); }
 
-  // Llenar el título del modal con el nombre del producto
   document.getElementById('modalTitulo').textContent = p.name;
-  // Asignar la imagen principal al elemento img del modal
   document.getElementById('modalImgMain').src = p.imgs[0];
-  /* Asignar texto descriptivo al alt de la imagen para lectores de pantalla */
   document.getElementById('modalImgMain').alt = 'Imagen de ' + p.name;
+  document.getElementById('modalThumbs').innerHTML = p.imgs.map((img,i) => `<div class="modal-thumb ${i===0?'active':''}" onclick="cambiarImg('${img}',this)"><img src="${img}" alt=""/></div>`).join('');
 
-  // Renderizar las miniaturas de imágenes del producto
-  document.getElementById('modalThumbs').innerHTML = p.imgs.map((img, i) => `
-    <div class="modal-thumb ${i === 0 ? 'active' : ''}" onclick="cambiarImg('${img}', this)">
-      <img src="${img}" alt=""/>
-    </div>
-  `).join('');
-
-  // Renderizar la información del producto: badge, categoría, nombre, descripción, specs, apps, botones
   document.getElementById('modalInfo').innerHTML = `
     <span class="modal-badge">${p.badge}</span>
     <div class="modal-cat">${p.cat}</div>
     <div class="modal-name">${p.name}</div>
     <div class="modal-desc">${p.desc}</div>
-    <table class="modal-tabla">
-  ${(p.specs || []).map(([k, v]) => `
-    <tr>
-      <td>${k}</td>
-      <td>${v || '-'}</td>
-    </tr>
-  `).join('')}
-</table>
+    <table class="modal-tabla">${(p.specs||[]).map(([k,v])=>`<tr><td>${k}</td><td>${v||'-'}</td></tr>`).join('')}</table>
+    <div class="modal-apps"><h4>Aplicaciones</h4><ul>${(p.apps||[]).map(a=>`<li>${a}</li>`).join('')}</ul></div>
+    ${p.doc ? `<button class="modal-pdf-btn" onclick="event.stopPropagation();abrirPDF('${p.doc}','${p.name}')">📄 Ver Ficha Técnica ${escapeHtml(p.name)}</button>` : ''}
+    <a href="${WP}?text=${encodeURIComponent('Hola, me interesa el '+p.name+'. ¿Pueden darme información y precio?')}" target="_blank" rel="noopener noreferrer" class="modal-wp">${WP_SVG} Consultar por WhatsApp</a>`;
 
-    <div class="modal-apps">
-      <h4>Aplicaciones</h4>
-     <ul>${(p.apps || []).map(a => `<li>${a}</li>`).join('')}</ul>
-    </div>
-${p.doc ? `<button class="modal-pdf-btn" onclick="event.stopPropagation(); abrirPDF('${p.doc}', '${p.name}')">
-      📄 Ver Ficha Técnica ${escapeHtml(p.name)}
-    </button>` : ''}
-    <a href="${WP}?text=${encodeURIComponent('Hola, me interesa el ' + p.name + '. ¿Pueden darme información y precio?')}"
-       target="_blank" rel="noopener noreferrer" class="modal-wp">
-      ${WP_SVG} Consultar por WhatsApp
-    </a>
-  `;
-
-  // Mostrar el modal y bloquear el scroll del body
   document.getElementById('modalOverlay').classList.add('open');
   document.body.style.overflow = 'hidden';
+  openModal._prev = document.activeElement;
 
-  /* Guardar referencia al elemento que tenía el foco antes de abrir el modal */
-  openModal._focusAnterior = document.activeElement;
-
-  /* Obtener todos los elementos enfocables dentro del modal */
-  const modal = document.getElementById('modal');
-  const enfocables = modal.querySelectorAll(
-    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-  );
-  /* Primer y último elemento enfocable del modal */
-  const primero = enfocables[0];
-  const ultimo = enfocables[enfocables.length - 1];
-
-  /* Función que atrapa el foco dentro del modal al presionar Tab */
-  function trapFocus(e) {
-    if (e.key !== 'Tab') return; /* Solo actuar cuando se presiona Tab */
-    if (e.shiftKey) {
-      /* Si se presiona Shift+Tab y el foco está en el primero, ir al último */
-      if (document.activeElement === primero) {
-        e.preventDefault();
-        ultimo.focus();
-      }
-    } else {
-      /* Si se presiona Tab y el foco está en el último, volver al primero */
-      if (document.activeElement === ultimo) {
-        e.preventDefault();
-        primero.focus();
-      }
-    }
+  const enfocables = document.getElementById('modal').querySelectorAll('button,[href],input,select,textarea,[tabindex]:not([tabindex="-1"])');
+  const first = enfocables[0], last = enfocables[enfocables.length-1];
+  function trap(e) {
+    if (e.key !== 'Tab') return;
+    if (e.shiftKey) { if (document.activeElement===first) { e.preventDefault(); last.focus(); } }
+    else { if (document.activeElement===last) { e.preventDefault(); first.focus(); } }
   }
-
-  /* Registrar el listener del focus trap y guardarlo para poder eliminarlo después */
-  document.addEventListener('keydown', trapFocus);
-  openModal._trapFocus = trapFocus; /* Guardar referencia para eliminar en cerrarModalBtn */
-
-  /* Enfocar el primer elemento del modal al abrirlo */
-  if (primero) primero.focus();
+  document.addEventListener('keydown', trap);
+  openModal._trap = trap;
+  if (first) first.focus();
 }
 
-/**
- * Cambia la imagen principal del modal al hacer clic en miniatura
- * @param {string} src - Ruta de la nueva imagen
- * @param {HTMLElement} el - Elemento de la miniatura clicada
- */
 function cambiarImg(src, el) {
   document.getElementById('modalImgMain').src = src;
-  // Quitar clase active de todas las miniaturas y asignarla a la clicada
   document.querySelectorAll('.modal-thumb').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
 }
-
-/**
- * Cierra el modal al hacer clic fuera del contenido (en el overlay)
- * @param {Event} e - Evento del clic
- */
-function cerrarModal(e) {
-  if (e.target === document.getElementById('modalOverlay')) cerrarModalBtn();
-}
-
-/**
- * Cierra el modal y restaura el scroll del body
- */
+function cerrarModal(e) { if (e.target===document.getElementById('modalOverlay')) cerrarModalBtn(); }
 function cerrarModalBtn() {
-  /* Eliminar el listener del focus trap al cerrar el modal */
-  if (openModal._trapFocus) {
-    document.removeEventListener('keydown', openModal._trapFocus);
-    openModal._trapFocus = null; /* Limpiar la referencia */
-  }
-  /* Devolver el foco al elemento que lo tenía antes de abrir el modal */
-  if (openModal._focusAnterior) {
-    openModal._focusAnterior.focus();
-    openModal._focusAnterior = null; /* Limpiar la referencia */
-  }
-
-  // Ocultar el modal y restaurar el scroll del body
+  if (openModal._trap) { document.removeEventListener('keydown', openModal._trap); openModal._trap=null; }
+  if (openModal._prev) { openModal._prev.focus(); openModal._prev=null; }
   document.getElementById('modalOverlay').classList.remove('open');
   document.body.style.overflow = '';
 }
-
-// Cerrar modal con tecla Escape — primero cierra el visor PDF si está abierto
 document.addEventListener('keydown', e => {
   if (e.key !== 'Escape') return;
-  const pdfOverlay = document.getElementById('pdfOverlay');
-  // Si el visor PDF está visible, cerrarlo primero sin tocar el modal
-  if (pdfOverlay && pdfOverlay.style.display === 'flex') {
-    cerrarPDF();
-  } else {
-    cerrarModalBtn();
-  }
+  const pdfO = document.getElementById('pdfOverlay');
+  if (pdfO && pdfO.style.display==='flex') cerrarPDF();
+  else cerrarModalBtn();
 });
 
-/**
- * Abre el PDF en un visor iframe superpuesto dentro de la misma página
- * No abre nueva pestaña ni navega fuera del sitio
- * @param {string} url - URL del PDF en Cloudinary
- * @param {string} nombre - Nombre del producto para el título del visor
- */
 function abrirPDF(url, nombre) {
-  // Buscar el overlay del visor PDF o crearlo si no existe todavía
-  let pdfOverlay = document.getElementById('pdfOverlay');
-  if (!pdfOverlay) {
-    // Crear el contenedor del visor PDF
-    pdfOverlay = document.createElement('div');
-    pdfOverlay.id = 'pdfOverlay';
-    // Estilos del overlay: cubre toda la pantalla sobre el modal
-    pdfOverlay.style.cssText = [
-      'position:fixed',
-      'inset:0',
-      'z-index:3000',
-      'background:rgba(0,0,0,0.95)',
-      'display:flex',
-      'flex-direction:column',
-      'align-items:center',
-      'justify-content:flex-start',
-      'padding:1rem'
-    ].join(';');
-    // Agregar al body para que quede encima de todo
-    document.body.appendChild(pdfOverlay);
+  let pdfO = document.getElementById('pdfOverlay');
+  if (!pdfO) {
+    pdfO = document.createElement('div');
+    pdfO.id = 'pdfOverlay';
+    pdfO.style.cssText = 'position:fixed;inset:0;z-index:3000;background:rgba(13,27,42,0.9);display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:1rem';
+    document.body.appendChild(pdfO);
   }
-
-  // Detectar si el usuario está en dispositivo móvil
-  // En móvil los iframes con PDF tienen problemas, por eso se usa Google Docs Viewer
-  const esMobile = /Android|iPhone|iPad|iPod|Opera Mini|IEMobile/i.test(navigator.userAgent);
-
-  // En desktop se usa el PDF directo; en móvil se usa Google Docs Viewer como proxy
-  const srcIframe = esMobile
-    ? 'https://docs.google.com/viewer?url=' + encodeURIComponent(url) + '&embedded=true'
-    : url;
-
-  // Construir el visor con encabezado, iframe y botón de descarga como respaldo
-  pdfOverlay.innerHTML = `
-    <div style="width:100%;max-width:960px;display:flex;flex-direction:column;height:100%;">
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:0.75rem 1rem;margin-bottom:0.75rem;background:var(--bg3);border:1px solid var(--borde);border-radius:10px;flex-shrink:0;gap:0.75rem;">
-        <span style="font-family:'Rajdhani',sans-serif;font-size:0.95rem;font-weight:700;color:var(--titulo);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
-          📄 ${nombre}
-        </span>
-        <div style="justify-content:flex-end;">
-          <button
-            onclick="cerrarPDF()"
-            style="width:36px;height:36px;border-radius:8px;border:1px solid var(--borde);background:transparent;color:var(--texto);font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;"
-            aria-label="Cerrar visor PDF"
-          >✕</button>
-        </div>
-      </div>
-      <iframe
-        src="${srcIframe}"
-        style="flex:1;width:100%;border:none;border-radius:10px;background:#fff;min-height:0;"
-        title="Ficha Técnica ${nombre}"
-      ></iframe>
+  const mob = /Android|iPhone|iPad|iPod|Opera Mini|IEMobile/i.test(navigator.userAgent);
+  const src = mob ? 'https://docs.google.com/viewer?url='+encodeURIComponent(url)+'&embedded=true' : url;
+  pdfO.innerHTML = `<div style="width:100%;max-width:960px;display:flex;flex-direction:column;height:100%;">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:0.75rem 1rem;margin-bottom:0.75rem;background:#fff;border:1px solid var(--borde);border-radius:10px;flex-shrink:0;gap:0.75rem;">
+      <span style="font-family:'Rajdhani',sans-serif;font-size:0.95rem;font-weight:700;color:var(--titulo);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">📄 ${nombre}</span>
+      <button onclick="cerrarPDF()" style="width:36px;height:36px;border-radius:8px;border:1px solid var(--borde);background:transparent;color:var(--titulo);font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;" aria-label="Cerrar">✕</button>
     </div>
-  `;
-
-  // Mostrar el overlay encima del modal
-  pdfOverlay.style.display = 'flex';
+    <iframe src="${src}" style="flex:1;width:100%;border:none;border-radius:10px;background:#fff;min-height:0;" title="Ficha Técnica ${nombre}"></iframe>
+  </div>`;
+  pdfO.style.display = 'flex';
 }
-
-/**
- * Cierra el visor de PDF sin cerrar el modal del producto
- */
-function cerrarPDF() {
-  const pdfOverlay = document.getElementById('pdfOverlay');
-  // Ocultar el overlay del visor PDF
-  if (pdfOverlay) pdfOverlay.style.display = 'none';
-  // No restaurar overflow porque el modal del producto sigue abierto
-}
+function cerrarPDF() { const o = document.getElementById('pdfOverlay'); if (o) o.style.display='none'; }
 
 // ========================================
 // MENÚ MÓVIL
 // ========================================
-
-/**
- * Alterna la apertura/cierre del menú móvil
- */
 function toggleMobileMenu() {
-  const hamburger = document.getElementById('navHamburger');
-  const navLinks = document.getElementById('navLinks');
-  const overlay = document.getElementById('navMobileOverlay');
-  
-  if (!hamburger || !navLinks) return;
-  
-  // Alternar clase 'active' en el botón hamburguesa y 'open' en el menú
-  const isOpen = hamburger.classList.toggle('active');
-  navLinks.classList.toggle('open');
-  
-  // Alternar el overlay semitransparente de fondo
-  if (overlay) {
-    overlay.classList.toggle('open');
-  }
-  
-  // Actualizar atributo aria para accesibilidad
-  hamburger.setAttribute('aria-expanded', isOpen);
+  const h = document.getElementById('navHamburger');
+  const nl = document.getElementById('navLinks');
+  const ov = document.getElementById('navMobileOverlay');
+  if (!h || !nl) return;
+  const open = h.classList.toggle('active');
+  nl.classList.toggle('open');
+  if (ov) ov.classList.toggle('open');
+  h.setAttribute('aria-expanded', open);
 }
 
 // ========================================
-// ENLACE ACTIVO EN NAVEGACIÓN
+// ENLACE ACTIVO
 // ========================================
-
-/**
- * Actualiza el enlace activo en la navegación según el scroll
- */
 function initActiveMenuLink() {
-  const sections = document.querySelectorAll('section[id]');
-  const navLinks = document.querySelectorAll('.nav-link');
-  
-  if (sections.length === 0 || navLinks.length === 0) return;
-  
-  function updateActiveLink() {
-    const scrollPos = window.scrollY + 150;
-    const heroHeight = document.querySelector('.hero')?.offsetHeight || 600;
-    
-    // Si el scroll está dentro del hero, quitar todos los activos
-    if (scrollPos < heroHeight) {
-      navLinks.forEach(link => link.classList.remove('active'));
-      return;
-    }
-    
-    // Activar el enlace correspondiente a la sección visible
-    sections.forEach(section => {
-      const sectionTop = section.offsetTop;
-      const sectionHeight = section.offsetHeight;
-      const sectionId = section.getAttribute('id');
-      
-      if (scrollPos >= sectionTop && scrollPos < sectionTop + sectionHeight) {
-        navLinks.forEach(link => {
-          link.classList.remove('active');
-          if (link.getAttribute('href') === '#' + sectionId) {
-            link.classList.add('active');
-          }
-        });
+  const secs = document.querySelectorAll('section[id]');
+  const links = document.querySelectorAll('.nav-link');
+  if (!secs.length || !links.length) return;
+  function update() {
+    const sp = window.scrollY + 150;
+    const hero = document.querySelector('.hero')?.offsetHeight || 600;
+    if (sp < hero) { links.forEach(l => l.classList.remove('active')); return; }
+    secs.forEach(s => {
+      if (sp >= s.offsetTop && sp < s.offsetTop + s.offsetHeight) {
+        links.forEach(l => { l.classList.remove('active'); if (l.getAttribute('href')==='#'+s.id) l.classList.add('active'); });
       }
     });
   }
-  
-  // Escuchar el scroll para actualizar el enlace activo
-  window.addEventListener('scroll', updateActiveLink, { passive: true });
-  // Ejecutar al cargar para establecer el estado inicial
-  updateActiveLink();
+  window.addEventListener('scroll', update, { passive: true });
+  update();
 }
 
 // ========================================
-// INICIALIZACIÓN AL CARGAR LA PÁGINA
+// INIT
 // ========================================
-
 document.addEventListener('DOMContentLoaded', function() {
-  initCache();         // Inicializar el cache de elementos del DOM
-  loadTheme();         // Cargar el tema guardado (claro u oscuro)
-  initIntroAudio();    // Inicializar el audio introductorio
-  loadProducts();      // Cargar los productos desde el JSON y renderizar
-  setupCatalogFilters(); // Configurar los eventos de búsqueda y filtros
-  initActiveMenuLink(); // Inicializar el enlace activo según el scroll
-  initZoomControls();  // Inicializar los controles de zoom del modal
+  // Forzar tema claro siempre
+  document.body.setAttribute('data-theme', 'light');
 
-  // Crear el observador de intersección para las animaciones de reveal
+  initCache();
+  initIntroAudio();
+  loadProducts();
+  setupCatalogFilters();
+  initActiveMenuLink();
+  initZoomControls();
+
   const obs = new IntersectionObserver(entries => {
-    // Por cada entrada del observador, agregar clase 'visible' si el elemento es visible
     entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
   }, { threshold: 0.1 });
-  // Observar todos los elementos con clase 'reveal' para animarlos al aparecer
   document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 });
