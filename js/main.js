@@ -1,7 +1,11 @@
 /**
 ======================================================================
 PA ACOUSTIC — main.js
-TEMA CLARO PERMANENTE - Sin modo oscuro ni toggle
+CAMBIOS:
+  · loadProducts: lee images.gallery para múltiples fotos en modal
+  · renderBanner: items más grandes (400px)
+  · openModal: thumbs con todas las fotos de gallery
+  · prod-img-wrap: clase para imágenes uniformes (via CSS)
 ======================================================================
 **/
 
@@ -149,7 +153,7 @@ function initIntroAudio() {
 }
 
 // ========================================
-// PRODUCTOS
+// PRODUCTOS — Lee images.gallery para múltiples fotos
 // ========================================
 let products = [];
 
@@ -157,26 +161,40 @@ async function loadProducts() {
   try {
     const response = await fetch("data/products.json");
     const data = await response.json();
-    products = data.map(p => ({
-      id: p.name.toLowerCase(),
-      name: p.name.toUpperCase(),
-      cat: p.category || "Parlantes",
-      badge: "Producto",
-      desc: p.description || "Producto de audio profesional",
-      imgs: [p.images?.main || "", ...(p.images?.gallery || [])].filter(Boolean),
-      watermark: p.images?.watermark || null,
-      specs: p.specs ? Object.entries(p.specs).filter(([k]) => k !== 'aplicaciones') : [],
-      apps: p.specs?.aplicaciones ? (typeof p.specs.aplicaciones === 'string' ? p.specs.aplicaciones.split(',').map(s => s.trim()) : p.specs.aplicaciones) : [],
-      tags: [],
-      doc: p.document || null
-    }));
+    products = data.map(p => {
+      // Construir array de imágenes: gallery tiene prioridad, si no existe usa solo main
+      const mainImg  = p.images?.main || "";
+      // Sanitizar gallery: acepta array, string vacío, null o undefined
+      const rawGallery = p.images?.gallery;
+      const extraImgs  = Array.isArray(rawGallery) ? rawGallery : [];
+      // Combinar: main siempre primero, luego extras sin duplicados
+      const gallery = [mainImg, ...extraImgs.filter(u => u && u !== mainImg)].filter(Boolean);
+
+      return {
+        id:        p.name.toLowerCase().replace(/\s+/g, '-'),
+        name:      p.name.toUpperCase(),
+        cat:       p.category || "Parlantes",
+        badge:     "Producto",
+        desc:      p.description || "Producto de audio profesional",
+        imgs:      gallery,
+        watermark: p.images?.watermark || null,
+        specs:     p.specs ? Object.entries(p.specs).filter(([k]) => k !== 'aplicaciones') : [],
+        apps:      p.specs?.aplicaciones
+                     ? (typeof p.specs.aplicaciones === 'string'
+                         ? p.specs.aplicaciones.split(',').map(s => s.trim())
+                         : p.specs.aplicaciones)
+                     : [],
+        tags:      [],
+        doc:       p.document || null
+      };
+    });
     renderBanner();
     renderProducts();
   } catch (e) { console.error("Error cargando products.json:", e); }
 }
 
 // ========================================
-// BANNER
+// BANNER — items 400px de alto
 // ========================================
 function onBannerItemClick(id) {
   document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
@@ -185,11 +203,12 @@ function onBannerItemClick(id) {
 function renderBanner() {
   const track = document.getElementById('bannerTrack');
   if (!track) return;
+  // Usa siempre la primera imagen (portada) para el banner
   const items = products.map(p => ({ src: p.imgs[0], alt: p.name, id: p.id }));
-  const dup = [...items, ...items, ...items];
+  const dup   = [...items, ...items, ...items];
   track.innerHTML = dup.map(({ src, alt, id }) => `
-    <div class="banner-item" onclick="onBannerItemClick('${id}')" role="button" tabindex="0">
-      <img src="${src}" alt="${alt}" />
+    <div class="banner-item" onclick="onBannerItemClick('${id}')" role="button" tabindex="0" aria-label="Ver ${alt}">
+      <img src="${src}" alt="${alt}" loading="lazy"/>
     </div>`).join('');
 }
 
@@ -202,8 +221,8 @@ function getProductSearchText(p) {
 function getFilteredproducts() {
   const se = document.getElementById('catalogSearch');
   const ce = document.getElementById('catalogCategory');
-  const q = se?.value ? se.value.trim().toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '') : '';
-  const c = ce?.value ? ce.value.trim().toLowerCase() : '';
+  const q  = se?.value ? se.value.trim().toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '') : '';
+  const c  = ce?.value ? ce.value.trim().toLowerCase() : '';
   let list = products;
   if (c) list = list.filter(p => (p.cat||'').toLowerCase() === c);
   if (q) list = list.filter(p => getProductSearchText(p).includes(q));
@@ -211,7 +230,7 @@ function getFilteredproducts() {
 }
 function getUniqueCategories() {
   const fixed = ['Parlantes','Line Array','Woofer','Drivers','Cabinas'];
-  const from = [];
+  const from  = [];
   products.forEach(p => { if (p.cat && !from.includes(p.cat)) from.push(p.cat); });
   return [...new Set([...fixed, ...from])];
 }
@@ -227,24 +246,27 @@ function fillCategorySelect() {
 function escapeHtml(t) { const d = document.createElement('div'); d.textContent = t||''; return d.innerHTML; }
 function escapeAttr(t) { return String(t||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
+// ========================================
+// RENDER PRODUCTOS
+// ========================================
 function renderProducts() {
-  const filtered = getFilteredproducts();
-  const grid = document.getElementById('productsGrid');
+  const filtered  = getFilteredproducts();
+  const grid      = document.getElementById('productsGrid');
   if (!grid) return;
 
-  const se = document.getElementById('catalogSearch');
-  const ce = document.getElementById('catalogCategory');
-  const query = se?.value ? se.value.trim() : '';
+  const se       = document.getElementById('catalogSearch');
+  const ce       = document.getElementById('catalogCategory');
+  const query    = se?.value ? se.value.trim() : '';
   const category = ce?.value ? ce.value.trim() : '';
 
   // Contador
   const pc = document.getElementById('productsCount');
   if (pc) {
     const total = filtered.length;
-    const ip = PAGINATION_CONFIG.itemsPerPage;
-    const cp = PAGINATION_CONFIG.currentPage;
+    const ip    = PAGINATION_CONFIG.itemsPerPage;
+    const cp    = PAGINATION_CONFIG.currentPage;
     const start = Math.min(total, cp * ip);
-    const end = cp * ip;
+    const end   = cp * ip;
     if (total > 0) {
       pc.innerHTML = `<span class="count-label">Página</span><span class="count-current">${cp}</span><span class="count-range">${start}-${end}</span>${!category && !query ? `<span class="count-label">Total:</span><span class="categoria-badge" style="background:var(--rojo);color:#fff;padding:0.2rem 0.7rem;border-radius:20px;font-size:0.75rem;font-weight:600;">${total} productos</span>` : ''}`;
       pc.style.display = 'inline-flex';
@@ -271,13 +293,13 @@ function renderProducts() {
   }
 
   const total = filtered.length;
-  const ip = PAGINATION_CONFIG.itemsPerPage;
-  const tp = Math.ceil(total / ip);
+  const ip    = PAGINATION_CONFIG.itemsPerPage;
+  const tp    = Math.ceil(total / ip);
   if (PAGINATION_CONFIG.currentPage > tp) PAGINATION_CONFIG.currentPage = tp || 1;
-  if (PAGINATION_CONFIG.currentPage < 1) PAGINATION_CONFIG.currentPage = 1;
+  if (PAGINATION_CONFIG.currentPage < 1)  PAGINATION_CONFIG.currentPage = 1;
 
-  const start = (PAGINATION_CONFIG.currentPage - 1) * ip;
-  const page = filtered.slice(start, start + ip);
+  const start   = (PAGINATION_CONFIG.currentPage - 1) * ip;
+  const page    = filtered.slice(start, start + ip);
   const grouped = {};
   page.forEach(p => { if (!grouped[p.cat]) grouped[p.cat] = []; grouped[p.cat].push(p); });
 
@@ -285,11 +307,14 @@ function renderProducts() {
   Object.keys(grouped).forEach((cat, i) => {
     if (i > 0) html += `<div class="prod-category-header"><span>${cat}</span></div>`;
     grouped[cat].forEach(p => {
+      // Indicador de galería si tiene más de 1 imagen
+      const hasGallery = p.imgs.length > 1;
       html += `<div class="prod-card" style="--card-delay:${delay*0.07}s" onclick="openModal('${p.id}')">
         <div class="prod-img-wrap">
-          <img src="${p.imgs[0]}" alt="${p.name}"/>
+          <img src="${p.imgs[0]}" alt="${escapeAttr(p.name)}" loading="lazy"/>
           ${p.watermark ? `<img src="${p.watermark}" alt="" class="prod-watermark"/>` : ''}
           <span class="prod-badge">${escapeHtml(p.badge)}</span>
+          ${hasGallery ? `<span class="prod-gallery-count" title="${p.imgs.length} fotos">📷 ${p.imgs.length}</span>` : ''}
         </div>
         <div class="prod-body">
           <div class="prod-cat">${escapeHtml(p.cat)}</div>
@@ -328,7 +353,7 @@ function renderPaginationControls(totalPages, currentPage) {
 }
 
 function changePage(page) {
-  const f = getFilteredproducts();
+  const f  = getFilteredproducts();
   const tp = Math.ceil(f.length / PAGINATION_CONFIG.itemsPerPage);
   if (page < 1 || page > tp) return;
   PAGINATION_CONFIG.currentPage = page;
@@ -339,12 +364,12 @@ function changePage(page) {
 
 function setupCatalogFilters() {
   fillCategorySelect();
-  const se = document.getElementById('catalogSearch');
-  const ce = document.getElementById('catalogCategory');
+  const se    = document.getElementById('catalogSearch');
+  const ce    = document.getElementById('catalogCategory');
   const mob_c = document.getElementById('mobileMenuCategory');
   const mob_s = document.getElementById('mobileMenuSearch');
-  const sb = document.getElementById('navSearchBox');
-  const st = document.getElementById('navSearchTrigger');
+  const sb    = document.getElementById('navSearchBox');
+  const st    = document.getElementById('navSearchTrigger');
 
   if (se) {
     se.addEventListener('input', () => { PAGINATION_CONFIG.currentPage = 1; renderProducts(); });
@@ -372,64 +397,142 @@ function setupCatalogFilters() {
 }
 
 // ========================================
-// MODAL
+// MODAL — galería completa con thumbs navegables
 // ========================================
 function openModal(id) {
   const p = products.find(x => x.id === id);
   if (!p) return;
 
-  const mb = document.getElementById('modalBody');
+  // Reset zoom al abrir
+  ZOOM_CONFIG.currentZoom = 1;
+
+  const mb    = document.getElementById('modalBody');
   const oldWm = mb.querySelector('.modal-watermark');
   if (oldWm) oldWm.remove();
-  if (p.watermark) { const wm = document.createElement('img'); wm.src=p.watermark; wm.className='modal-watermark'; mb.appendChild(wm); }
+  if (p.watermark) {
+    const wm = document.createElement('img');
+    wm.src = p.watermark;
+    wm.className = 'modal-watermark';
+    mb.appendChild(wm);
+  }
 
   document.getElementById('modalTitulo').textContent = p.name;
-  document.getElementById('modalImgMain').src = p.imgs[0];
-  document.getElementById('modalImgMain').alt = 'Imagen de ' + p.name;
-  document.getElementById('modalThumbs').innerHTML = p.imgs.map((img,i) => `<div class="modal-thumb ${i===0?'active':''}" onclick="cambiarImg('${img}',this)"><img src="${img}" alt=""/></div>`).join('');
+
+  // Imagen principal = primera del gallery
+  const mainImg = document.getElementById('modalImgMain');
+  mainImg.src = p.imgs[0];
+  mainImg.alt = 'Imagen de ' + p.name;
+  mainImg.style.transform = '';
+
+  // Flechas de navegación (solo si hay galería)
+  const mainWrap = document.getElementById('modalImgMain').parentElement;
+  mainWrap.querySelectorAll('.modal-nav-arrow').forEach(a => a.remove());
+  if (p.imgs.length > 1) {
+    const arrowL = document.createElement('button');
+    arrowL.className = 'modal-nav-arrow left';
+    arrowL.innerHTML = '&#8249;';
+    arrowL.setAttribute('aria-label', 'Imagen anterior');
+    arrowL.onclick = (e) => { e.stopPropagation(); navegarGaleria(-1); };
+
+    const arrowR = document.createElement('button');
+    arrowR.className = 'modal-nav-arrow right';
+    arrowR.innerHTML = '&#8250;';
+    arrowR.setAttribute('aria-label', 'Imagen siguiente');
+    arrowR.onclick = (e) => { e.stopPropagation(); navegarGaleria(1); };
+
+    mainWrap.appendChild(arrowL);
+    mainWrap.appendChild(arrowR);
+  }
+
+  // Thumbs: todas las imágenes del gallery
+  const thumbsEl = document.getElementById('modalThumbs');
+  if (p.imgs.length > 1) {
+    thumbsEl.innerHTML = p.imgs.map((img, i) => `
+      <div class="modal-thumb ${i === 0 ? 'active' : ''}"
+           onclick="cambiarImg('${img}', this)"
+           role="tab"
+           aria-label="Imagen ${i + 1} de ${p.imgs.length}">
+        <img src="${img}" alt="Vista ${i + 1}" loading="lazy"/>
+      </div>`).join('');
+    thumbsEl.style.display = 'flex';
+  } else {
+    // Una sola imagen: ocultar la barra de thumbs
+    thumbsEl.innerHTML = '';
+    thumbsEl.style.display = 'none';
+  }
 
   document.getElementById('modalInfo').innerHTML = `
-    <span class="modal-badge">${p.badge}</span>
-    <div class="modal-cat">${p.cat}</div>
-    <div class="modal-name">${p.name}</div>
-    <div class="modal-desc">${p.desc}</div>
-    <table class="modal-tabla">${(p.specs||[]).map(([k,v])=>`<tr><td>${k}</td><td>${v||'-'}</td></tr>`).join('')}</table>
-    <div class="modal-apps"><h4>Aplicaciones</h4><ul>${(p.apps||[]).map(a=>`<li>${a}</li>`).join('')}</ul></div>
-    ${p.doc ? `<button class="modal-pdf-btn" onclick="event.stopPropagation();abrirPDF('${p.doc}','${p.name}')">📄 Ver Ficha Técnica ${escapeHtml(p.name)}</button>` : ''}
+    <span class="modal-badge">${escapeHtml(p.badge)}</span>
+    <div class="modal-cat">${escapeHtml(p.cat)}</div>
+    <div class="modal-name">${escapeHtml(p.name)}</div>
+    <div class="modal-desc">${escapeHtml(p.desc)}</div>
+    <table class="modal-tabla">${(p.specs||[]).map(([k,v])=>`<tr><td>${escapeHtml(k)}</td><td>${escapeHtml(String(v||'-'))}</td></tr>`).join('')}</table>
+    <div class="modal-apps"><h4>Aplicaciones</h4><ul>${(p.apps||[]).map(a=>`<li>${escapeHtml(a)}</li>`).join('')}</ul></div>
+    ${p.doc ? `<button class="modal-pdf-btn" onclick="event.stopPropagation();abrirPDF('${p.doc}','${escapeAttr(p.name)}')">📄 Ver Ficha Técnica ${escapeHtml(p.name)}</button>` : ''}
     <a href="${WP}?text=${encodeURIComponent('Hola, me interesa el '+p.name+'. ¿Pueden darme información y precio?')}" target="_blank" rel="noopener noreferrer" class="modal-wp">${WP_SVG} Consultar por WhatsApp</a>`;
+
+  // Navegación de teclado entre imágenes (← →)
+  openModal._currentImgIdx = 0;
+  openModal._imgs          = p.imgs;
 
   document.getElementById('modalOverlay').classList.add('open');
   document.body.style.overflow = 'hidden';
   openModal._prev = document.activeElement;
 
   const enfocables = document.getElementById('modal').querySelectorAll('button,[href],input,select,textarea,[tabindex]:not([tabindex="-1"])');
-  const first = enfocables[0], last = enfocables[enfocables.length-1];
+  const first = enfocables[0], last = enfocables[enfocables.length - 1];
+
   function trap(e) {
+    if (e.key === 'ArrowRight') { navegarGaleria(1); return; }
+    if (e.key === 'ArrowLeft')  { navegarGaleria(-1); return; }
     if (e.key !== 'Tab') return;
-    if (e.shiftKey) { if (document.activeElement===first) { e.preventDefault(); last.focus(); } }
-    else { if (document.activeElement===last) { e.preventDefault(); first.focus(); } }
+    if (e.shiftKey) { if (document.activeElement === first) { e.preventDefault(); last.focus(); } }
+    else            { if (document.activeElement === last)  { e.preventDefault(); first.focus(); } }
   }
   document.addEventListener('keydown', trap);
   openModal._trap = trap;
   if (first) first.focus();
 }
 
+// Navegar con flechas del teclado dentro del modal
+function navegarGaleria(dir) {
+  const imgs = openModal._imgs;
+  if (!imgs || imgs.length <= 1) return;
+  openModal._currentImgIdx = (openModal._currentImgIdx + dir + imgs.length) % imgs.length;
+  const idx   = openModal._currentImgIdx;
+  const thumb = document.querySelectorAll('.modal-thumb')[idx];
+  if (thumb) cambiarImg(imgs[idx], thumb);
+}
+
 function cambiarImg(src, el) {
-  document.getElementById('modalImgMain').src = src;
+  const mainImg = document.getElementById('modalImgMain');
+  mainImg.style.opacity   = '0';
+  mainImg.style.transform = 'scale(0.97)';
+  setTimeout(() => {
+    mainImg.src             = src;
+    mainImg.style.opacity   = '1';
+    mainImg.style.transform = 'scale(1)';
+  }, 150);
   document.querySelectorAll('.modal-thumb').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
+  // Sincronizar índice para navegación con teclado
+  const idx = Array.from(document.querySelectorAll('.modal-thumb')).indexOf(el);
+  if (idx !== -1) openModal._currentImgIdx = idx;
 }
-function cerrarModal(e) { if (e.target===document.getElementById('modalOverlay')) cerrarModalBtn(); }
+
+function cerrarModal(e) { if (e.target === document.getElementById('modalOverlay')) cerrarModalBtn(); }
 function cerrarModalBtn() {
-  if (openModal._trap) { document.removeEventListener('keydown', openModal._trap); openModal._trap=null; }
-  if (openModal._prev) { openModal._prev.focus(); openModal._prev=null; }
+  if (openModal._trap) { document.removeEventListener('keydown', openModal._trap); openModal._trap = null; }
+  if (openModal._prev) { openModal._prev.focus(); openModal._prev = null; }
   document.getElementById('modalOverlay').classList.remove('open');
   document.body.style.overflow = '';
+  ZOOM_CONFIG.currentZoom = 1;
 }
+
 document.addEventListener('keydown', e => {
   if (e.key !== 'Escape') return;
   const pdfO = document.getElementById('pdfOverlay');
-  if (pdfO && pdfO.style.display==='flex') cerrarPDF();
+  if (pdfO && pdfO.style.display === 'flex') cerrarPDF();
   else cerrarModalBtn();
 });
 
@@ -442,23 +545,23 @@ function abrirPDF(url, nombre) {
     document.body.appendChild(pdfO);
   }
   const mob = /Android|iPhone|iPad|iPod|Opera Mini|IEMobile/i.test(navigator.userAgent);
-  const src = mob ? 'https://docs.google.com/viewer?url='+encodeURIComponent(url)+'&embedded=true' : url;
+  const src = mob ? 'https://docs.google.com/viewer?url=' + encodeURIComponent(url) + '&embedded=true' : url;
   pdfO.innerHTML = `<div style="width:100%;max-width:960px;display:flex;flex-direction:column;height:100%;">
     <div style="display:flex;align-items:center;justify-content:space-between;padding:0.75rem 1rem;margin-bottom:0.75rem;background:#fff;border:1px solid var(--borde);border-radius:10px;flex-shrink:0;gap:0.75rem;">
-      <span style="font-family:'Rajdhani',sans-serif;font-size:0.95rem;font-weight:700;color:var(--titulo);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">📄 ${nombre}</span>
+      <span style="font-family:'Rajdhani',sans-serif;font-size:0.95rem;font-weight:700;color:var(--titulo);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">📄 ${escapeHtml(nombre)}</span>
       <button onclick="cerrarPDF()" style="width:36px;height:36px;border-radius:8px;border:1px solid var(--borde);background:transparent;color:var(--titulo);font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;" aria-label="Cerrar">✕</button>
     </div>
-    <iframe src="${src}" style="flex:1;width:100%;border:none;border-radius:10px;background:#fff;min-height:0;" title="Ficha Técnica ${nombre}"></iframe>
+    <iframe src="${src}" style="flex:1;width:100%;border:none;border-radius:10px;background:#fff;min-height:0;" title="Ficha Técnica ${escapeHtml(nombre)}"></iframe>
   </div>`;
   pdfO.style.display = 'flex';
 }
-function cerrarPDF() { const o = document.getElementById('pdfOverlay'); if (o) o.style.display='none'; }
+function cerrarPDF() { const o = document.getElementById('pdfOverlay'); if (o) o.style.display = 'none'; }
 
 // ========================================
 // MENÚ MÓVIL
 // ========================================
 function toggleMobileMenu() {
-  const h = document.getElementById('navHamburger');
+  const h  = document.getElementById('navHamburger');
   const nl = document.getElementById('navLinks');
   const ov = document.getElementById('navMobileOverlay');
   if (!h || !nl) return;
@@ -472,16 +575,16 @@ function toggleMobileMenu() {
 // ENLACE ACTIVO
 // ========================================
 function initActiveMenuLink() {
-  const secs = document.querySelectorAll('section[id]');
+  const secs  = document.querySelectorAll('section[id]');
   const links = document.querySelectorAll('.nav-link');
   if (!secs.length || !links.length) return;
   function update() {
-    const sp = window.scrollY + 150;
+    const sp   = window.scrollY + 150;
     const hero = document.querySelector('.hero')?.offsetHeight || 600;
     if (sp < hero) { links.forEach(l => l.classList.remove('active')); return; }
     secs.forEach(s => {
       if (sp >= s.offsetTop && sp < s.offsetTop + s.offsetHeight) {
-        links.forEach(l => { l.classList.remove('active'); if (l.getAttribute('href')==='#'+s.id) l.classList.add('active'); });
+        links.forEach(l => { l.classList.remove('active'); if (l.getAttribute('href') === '#' + s.id) l.classList.add('active'); });
       }
     });
   }
@@ -492,10 +595,8 @@ function initActiveMenuLink() {
 // ========================================
 // INIT
 // ========================================
-document.addEventListener('DOMContentLoaded', function() {
-  // Forzar tema claro siempre
+document.addEventListener('DOMContentLoaded', function () {
   document.body.setAttribute('data-theme', 'light');
-
   initCache();
   initIntroAudio();
   loadProducts();
