@@ -134,7 +134,8 @@ nav { position: sticky; top: 0; z-index: 200; display: flex; align-items: center
 
 /* ── IMAGEN DE PRODUCTO — altura fija uniforme ── */
 .prod-img-wrap {
-  height: 280px;
+  width: 100%;
+  aspect-ratio: 4 / 3;
   background: linear-gradient(145deg, #f0f5f9 0%, #e4eaf2 100%);
   border-bottom: 1px solid var(--borde);
   display: flex;
@@ -147,7 +148,7 @@ nav { position: sticky; top: 0; z-index: 200; display: flex; align-items: center
   width: 100%;
   height: 100%;
   object-fit: contain;
-  padding: 1.25rem;
+  padding: 0.75rem;
   transition: transform .4s ease;
 }
 .prod-card:hover .prod-img-wrap img:first-child {
@@ -494,7 +495,7 @@ footer p { font-size: 0.72rem; color: var(--muted); }
   .nos-grid, .con-grid { grid-template-columns: 1fr; gap: 2rem; }
   .products-grid { display: grid; grid-template-columns: 1fr; gap: 1.75rem; justify-items: center; padding: 0 1rem; max-width: 400px; margin: 0 auto; }
   .prod-card { max-width: 100%; width: 340px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
-  .prod-img-wrap { height: 240px; }
+
   .prod-btn { padding: 0.55rem 1rem; min-height: 36px; }
 
   /* Banner */
@@ -510,7 +511,7 @@ footer p { font-size: 0.72rem; color: var(--muted); }
 
 @media (max-width: 480px) {
   .banner-item { width: 300px; height: 380px; }
-  .prod-img-wrap { height: 210px; }
+
   .pagination-controls { gap: 0.5rem; padding: 0.75rem 1rem; border-radius: 30px; }
   .pagination-btn { width: 32px; height: 32px; font-size: 1rem; }
   .pagination-info { gap: 0.35rem; padding: 0.4rem 0.75rem; font-size: 0.8rem; border-radius: 20px; }
