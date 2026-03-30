@@ -362,5 +362,15 @@
       "material": "Polipropileno de alta resistencia",
       "aplicaciones": "Eventos en vivo, Iglesias y conferencias, Eventos corporativos, Salones sociales"
     }
+  },
+  {
+    "id": 16,
+    "name": "MN4582",
+    "category": "Drivers",
+    "images":{
+      "main": "https://res.cloudinary.com/djlr3wszq/image/upload/v1774826798/mn4582_v6x12u.png",
+      "gallery": ["https://res.cloudinary.com/djlr3wszq/image/upload/v1774826798/mn4582_v6x12u.png", "https://res.cloudinary.com/djlr3wszq/image/upload/v1774826843/mn4582-1_zepyth.png", "https://res.cloudinary.com/djlr3wszq/image/upload/v1774826951/mn4582-2_kqviop.png"]
+    },
+    "description": "DRIVER COAXIAL MN4582, driver de compresión coaxial de neodimo de 2 pulgadas. Caracteristicas Principales: Diseño coaxial"
   }
 ]

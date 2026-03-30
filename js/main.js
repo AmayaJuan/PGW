@@ -69,9 +69,12 @@ function zoomOut() {
   return false;
 }
 function applyZoomToImages() {
+  // Solo zoom en la imagen principal — nunca en los thumbs
   const img = document.getElementById('modalImgMain');
-  if (img) { img.style.transform = 'scale(' + ZOOM_CONFIG.currentZoom + ')'; img.style.transition = 'transform 0.3s ease'; }
-  document.querySelectorAll('.modal-thumb img').forEach(t => { t.style.transform = 'scale(' + ZOOM_CONFIG.currentZoom + ')'; t.style.transition = 'transform 0.3s ease'; });
+  if (img) {
+    img.style.transform  = 'scale(' + ZOOM_CONFIG.currentZoom + ')';
+    img.style.transition = 'transform 0.3s ease';
+  }
 }
 function handleWheelZoom(e) {
   const overlay = document.getElementById('modalOverlay');
@@ -506,13 +509,17 @@ function navegarGaleria(dir) {
 
 function cambiarImg(src, el) {
   const mainImg = document.getElementById('modalImgMain');
-  mainImg.style.opacity   = '0';
-  mainImg.style.transform = 'scale(0.97)';
+
+  // Resetear zoom al cambiar imagen para que cada foto empiece desde 1x
+  ZOOM_CONFIG.currentZoom  = 1;
+  mainImg.style.transform  = 'scale(1)';
+
+  mainImg.style.opacity    = '0';
   setTimeout(() => {
-    mainImg.src             = src;
-    mainImg.style.opacity   = '1';
-    mainImg.style.transform = 'scale(1)';
+    mainImg.src            = src;
+    mainImg.style.opacity  = '1';
   }, 150);
+
   document.querySelectorAll('.modal-thumb').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
   // Sincronizar índice para navegación con teclado
