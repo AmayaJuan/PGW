@@ -645,7 +645,7 @@ function abrirLightbox(src, nombre) {
     // Scroll zoom
     wrap.addEventListener('wheel', e => {
       e.preventDefault();
-      lbZoom(e.deltaY < 0 ? 0.15 : -0.15);
+      lbZoom(e.deltaY < 0 ? 0.2 : -0.2);
     }, { passive: false });
 
     // Touch
@@ -667,7 +667,7 @@ function abrirLightbox(src, nombre) {
         lbApply();
       } else if (e.touches.length === 2) {
         const d = Math.hypot(e.touches[0].clientX-e.touches[1].clientX, e.touches[0].clientY-e.touches[1].clientY);
-        LBState.scale = Math.max(0.5, Math.min(5, LBState.pinchScale * (d / LBState.pinchDist)));
+        LBState.scale = Math.max(0.8, Math.min(3, LBState.pinchScale * (d / LBState.pinchDist)));
         lbApply();
       }
     }, { passive: false });
@@ -683,7 +683,7 @@ function abrirLightbox(src, nombre) {
 }
 
 function lbZoom(delta) {
-  LBState.scale = Math.max(0.5, Math.min(5, LBState.scale + delta));
+  LBState.scale = Math.max(0.8, Math.min(3, LBState.scale + delta));
   lbApply();
 }
 
