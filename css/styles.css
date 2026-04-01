@@ -104,7 +104,7 @@ nav { position: sticky; top: 0; z-index: 200; display: flex; align-items: center
 .hero-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 60% 70% at 65% 50%, rgba(196,30,58,0.04) 0%, transparent 65%); }
 .hero-grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(13,27,42,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(13,27,42,0.06) 1px, transparent 1px); background-size: 50px 50px; mask-image: radial-gradient(ellipse at 30% 50%, black 20%, transparent 70%); }
 .hero-content { position: relative; z-index: 2; max-width: 600px; opacity: 0; animation: fadeUp .9s ease forwards .3s; }
-.hero-logo-img { height: 120px; max-width: min(380px, 70vw); width: auto; margin-bottom: 1.5rem; object-fit: contain; display: block; }
+.hero-logo-img { height: 180px; max-width: min(480px, 80vw); width: auto; margin-bottom: 1.5rem; object-fit: contain; display: block; }
 .hero-tag { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.3rem 1rem; border: 1px solid rgba(196,30,58,0.4); border-radius: 999px; font-size: 0.7rem; color: var(--rojo); letter-spacing: 0.2em; text-transform: uppercase; background: rgba(196,30,58,0.06); margin-bottom: 1.5rem; }
 .hero-tag::before { content: '●'; font-size: 0.45rem; animation: blink 2s infinite; }
 .hero-titulo { font-family: 'Rajdhani', sans-serif; font-size: clamp(2.8rem,7vw,6rem); font-weight: 700; line-height: 0.95; text-transform: uppercase; color: var(--titulo); margin-bottom: 1.25rem; }
@@ -610,8 +610,8 @@ footer p { font-size: 0.72rem; color: var(--muted); }
 }
 
 #lbImg {
-  max-width: 85vw;
-  max-height: 70vh;
+  max-width: 72vw;
+  max-height: 60vh;
   object-fit: contain;
   border-radius: 12px;
   user-select: none;
@@ -619,8 +619,8 @@ footer p { font-size: 0.72rem; color: var(--muted); }
   cursor: grab;
   will-change: transform;
   box-shadow: 0 4px 24px rgba(13,27,42,0.12);
-  border: 1px solid var(--borde);
-  background: #ffffff;
+  border: none;
+  background: transparent;
 }
 #lbImg:active { cursor: grabbing; }
 
@@ -668,6 +668,6 @@ footer p { font-size: 0.72rem; color: var(--muted); }
 #modalImgMain { cursor: zoom-in; }
 
 @media (max-width: 768px) {
-  #lbImg { max-width: 98%; max-height: 75vh; }
+  #lbImg { max-width: 95%; max-height: 65vh; }
   .lb-hint { display: none; }
 }
