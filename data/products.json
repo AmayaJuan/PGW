@@ -4,8 +4,8 @@
     "name": "hl10a",
     "category": "Line Array",
     "images": {
-      "main": "https://res.cloudinary.com/djlr3wszq/image/upload/v1773502278/hl10a-1_kd06ad.png",
-      "gallery": []
+      "main": "https://res.cloudinary.com/djlr3wszq/image/upload/v1775083413/hl10a-1_ehys5y.png",
+      "gallery": ["https://res.cloudinary.com/djlr3wszq/image/upload/v1775083410/hl10a-2_dwo2ic.png", "https://res.cloudinary.com/djlr3wszq/image/upload/v1775083410/hl10a-2_dwo2ic.png", "https://res.cloudinary.com/djlr3wszq/image/upload/v1775083415/hl10a_fvjqkk.png", "https://res.cloudinary.com/djlr3wszq/image/upload/v1775083408/hl10a-3_m1mrs5.png"]
     },
     "description": "El PA HL10-A es un sistema line array activo bi-amplificado de 2 vias.",
     "document": "https://res.cloudinary.com/djlr3wszq/image/upload/v1773531017/FICHA_TECNICA_PA_HL_10A_1_kyplax.pdf",
@@ -33,8 +33,8 @@
     "name": "hl30a",
     "category": "Line Array",
     "images": {
-      "main": "https://res.cloudinary.com/djlr3wszq/image/upload/v1773503067/hl30a-1_wdfrms.png",
-      "gallery": []
+      "main": "https://res.cloudinary.com/djlr3wszq/image/upload/v1775083566/hl30a-3_suvnal.png",
+      "gallery": ["https://res.cloudinary.com/djlr3wszq/image/upload/v1775083569/hl30a-2_dpgtum.png", "https://res.cloudinary.com/djlr3wszq/image/upload/v1775083575/hl30a_pk2r2n.png", "https://res.cloudinary.com/djlr3wszq/image/upload/v1775083572/hl30a-1_vjxhig.png"]
     },
     "description": "El PA HL30-A es un sistema line array activo bi-amplificado de 2 vias, disenado para aplicaciones profesionales de refuerzo sonoro.",
     "document": "https://res.cloudinary.com/djlr3wszq/image/upload/v1773526923/FICHA_TECNICA_PA_HL30A_qiqevw.pdf",
@@ -117,7 +117,7 @@
     "category": "Woofer",
     "images": {
       "main": "https://res.cloudinary.com/djlr3wszq/image/upload/v1773505883/pa12n1000-1_qaoenb.png",
-      "gallery": ["https://res.cloudinary.com/djlr3wszq/image/upload/v1774996918/pa12n1000_ojk6vs.png", "https://res.cloudinary.com/djlr3wszq/image/upload/v1774996919/pa12n1000-1_negmeh.png"]
+      "gallery": ["https://res.cloudinary.com/djlr3wszq/image/upload/v1775084033/pa12n1000_ojk6vs.png", "https://res.cloudinary.com/djlr3wszq/image/upload/v1774996919/pa12n1000-1_negmeh.png"]
     },
     "description": "Woofer de 12 pulgadas con sensibilidad de 100 dB, ideal para sistemas que requieren potencia real con una respuesta rapida y contundente.",
     "document": "https://res.cloudinary.com/djlr3wszq/image/upload/v1773524084/FICHA_TECNICA_WOOFER_PA12N1000_nk9zc9.pdf",
@@ -153,7 +153,7 @@
     "category": "Woofer",
     "images": {
       "main": "https://res.cloudinary.com/djlr3wszq/image/upload/v1774912809/parlante_10_sheffieeld-1_yh3ldi.png",
-      "gallery": []
+      "gallery": ["https://res.cloudinary.com/djlr3wszq/image/upload/v1775083755/sheffield10_clvemq.png"]
     },
     "description": "El parlante SHEFFIELD 10 es un altavoz para aplicaciones profesionales que requieren potencia constante y excelente comportamiento en sistemas de audio.",
     "document": "https://res.cloudinary.com/djlr3wszq/image/upload/v1773524034/FICHA_TECNICA_PARLANTE_10_SHEFIEELD_mlt894.pdf",
@@ -224,8 +224,8 @@
     "name": "pa120r400w",
     "category": "Cabinas",
     "images": {
-      "main": "https://res.cloudinary.com/djlr3wszq/image/upload/v1773772304/Cabina12_zbk36d.png",
-      "gallery": []
+      "main": "https://res.cloudinary.com/djlr3wszq/image/upload/v1775084202/pa120r400w_c5yqgi.png",
+      "gallery": ["https://res.cloudinary.com/djlr3wszq/image/upload/v1775084221/pa120r400w-1_xsxxa4.png"]
     },
     "description": "Cabina de 12 pulgadas con reproductor mp3, usb, bluetooth y radio FM, con sistema DSP. Potencia 400 W RMS.",
     "document": "",
@@ -395,7 +395,7 @@
     "category": "Drivers",
     "images":{
       "main": "https://res.cloudinary.com/djlr3wszq/image/upload/v1775070189/344mm_ceiung.png",
-      "gallery": ["https://res.cloudinary.com/djlr3wszq/image/upload/v1775070188/344mm-1_nh9o2a.png"]
+      "gallery": ["https://res.cloudinary.com/djlr3wszq/image/upload/v1775083899/34.4mm_xn8qg2.png"]
     },
     "description": "",
     "document": "",
