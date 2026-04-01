@@ -402,7 +402,9 @@ if (mob_c) mob_c.addEventListener('change', () => {
 function openModal(id) {
   const p = products.find(x => x.id === id);
   if (!p) return;
-  ZOOM_CONFIG.currentZoom = 1;
+
+  // ✅ INICIALIZAR ZOOM MODAL
+  modalZoomInit();
 
   const mainWrap = document.getElementById('modalImgMain').parentElement;
   const oldVideo = mainWrap.querySelector('.modal-video-wrap');
@@ -411,7 +413,7 @@ function openModal(id) {
   const mainImg = document.getElementById('modalImgMain');
   mainImg.style.display   = '';
   mainImg.style.opacity   = '1';
-  mainImg.style.transform = '';
+  mainImg.style.transform = 'scale(1)';
 
   const mb    = document.getElementById('modalBody');
   const oldWm = mb.querySelector('.modal-watermark');
@@ -428,7 +430,7 @@ function openModal(id) {
   mainImg.alt = 'Imagen de ' + p.name;
   mainImg.removeAttribute('srcset');
   mainImg.removeAttribute('sizes');
-  mainImg.style.cursor = 'zoom-in';
+  mainImg.style.cursor = 'zoom-in grab';
   mainImg.onclick = (e) => { e.stopPropagation(); abrirLightbox(mainImg.src, p.name); };
 
   mainWrap.querySelectorAll('.modal-nav-arrow').forEach(a => a.remove());
@@ -436,11 +438,11 @@ function openModal(id) {
     const arrowL = document.createElement('button');
     arrowL.className = 'modal-nav-arrow left'; arrowL.innerHTML = '&#8249;';
     arrowL.setAttribute('aria-label', 'Imagen anterior');
-    arrowL.onclick = (e) => { e.stopPropagation(); navegarGaleria(-1); };
+    arrowL.onclick = (e) => { e.stopPropagation(); modalZoomCleanup(); navegarGaleria(-1); };
     const arrowR = document.createElement('button');
     arrowR.className = 'modal-nav-arrow right'; arrowR.innerHTML = '&#8250;';
     arrowR.setAttribute('aria-label', 'Imagen siguiente');
-    arrowR.onclick = (e) => { e.stopPropagation(); navegarGaleria(1); };
+    arrowR.onclick = (e) => { e.stopPropagation(); modalZoomCleanup(); navegarGaleria(1); };
     mainWrap.appendChild(arrowL);
     mainWrap.appendChild(arrowR);
   }
@@ -452,7 +454,7 @@ function openModal(id) {
   if (totalItems > 1) {
     const imgThumbs = p.imgs.map((img, i) => `
       <div class="modal-thumb ${i === 0 ? 'active' : ''}"
-           onclick="cambiarImg('${escapeAttr(img)}', this)"
+           onclick="modalZoomCleanup(); cambiarImg('${escapeAttr(img)}', this)"
            role="tab" data-type="img" aria-label="Imagen ${i + 1} de ${p.imgs.length}">
         <img src="${escapeAttr(img)}" alt="Vista ${i + 1}" loading="lazy"/>
       </div>`).join('');
@@ -463,7 +465,7 @@ function openModal(id) {
         : '';
       return `
         <div class="modal-thumb modal-thumb-video"
-             onclick="cambiarAVideo('${escapeAttr(p.video)}', this)"
+             onclick="modalZoomCleanup(); cambiarAVideo('${escapeAttr(p.video)}', this)"
              role="tab" data-type="video" ${thumbBg} aria-label="Ver video del producto">
           <span class="thumb-play-icon">&#9654;</span>
         </div>`;
@@ -499,8 +501,8 @@ function openModal(id) {
   const enfocables = document.getElementById('modal').querySelectorAll('button,[href],input,select,textarea,[tabindex]:not([tabindex="-1"])');
   const first = enfocables[0], last = enfocables[enfocables.length - 1];
   function trap(e) {
-    if (e.key === 'ArrowRight') { navegarGaleria(1); return; }
-    if (e.key === 'ArrowLeft')  { navegarGaleria(-1); return; }
+    if (e.key === 'ArrowRight') { modalZoomCleanup(); navegarGaleria(1); return; }
+    if (e.key === 'ArrowLeft')  { modalZoomCleanup(); navegarGaleria(-1); return; }
     if (e.key !== 'Tab') return;
     if (e.shiftKey) { if (document.activeElement === first) { e.preventDefault(); last.focus(); } }
     else            { if (document.activeElement === last)  { e.preventDefault(); first.focus(); } }
@@ -573,19 +575,21 @@ function cambiarImg(src, el) {
 
 function cerrarModal(e) { if (e.target === document.getElementById('modalOverlay')) cerrarModalBtn(); }
 function cerrarModalBtn() {
+  // ✅ LIMPIAR ZOOM MODAL
+  modalZoomCleanup();
+  
   const mainWrap = document.getElementById('modalImgMain')?.parentElement;
   if (mainWrap) {
     const videoWrap = mainWrap.querySelector('.modal-video-wrap');
     if (videoWrap) videoWrap.remove();
     const mainImg = document.getElementById('modalImgMain');
-    if (mainImg) { mainImg.style.display = ''; mainImg.style.opacity = '1'; mainImg.style.transform = ''; }
+    if (mainImg) { mainImg.style.display = ''; mainImg.style.opacity = '1'; mainImg.style.transform = 'scale(1)'; }
     mainWrap.querySelectorAll('.modal-nav-arrow').forEach(a => a.style.display = '');
   }
   if (openModal._trap) { document.removeEventListener('keydown', openModal._trap); openModal._trap = null; }
   if (openModal._prev) { openModal._prev.focus(); openModal._prev = null; }
   document.getElementById('modalOverlay').classList.remove('open');
   document.body.style.overflow = '';
-  ZOOM_CONFIG.currentZoom = 1;
 }
 
 document.addEventListener('keydown', e => {
