@@ -369,7 +369,14 @@ function setupCatalogFilters() {
     });
   }
   if (ce) ce.addEventListener('change', () => { PAGINATION_CONFIG.currentPage = 1; renderProducts(); document.getElementById('products').scrollIntoView({ behavior: 'instant' }); });
-  if (mob_c) mob_c.addEventListener('change', () => { if (ce) ce.value = mob_c.value; PAGINATION_CONFIG.currentPage = 1; renderProducts(); document.getElementById('products').scrollIntoView({ behavior: 'instant' }); });
+if (mob_c) mob_c.addEventListener('change', () => { 
+  const nl = document.getElementById('navLinks');
+  if (nl && nl.classList.contains('open')) toggleMobileMenu(); // ✅ Cierra hamburguesa
+  if (ce) ce.value=mob_c.value; 
+  PAGINATION_CONFIG.currentPage=1; 
+  renderProducts(); 
+  document.getElementById('products').scrollIntoView({behavior:'instant'}); 
+});
   if (mob_s) {
     mob_s.addEventListener('input', () => { if (se) { se.value = mob_s.value; PAGINATION_CONFIG.currentPage = 1; renderProducts(); } });
     mob_s.addEventListener('keydown', e => {

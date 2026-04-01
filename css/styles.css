@@ -294,7 +294,7 @@ footer p { font-size: 0.72rem; color: var(--muted); }
   max-height: 65vh;
   border-radius: 10px;
   overflow: hidden;
-  background: linear-gradient(145deg, #f8f9fa 0%, #e9ecef 100%);
+  background: #ffffff;  /* ✅ Fondo blanco sólido móvil también */
   display: flex;
   align-items: center;
   justify-content: center;
