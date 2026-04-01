@@ -322,7 +322,7 @@ footer p { font-size: 0.72rem; color: var(--muted); }
 .modal-img-main img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain; /* ✅ Imagen COMPLETA sin cortar/dimensionada perfecta */
   padding: 0.5rem;
   image-rendering: -webkit-optimize-contrast;
   transition: opacity .15s ease, transform .15s ease;

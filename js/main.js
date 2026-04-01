@@ -47,7 +47,17 @@ const PAGINATION_CONFIG = { itemsPerPage: 8, currentPage: 1 };
 // ========================================
 // ZOOM
 // ========================================
-const ZOOM_CONFIG = { minZoom: 1, maxZoom: 3, currentZoom: 1 };
+const ZOOM_CONFIG = { 
+  levels: [0.5, 0.8, 1, 1.5, 2], 
+  currentLevel: 2, 
+  currentZoom: 1 
+};
+
+function zoomStep(direction) {
+  ZOOM_CONFIG.currentLevel = Math.max(0, Math.min(ZOOM_CONFIG.levels.length - 1, ZOOM_CONFIG.currentLevel + direction));
+  ZOOM_CONFIG.currentZoom = ZOOM_CONFIG.levels[ZOOM_CONFIG.currentLevel];
+  applyZoomToImages();
+}
 
 function zoomIn() {
   if (ZOOM_CONFIG.currentZoom < ZOOM_CONFIG.maxZoom) {
@@ -78,7 +88,7 @@ function handleWheelZoom(e) {
   const r = img.getBoundingClientRect();
   if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) return;
   e.preventDefault();
-  if (e.deltaY < 0) zoomIn(); else zoomOut();
+  zoomStep(e.deltaY < 0 ? 1 : -1); // ✅ Solo niveles discretos
 }
 function initZoomControls() {
   document.addEventListener('wheel', handleWheelZoom, { passive: false });
@@ -466,7 +476,8 @@ function openModal(id) {
   mainImg.alt = 'Imagen de ' + p.name;
   mainImg.style.transform = '';
   mainImg.style.cursor = 'zoom-in';
-  mainImg.onclick = (e) => { e.stopPropagation(); abrirLightbox(mainImg.src, p.name); };
+mainImg.onclick = (e) => { e.stopPropagation(); abrirLightbox(mainImg.src, p.name); };
+// Zoom restringido a niveles discretos en lightbox
 
   // Flechas de navegación
   mainWrap.querySelectorAll('.modal-nav-arrow').forEach(a => a.remove());
@@ -597,7 +608,7 @@ function cambiarAVideo(url, el) {
         title="Video del producto"></iframe>`;
   } else {
     videoWrap.innerHTML = `
-      <video controls autoplay playsinline>
+      <video controls playsinline style="width:100%;height:100%;object-fit:contain;background:#000;">
         <source src="${embed.src}" type="video/mp4"/>
       </video>`;
   }
@@ -631,7 +642,8 @@ function cambiarImg(src, el) {
   setTimeout(() => {
     mainImg.src           = src;
     mainImg.style.opacity = '1';
-    mainImg.onclick = (e) => { e.stopPropagation(); abrirLightbox(src, ''); };
+// mainImg.onclick = (e) => { e.stopPropagation(); abrirLightbox(src, ''); };
+mainImg.onclick = null;
   }, 150);
 
   document.querySelectorAll('.modal-thumb').forEach(t => t.classList.remove('active'));
