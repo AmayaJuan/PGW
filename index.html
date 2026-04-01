@@ -13,11 +13,14 @@
   <meta property="og:locale" content="es_CO"/>
   <link rel="icon" type="image/png" href="https://res.cloudinary.com/djlr3wszq/image/upload/v1774903848/LOGO_PA_alta_resolucion_tisjr6.png"/>
   <title>P.Acoustic — Audio Profesional</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Nunito:wght@300;400;500;600&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="css/styles.css"/>
-  <link rel="stylesheet" href="css/pdf-btn.css"/>
+<link rel="preconnect" href="https://res.cloudinary.com" crossorigin>
+<link rel="dns-prefetch" href="https://res.cloudinary.com">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Nunito:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="css/styles.css"/>
+<link rel="stylesheet" href="css/pdf-btn.css"/>
 </head>
 <body data-theme="light">
 
@@ -39,7 +42,7 @@
 <nav aria-label="Navegación principal">
   <div class="nav-logo">
     <a href="#" onclick="handleLogoClick(event); return false;">
-      <img src="https://res.cloudinary.com/djlr3wszq/image/upload/v1774903848/LOGO_PA_alta_resolucion_tisjr6.png" alt="P.Acoustic"/>
+      <img src="https://res.cloudinary.com/djlr3wszq/image/upload/v1774903848/LOGO_PA_alta_resolucion_tisjr6.png" alt="P.Acoustic" loading="lazy"/>
     </a>
   </div>
 
@@ -98,6 +101,7 @@
       src="https://res.cloudinary.com/djlr3wszq/image/upload/v1774903848/LOGO_PA_alta_resolucion_tisjr6.png"
       alt="P.Acoustic"
       class="hero-logo-img"
+      fetchpriority="high"
     />
     <div class="hero-tag">Audio Profesional Medellin - Colombia</div>
     <h1 class="hero-titulo">
