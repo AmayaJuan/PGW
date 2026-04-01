@@ -371,6 +371,7 @@
       "main": "https://res.cloudinary.com/djlr3wszq/image/upload/v1774826798/mn4582_v6x12u.png",
       "gallery": ["https://res.cloudinary.com/djlr3wszq/image/upload/v1774826798/mn4582_v6x12u.png", "https://res.cloudinary.com/djlr3wszq/image/upload/v1774826843/mn4582-1_zepyth.png", "https://res.cloudinary.com/djlr3wszq/image/upload/v1774826951/mn4582-2_kqviop.png"]
     },
+    "video": "https://res.cloudinary.com/djlr3wszq/video/upload/v1775004775/videocoaxial_lxr7xq.mp4",
     "description": "DRIVER COAXIAL MN4582, driver de compresión coaxial de neodimo de 2 pulgadas. Caracteristicas Principales: Diseño coaxial con dos imanes de neodimio y dos diafragmas para rango  medio y agudos. Ancho de banda extendido: 300Hz - 22kHz. Ensamblaje de imanes de de neodimio, compacto y ligero. Alta dinámica y baja distorsión. Dos subsistemasque dividen el espectro de frecuencias, mejorando el manejo de potencia.",
     "document": "https://res.cloudinary.com/djlr3wszq/image/upload/v1774826683/FICHA_TECNICA_MN4582-1_edxwnh.pdf",
     "specs":{
@@ -390,11 +391,61 @@
   },
   {
      "id": 17,
-     "name": "344 mm",
+     "name": "34.4 mm",
     "category": "Drivers",
     "images":{
       "main": "https://res.cloudinary.com/djlr3wszq/image/upload/v1775070189/344mm_ceiung.png",
       "gallery": ["https://res.cloudinary.com/djlr3wszq/image/upload/v1775070188/344mm-1_nh9o2a.png"]
+    },
+    "description": "",
+    "document": "",
+    "specs":{
+      "impedancia nominal" :"",
+      "sensibilidad (1W/1m)": "",
+      "Radio de frecuencia - medio": "",
+      "Radio de frecuencia - agudo": "",
+      "Potencia (RMS)": "",
+      "Potencia Pico": "",
+      "Diámetro de bobina (Medio)": "",
+      "Diámetro de bobina (Agudo)": "",
+      "material de bobina": "",
+      "dimensiones": "", 
+      "Peso neto": "",
+      "aplicaciones": ""
+    }
+  }, 
+  {
+     "id": 18,
+     "name": "44,4 mm",
+    "category": "Drivers",
+    "images":{
+      "main": "https://res.cloudinary.com/djlr3wszq/image/upload/v1775001051/drive44.4_ivvwzr.png",
+      "gallery": ["https://res.cloudinary.com/djlr3wszq/image/upload/v1775001051/drivee44.4mm_rmc1pd.png"]
+    },
+    "description": "",
+    "document": "",
+    "specs":{
+      "impedancia nominal" :"",
+      "sensibilidad (1W/1m)": "",
+      "Radio de frecuencia - medio": "",
+      "Radio de frecuencia - agudo": "",
+      "Potencia (RMS)": "",
+      "Potencia Pico": "",
+      "Diámetro de bobina (Medio)": "",
+      "Diámetro de bobina (Agudo)": "",
+      "material de bobina": "",
+      "dimensiones": "", 
+      "Peso neto": "",
+      "aplicaciones": ""
+    }
+  },
+  {
+     "id": 19,
+     "name": "PA10MB",
+    "category": "Woofer",
+    "images":{
+      "main": "https://res.cloudinary.com/djlr3wszq/image/upload/v1774999490/pa10mb_uzabdo.png",
+      "gallery": ["https://res.cloudinary.com/djlr3wszq/image/upload/v1774999490/pa10mb-1_vgjvx2.png"]
     },
     "description": "",
     "document": "",

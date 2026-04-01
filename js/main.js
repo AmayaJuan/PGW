@@ -1,11 +1,6 @@
 /**
 ======================================================================
 PA ACOUSTIC — main.js
-CAMBIOS:
-  · loadProducts: lee images.gallery para múltiples fotos en modal
-  · renderBanner: items más grandes (400px)
-  · openModal: thumbs con todas las fotos de gallery
-  · prod-img-wrap: clase para imágenes uniformes (via CSS)
 ======================================================================
 **/
 
@@ -69,7 +64,6 @@ function zoomOut() {
   return false;
 }
 function applyZoomToImages() {
-  // Solo zoom en la imagen principal — nunca en los thumbs
   const img = document.getElementById('modalImgMain');
   if (img) {
     img.style.transform  = 'scale(' + ZOOM_CONFIG.currentZoom + ')';
@@ -156,7 +150,7 @@ function initIntroAudio() {
 }
 
 // ========================================
-// PRODUCTOS — Lee images.gallery para múltiples fotos
+// PRODUCTOS
 // ========================================
 let products = [];
 
@@ -165,13 +159,10 @@ async function loadProducts() {
     const response = await fetch("data/products.json");
     const data = await response.json();
     products = data.map(p => {
-      // Construir array de imágenes: gallery tiene prioridad, si no existe usa solo main
-      const mainImg  = p.images?.main || "";
-      // Sanitizar gallery: acepta array, string vacío, null o undefined
+      const mainImg    = p.images?.main || "";
       const rawGallery = p.images?.gallery;
       const extraImgs  = Array.isArray(rawGallery) ? rawGallery : [];
-      // Combinar: main siempre primero, luego extras sin duplicados
-      const gallery = [mainImg, ...extraImgs.filter(u => u && u !== mainImg)].filter(Boolean);
+      const gallery    = [mainImg, ...extraImgs.filter(u => u && u !== mainImg)].filter(Boolean);
 
       return {
         id:        p.name.toLowerCase().replace(/\s+/g, '-'),
@@ -188,6 +179,7 @@ async function loadProducts() {
                          : p.specs.aplicaciones)
                      : [],
         tags:      [],
+        video:     p.video || null,
         doc:       p.document || null
       };
     });
@@ -197,7 +189,7 @@ async function loadProducts() {
 }
 
 // ========================================
-// BANNER — items 400px de alto
+// BANNER
 // ========================================
 function onBannerItemClick(id) {
   document.getElementById('products').scrollIntoView({ behavior: 'instant' });
@@ -206,13 +198,50 @@ function onBannerItemClick(id) {
 function renderBanner() {
   const track = document.getElementById('bannerTrack');
   if (!track) return;
-  // Usa siempre la primera imagen (portada) para el banner
   const items = products.map(p => ({ src: p.imgs[0], alt: p.name, id: p.id }));
   const dup   = [...items, ...items, ...items];
   track.innerHTML = dup.map(({ src, alt, id }) => `
     <div class="banner-item" onclick="onBannerItemClick('${id}')" role="button" tabindex="0" aria-label="Ver ${alt}">
       <img src="${src}" alt="${alt}" loading="lazy"/>
     </div>`).join('');
+}
+
+// ========================================
+// VIDEO EMBED
+// ========================================
+function getVideoEmbed(url) {
+  if (!url) return null;
+
+  // Cloudinary — genera thumb automático desde el frame 0
+  if (url.includes('res.cloudinary.com') && url.match(/\.(mp4|webm|mov)(\?|$)/i)) {
+    const thumb = url
+      .replace('/video/upload/', '/video/upload/so_0/')
+      .replace(/\.(mp4|webm|mov)(\?|$)/i, '.jpg');
+    return { type: 'video', src: url, thumb };
+  }
+
+  // Video directo genérico
+  if (url.match(/\.(mp4|webm|ogg)(\?|$)/i)) {
+    return { type: 'video', src: url, thumb: null };
+  }
+
+  // YouTube
+  const ytMatch = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([A-Za-z0-9_-]{11})/);
+  if (ytMatch) return {
+    type: 'iframe',
+    src: `https://www.youtube.com/embed/${ytMatch[1]}?rel=0&modestbranding=1`,
+    thumb: null
+  };
+
+  // YouTube Shorts
+  const ytShorts = url.match(/youtube\.com\/shorts\/([A-Za-z0-9_-]{11})/);
+  if (ytShorts) return {
+    type: 'iframe',
+    src: `https://www.youtube.com/embed/${ytShorts[1]}?rel=0`,
+    thumb: null
+  };
+
+  return null;
 }
 
 // ========================================
@@ -262,7 +291,6 @@ function renderProducts() {
   const query    = se?.value ? se.value.trim() : '';
   const category = ce?.value ? ce.value.trim() : '';
 
-  // Contador
   const pc = document.getElementById('productsCount');
   if (pc) {
     const total = filtered.length;
@@ -276,7 +304,6 @@ function renderProducts() {
     } else { pc.style.display = 'none'; }
   }
 
-  // Categoría activa
   const ca = document.getElementById('categoryActive');
   const cn = document.getElementById('categoryName');
   if (ca && cn) {
@@ -287,7 +314,6 @@ function renderProducts() {
     } else { ca.style.display = 'none'; }
   }
 
-  // Sin resultados
   if (filtered.length === 0 && (query || category)) {
     grid.innerHTML = `<div class="catalog-empty" style="grid-column:1/-1;text-align:center;padding:3rem 2rem;background:var(--bg3);border:1px solid var(--borde);border-radius:12px;"><p style="font-size:1rem;color:var(--texto);margin-bottom:.5rem;">No hay productos con los filtros seleccionados.</p><p style="font-size:.85rem;color:var(--muted);">Cambia la categoría o el texto de búsqueda.</p></div>`;
     const pgc = document.getElementById('paginationControls');
@@ -310,14 +336,14 @@ function renderProducts() {
   Object.keys(grouped).forEach((cat, i) => {
     if (i > 0) html += `<div class="prod-category-header"><span>${cat}</span></div>`;
     grouped[cat].forEach(p => {
-      // Indicador de galería si tiene más de 1 imagen
-      const hasGallery = p.imgs.length > 1;
+      const hasGallery = p.imgs.length > 1 || !!p.video;
+      const mediaCount = p.imgs.length + (p.video ? 1 : 0);
       html += `<div class="prod-card" style="--card-delay:${delay*0.07}s" onclick="openModal('${p.id}')">
         <div class="prod-img-wrap">
           <img src="${p.imgs[0]}" alt="${escapeAttr(p.name)}" loading="lazy"/>
           ${p.watermark ? `<img src="${p.watermark}" alt="" class="prod-watermark"/>` : ''}
           <span class="prod-badge">${escapeHtml(p.badge)}</span>
-          ${hasGallery ? `<span class="prod-gallery-count" title="${p.imgs.length} fotos">📷 ${p.imgs.length}</span>` : ''}
+          ${hasGallery ? `<span class="prod-gallery-count" title="${mediaCount} archivos">${p.video ? '🎬' : '📷'} ${mediaCount}</span>` : ''}
         </div>
         <div class="prod-body">
           <div class="prod-cat">${escapeHtml(p.cat)}</div>
@@ -400,7 +426,7 @@ function setupCatalogFilters() {
 }
 
 // ========================================
-// MODAL — galería completa con thumbs navegables
+// MODAL
 // ========================================
 function openModal(id) {
   const p = products.find(x => x.id === id);
@@ -408,6 +434,13 @@ function openModal(id) {
 
   // Reset zoom al abrir
   ZOOM_CONFIG.currentZoom = 1;
+
+  // Limpiar video previo si quedó abierto
+  const mainWrap = document.getElementById('modalImgMain').parentElement;
+  const oldVideo = mainWrap.querySelector('.modal-video-wrap');
+  if (oldVideo) oldVideo.remove();
+  const mainImgEl = document.getElementById('modalImgMain');
+  mainImgEl.style.display = '';
 
   const mb    = document.getElementById('modalBody');
   const oldWm = mb.querySelector('.modal-watermark');
@@ -421,7 +454,7 @@ function openModal(id) {
 
   document.getElementById('modalTitulo').textContent = p.name;
 
-  // Imagen principal = primera del gallery
+  // Imagen principal
   const mainImg = document.getElementById('modalImgMain');
   mainImg.src = p.imgs[0];
   mainImg.alt = 'Imagen de ' + p.name;
@@ -429,8 +462,7 @@ function openModal(id) {
   mainImg.style.cursor = 'zoom-in';
   mainImg.onclick = (e) => { e.stopPropagation(); abrirLightbox(mainImg.src, p.name); };
 
-  // Flechas de navegación (solo si hay galería)
-  const mainWrap = document.getElementById('modalImgMain').parentElement;
+  // Flechas de navegación
   mainWrap.querySelectorAll('.modal-nav-arrow').forEach(a => a.remove());
   if (p.imgs.length > 1) {
     const arrowL = document.createElement('button');
@@ -449,19 +481,40 @@ function openModal(id) {
     mainWrap.appendChild(arrowR);
   }
 
-  // Thumbs: todas las imágenes del gallery
-  const thumbsEl = document.getElementById('modalThumbs');
-  if (p.imgs.length > 1) {
-    thumbsEl.innerHTML = p.imgs.map((img, i) => `
+  // ── Thumbs: imágenes + video ──
+  const thumbsEl  = document.getElementById('modalThumbs');
+  const hasVideo  = !!p.video;
+  const totalItems = p.imgs.length + (hasVideo ? 1 : 0);
+
+  if (totalItems > 1) {
+    const imgThumbs = p.imgs.map((img, i) => `
       <div class="modal-thumb ${i === 0 ? 'active' : ''}"
            onclick="cambiarImg('${img}', this)"
            role="tab"
+           data-type="img"
            aria-label="Imagen ${i + 1} de ${p.imgs.length}">
         <img src="${img}" alt="Vista ${i + 1}" loading="lazy"/>
       </div>`).join('');
+
+    const videoThumb = hasVideo ? (() => {
+      const embed   = getVideoEmbed(p.video);
+      const thumbBg = embed?.thumb
+        ? `style="background-image:url('${embed.thumb}');background-size:cover;background-position:center;"`
+        : '';
+      return `
+        <div class="modal-thumb modal-thumb-video"
+             onclick="cambiarAVideo('${p.video}', this)"
+             role="tab"
+             data-type="video"
+             ${thumbBg}
+             aria-label="Ver video del producto">
+          <span class="thumb-play-icon">▶</span>
+        </div>`;
+    })() : '';
+
+    thumbsEl.innerHTML = imgThumbs + videoThumb;
     thumbsEl.style.display = 'flex';
   } else {
-    // Una sola imagen: ocultar la barra de thumbs
     thumbsEl.innerHTML = '';
     thumbsEl.style.display = 'none';
   }
@@ -476,7 +529,6 @@ function openModal(id) {
     ${p.doc ? `<button class="modal-pdf-btn" onclick="event.stopPropagation();abrirPDF('${p.doc}','${escapeAttr(p.name)}')">📄 Ver Ficha Técnica ${escapeHtml(p.name)}</button>` : ''}
     <a href="${WP}?text=${encodeURIComponent('Hola, me interesa el '+p.name+'. ¿Pueden darme información y precio?')}" target="_blank" rel="noopener noreferrer" class="modal-wp">${WP_SVG} Consultar por WhatsApp</a>`;
 
-  // Navegación de teclado entre imágenes (← →)
   openModal._currentImgIdx = 0;
   openModal._imgs          = p.imgs;
 
@@ -499,40 +551,99 @@ function openModal(id) {
   if (first) first.focus();
 }
 
-// Navegar con flechas del teclado dentro del modal
+// ========================================
+// GALERÍA — navegación con flechas/teclado
+// ========================================
 function navegarGaleria(dir) {
   const imgs = openModal._imgs;
   if (!imgs || imgs.length <= 1) return;
   openModal._currentImgIdx = (openModal._currentImgIdx + dir + imgs.length) % imgs.length;
   const idx   = openModal._currentImgIdx;
-  const thumb = document.querySelectorAll('.modal-thumb')[idx];
+  const thumb = document.querySelectorAll('.modal-thumb[data-type="img"]')[idx];
   if (thumb) cambiarImg(imgs[idx], thumb);
 }
 
+// ========================================
+// CAMBIAR A VIDEO
+// ========================================
+function cambiarAVideo(url, el) {
+  const embed = getVideoEmbed(url);
+  if (!embed) return;
+
+  const mainImg  = document.getElementById('modalImgMain');
+  const mainWrap = mainImg.parentElement;
+
+  // Ocultar flechas y imagen
+  mainWrap.querySelectorAll('.modal-nav-arrow').forEach(a => a.style.display = 'none');
+  mainImg.style.display = 'none';
+
+  // Quitar video anterior si existe
+  const old = mainWrap.querySelector('.modal-video-wrap');
+  if (old) old.remove();
+
+  const videoWrap = document.createElement('div');
+  videoWrap.className = 'modal-video-wrap';
+
+  if (embed.type === 'iframe') {
+    videoWrap.innerHTML = `
+      <iframe src="${embed.src}" frameborder="0" allowfullscreen
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        title="Video del producto"></iframe>`;
+  } else {
+    videoWrap.innerHTML = `
+      <video controls autoplay playsinline>
+        <source src="${embed.src}" type="video/mp4"/>
+      </video>`;
+  }
+
+  mainWrap.appendChild(videoWrap);
+
+  document.querySelectorAll('.modal-thumb').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// ========================================
+// CAMBIAR IMAGEN
+// ========================================
 function cambiarImg(src, el) {
-  const mainImg = document.getElementById('modalImgMain');
+  const mainImg  = document.getElementById('modalImgMain');
+  const mainWrap = mainImg.parentElement;
 
-  // Resetear zoom al cambiar imagen para que cada foto empiece desde 1x
-  ZOOM_CONFIG.currentZoom  = 1;
-  mainImg.style.transform  = 'scale(1)';
+  // Limpiar video si estaba activo
+  const videoWrap = mainWrap.querySelector('.modal-video-wrap');
+  if (videoWrap) videoWrap.remove();
 
-  mainImg.style.opacity    = '0';
+  // Restaurar imagen y flechas
+  mainImg.style.display = '';
+  mainWrap.querySelectorAll('.modal-nav-arrow').forEach(a => a.style.display = '');
+
+  // Reset zoom
+  ZOOM_CONFIG.currentZoom = 1;
+  mainImg.style.transform = 'scale(1)';
+  mainImg.style.opacity   = '0';
+
   setTimeout(() => {
-    mainImg.src            = src;
-    mainImg.style.opacity  = '1';
-    // Actualizar lightbox para la nueva imagen
+    mainImg.src           = src;
+    mainImg.style.opacity = '1';
     mainImg.onclick = (e) => { e.stopPropagation(); abrirLightbox(src, ''); };
   }, 150);
 
   document.querySelectorAll('.modal-thumb').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
-  // Sincronizar índice para navegación con teclado
-  const idx = Array.from(document.querySelectorAll('.modal-thumb')).indexOf(el);
+  const idx = Array.from(document.querySelectorAll('.modal-thumb[data-type="img"]')).indexOf(el);
   if (idx !== -1) openModal._currentImgIdx = idx;
 }
 
 function cerrarModal(e) { if (e.target === document.getElementById('modalOverlay')) cerrarModalBtn(); }
+
 function cerrarModalBtn() {
+  const mainWrap = document.getElementById('modalImgMain')?.parentElement;
+  if (mainWrap) {
+    const videoWrap = mainWrap.querySelector('.modal-video-wrap');
+    if (videoWrap) videoWrap.remove();
+    const mainImg = document.getElementById('modalImgMain');
+    if (mainImg) mainImg.style.display = '';
+  }
   if (openModal._trap) { document.removeEventListener('keydown', openModal._trap); openModal._trap = null; }
   if (openModal._prev) { openModal._prev.focus(); openModal._prev = null; }
   document.getElementById('modalOverlay').classList.remove('open');
@@ -549,6 +660,9 @@ document.addEventListener('keydown', e => {
   else cerrarModalBtn();
 });
 
+// ========================================
+// PDF
+// ========================================
 function abrirPDF(url, nombre) {
   let pdfO = document.getElementById('pdfOverlay');
   if (!pdfO) {
@@ -584,12 +698,8 @@ function toggleMobileMenu() {
   h.setAttribute('aria-expanded', open);
 }
 
-
 // ========================================
-// LIGHTBOX — imagen a pantalla completa
-// ========================================
-// ========================================
-// LIGHTBOX — zoom + paneo limpio
+// LIGHTBOX — zoom + paneo
 // ========================================
 const LBState = { scale: 1, x: 0, y: 0, dragging: false, lastX: 0, lastY: 0, pinchDist: 0, pinchScale: 1 };
 
@@ -628,7 +738,6 @@ function abrirLightbox(src, nombre) {
     lb.addEventListener('click', e => { if (e.target === lb) cerrarLightbox(); });
     img.addEventListener('dblclick', lbReset);
 
-    // Mouse drag
     wrap.addEventListener('mousedown', e => {
       LBState.dragging = true; LBState.lastX = e.clientX; LBState.lastY = e.clientY;
       img.style.cursor = 'grabbing'; e.preventDefault();
@@ -642,13 +751,11 @@ function abrirLightbox(src, nombre) {
     });
     window.addEventListener('mouseup', () => { LBState.dragging = false; img.style.cursor = 'grab'; });
 
-    // Scroll zoom
     wrap.addEventListener('wheel', e => {
       e.preventDefault();
       lbZoom(e.deltaY < 0 ? 0.2 : -0.2);
     }, { passive: false });
 
-    // Touch
     wrap.addEventListener('touchstart', e => {
       if (e.touches.length === 1) {
         LBState.lastX = e.touches[0].clientX; LBState.lastY = e.touches[0].clientY;
@@ -673,7 +780,6 @@ function abrirLightbox(src, nombre) {
     }, { passive: false });
   }
 
-  // Reset state on open
   LBState.scale = 1; LBState.x = 0; LBState.y = 0; LBState.dragging = false;
   const img = document.getElementById('lbImg');
   img.src = src; img.alt = nombre || '';
@@ -691,7 +797,6 @@ function cerrarLightbox() {
   const lb = document.getElementById('lightboxOverlay');
   if (lb) { lb.classList.remove('open'); lbReset(); document.body.style.overflow = 'hidden'; }
 }
-
 
 // ========================================
 // ENLACE ACTIVO
