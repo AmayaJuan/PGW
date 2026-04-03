@@ -700,7 +700,7 @@ function toggleMobileMenu() {
 // ========================================
 const LBState = { scale: 1, x: 0, y: 0, dragging: false, lastX: 0, lastY: 0, pinchDist: 0, pinchScale: 1 };
 const LB_MIN = 1;
-const LB_MAX = 1.12;  // Restricción política: máximo 12% aumento lightbox
+const LB_MAX = 1.15;  // Usuario: límite 15% aumento lightbox
 
 function lbApply() {
   const img = document.getElementById('lbImg');

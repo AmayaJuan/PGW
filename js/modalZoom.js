@@ -7,9 +7,9 @@
 // ── MODAL ZOOM ──
 const MODAL_ZOOM_CONFIG = {
   currentZoom: 1,
-  maxZoom: 1.12,  // Restricción política: máximo 12% aumento
+  maxZoom: 1.15,  // Usuario: límite 15% aumento
   minZoom: 1,
-  step: 0.05     // Paso más fino para control preciso
+  step: 0.05     // Paso fino control preciso
 };
 
 function modalZoomInit() {
