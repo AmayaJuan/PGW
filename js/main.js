@@ -1,13 +1,6 @@
 /**
 ======================================================================
-PA ACOUSTIC — main.js  (versión final)
-FIXES:
-  1. changePage llama getFilteredProducts() con P mayúscula
-  2. cambiarImg restaura onclick para lightbox
-  3. cerrarModalBtn restaura opacidad, flechas y transform
-  4. Video Cloudinary usa object-fit:contain (sin cortar)
-  5. Lightbox zoom hasta 5x, pan libre
-  6. cerrarLightbox NO cambia body overflow (modal sigue abierto)
+PA ACOUSTIC — main.js
 ======================================================================
 **/
 
@@ -15,137 +8,205 @@ const WP = 'https://wa.me/573053402732';
 const WP_SVG = `<svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>`;
 
 // ========================================
-// CACHE DOM
-// ========================================
-const domCache = {};
-function initCache() {
-  domCache.navHamburger       = document.getElementById('navHamburger');
-  domCache.navLinks           = document.getElementById('navLinks');
-  domCache.navMobileOverlay   = document.getElementById('navMobileOverlay');
-  domCache.catalogSearch      = document.getElementById('catalogSearch');
-  domCache.catalogCategory    = document.getElementById('catalogCategory');
-  domCache.navSearchBox       = document.getElementById('navSearchBox');
-  domCache.navSearchTrigger   = document.getElementById('navSearchTrigger');
-  domCache.mobileMenuCategory = document.getElementById('mobileMenuCategory');
-  domCache.mobileMenuSearch   = document.getElementById('mobileMenuSearch');
-  domCache.productsGrid       = document.getElementById('productsGrid');
-  domCache.products           = document.getElementById('products');
-  domCache.categoryActive     = document.getElementById('categoryActive');
-  domCache.bannerTrack        = document.getElementById('bannerTrack');
-  domCache.modalOverlay       = document.getElementById('modalOverlay');
-  domCache.modal              = document.getElementById('modal');
-  domCache.modalBody          = document.getElementById('modalBody');
-  domCache.modalTitulo        = document.getElementById('modalTitulo');
-  domCache.modalImgMain       = document.getElementById('modalImgMain');
-  domCache.modalThumbs        = document.getElementById('modalThumbs');
-  domCache.modalInfo          = document.getElementById('modalInfo');
-  domCache.introAudio         = document.getElementById('introAudio');
-}
-function $(id) {
-  if (!domCache[id]) domCache[id] = document.getElementById(id);
-  return domCache[id];
-}
+  // CACHE DOM - Optimización rendimiento
+  // ========================================
+  // Objeto global para almacenar referencias DOM (evita múltiples getElementById)
+  const domCache = {};
+  // Función para inicializar cache de elementos DOM frecuentemente usados
+  function initCache() {
+    // Cache botón hamburguesa menú móvil
+    domCache.navHamburger       = document.getElementById('navHamburger');
+    // Cache lista enlaces navegación principal
+    domCache.navLinks           = document.getElementById('navLinks');
+    // Cache overlay menú móvil (cierre al tocar fuera)
+    domCache.navMobileOverlay   = document.getElementById('navMobileOverlay');
+    // Cache input búsqueda catálogo desktop
+    domCache.catalogSearch      = document.getElementById('catalogSearch');
+    // Cache selector categoría desktop
+    domCache.catalogCategory    = document.getElementById('catalogCategory');
+    // Cache contenedor caja búsqueda navbar
+    domCache.navSearchBox       = document.getElementById('navSearchBox');
+    // Cache botón trigger búsqueda navbar
+    domCache.navSearchTrigger   = document.getElementById('navSearchTrigger');
+    // Cache selector categoría menú móvil
+    domCache.mobileMenuCategory = document.getElementById('mobileMenuCategory');
+    // Cache input búsqueda menú móvil
+    domCache.mobileMenuSearch   = document.getElementById('mobileMenuSearch');
+    // Cache grid contenedor tarjetas productos
+    domCache.productsGrid       = document.getElementById('productsGrid');
+    // Cache sección contenedor productos
+    domCache.products           = document.getElementById('products');
+    // Cache indicador categoría activa
+    domCache.categoryActive     = document.getElementById('categoryActive');
+    // Cache track carrusel banner productos
+    domCache.bannerTrack        = document.getElementById('bannerTrack');
+    // Cache overlay modal productos
+    domCache.modalOverlay       = document.getElementById('modalOverlay');
+    // Cache contenedor principal modal
+    domCache.modal              = document.getElementById('modal');
+    // Cache body contenido modal
+    domCache.modalBody          = document.getElementById('modalBody');
+    // Cache título modal producto
+    domCache.modalTitulo        = document.getElementById('modalTitulo');
+    // Cache imagen principal modal
+    domCache.modalImgMain       = document.getElementById('modalImgMain');
+    // Cache contenedor miniaturas galería
+    domCache.modalThumbs        = document.getElementById('modalThumbs');
+    // Cache panel información producto modal
+    domCache.modalInfo          = document.getElementById('modalInfo');
+    // Cache elemento audio introductorio
+    domCache.introAudio         = document.getElementById('introAudio');
+  }
+  // Función helper $() - Obtiene elemento del cache o DOM directamente
+  function $(id) {
+    // Si no existe en cache, obtener del DOM y guardar
+    if (!domCache[id]) domCache[id] = document.getElementById(id);
+    // Retorna referencia cacheada (evita queries repetidas)
+    return domCache[id];
+  }
 
 // ========================================
-// CONFIG
-// ========================================
-const PAGINATION_CONFIG = { itemsPerPage: 8, currentPage: 1 };
-const ZOOM_CONFIG = { currentZoom: 1 };
+  // CONFIG - Configuración global aplicación
+  // ========================================
+  // Objeto configuración paginación (8 productos por página, página actual 1)
+  const PAGINATION_CONFIG = { itemsPerPage: 8, currentPage: 1 };
 
-function initZoomControls() {
-  document.addEventListener('wheel', function(e) {
-    const overlay = document.getElementById('modalOverlay');
-    if (!overlay || !overlay.classList.contains('open')) return;
-    const img = document.getElementById('modalImgMain');
-    if (img && img.style.display !== 'none') {
-      const r = img.getBoundingClientRect();
+  // Función placeholder - Zoom controlado por modalZoom.js separado
+  // Mantenida para compatibilidad futura
+  function initZoomControls() {}
+
+  // ========================================
+  // NAVEGACIÓN - Manejo enlaces y scroll suave
+  // ========================================
+  // Event handler click logo - Scroll instantáneo al top página
+  function handleLogoClick(e) {
+    // Previene navegación por defecto del enlace
+    e.preventDefault();
+    // Scroll suave instantáneo a posición 0 (top página)
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    // Limpia clase 'active' de todos enlaces navegación
+    clearNavActive();
+  }
+  // Event handler click enlaces navegación principal
+  function handleNavClick(e, sectionId) {
+    // Obtiene referencia lista enlaces navegación
+    const nl = document.getElementById('navLinks');
+    // Si menú móvil abierto, cerrarlo automáticamente
+    if (nl && nl.classList.contains('open')) toggleMobileMenu();
+    // Limpia clases active después breve delay (UX suave)
+    setTimeout(() => clearNavActive(), 100);
+  }
+  // Elimina clase 'active' de todos enlaces navegación (.nav-link)
+  function clearNavActive() {
+    // Selecciona todos enlaces con clase .nav-link
+    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+  }
+
+// ========================================
+  // AUDIO - Sistema introductorio controlado por scroll
+  // ========================================
+  // Inicializa reproducción audio intro en homepage (solo scrollY < 100px)
+  function initIntroAudio() {
+    // Obtiene referencia elemento audio HTML
+    const audio = document.getElementById('introAudio');
+    // Si audio no existe en DOM, sale tempranamente
+    if (!audio) return;
+    // Flag control reproducción (evita múltiples plays)
+    let started = false;
+    // Función fade out gradual volumen hasta silencio
+    function stop() {
+      // Intervalo fade 80ms decremental 0.05 volumen
+      let fade = setInterval(() => {
+        // Reduce volumen hasta mínimo 0.05
+        if (audio.volume > 0.05) audio.volume -= 0.05;
+        // Cuando volumen bajo, pausa y reset
+        else { clearInterval(fade); audio.pause(); audio.volume = 0.6; started = false; }
+      }, 80);
     }
-  }, { passive: false });
-}
-
-// ========================================
-// NAVEGACIÓN
-// ========================================
-function handleLogoClick(e) {
-  e.preventDefault();
-  window.scrollTo({ top: 0, behavior: 'instant' });
-  clearNavActive();
-}
-function handleNavClick(e, sectionId) {
-  const nl = document.getElementById('navLinks');
-  if (nl && nl.classList.contains('open')) toggleMobileMenu();
-  setTimeout(() => clearNavActive(), 100);
-}
-function clearNavActive() {
-  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-}
-
-// ========================================
-// AUDIO
-// ========================================
-function initIntroAudio() {
-  const audio = document.getElementById('introAudio');
-  if (!audio) return;
-  let started = false;
-  function stop() {
-    let fade = setInterval(() => {
-      if (audio.volume > 0.05) audio.volume -= 0.05;
-      else { clearInterval(fade); audio.pause(); audio.volume = 0.6; started = false; }
-    }, 80);
+    // Función inicio reproducción con volumen bajo (política autoplay)
+    function play() {
+      // Sale si ya activo o scroll >= 100px (solo homepage visible)
+      if (started || window.scrollY >= 100) return;
+      // Marca como activo y volumen inicial suave
+      started = true; audio.volume = 0.5;
+      // Intenta reproducir (catch bloquea autoplay browsers)
+      audio.play().catch(() => { started = false; });
+    }
+    // Listener scroll pasivo (performance) - controla play/stop
+    window.addEventListener('scroll', () => {
+      // Si scroll >=100px y activo, fade out
+      if (window.scrollY >= 100 && started) stop();
+      // Si scroll <100px y inactivo, play
+      if (window.scrollY < 100 && !started) play();
+    }, { passive: true });
+    // Inicia inmediatamente al cargar (homepage)
+    play();
+    // Listener click único - permite play tras interacción usuario
+    document.addEventListener('click', function f() {
+      if (window.scrollY < 100) play();
+      // Remueve listener una vez usado (evita múltiples bindings)
+      document.removeEventListener('click', f);
+    }, { once: true });
   }
-  function play() {
-    if (started || window.scrollY >= 100) return;
-    started = true; audio.volume = 0.5;
-    audio.play().catch(() => { started = false; });
-  }
-  window.addEventListener('scroll', () => {
-    if (window.scrollY >= 100 && started) stop();
-    if (window.scrollY < 100 && !started) play();
-  }, { passive: true });
-  play();
-  document.addEventListener('click', function f() {
-    if (window.scrollY < 100) play();
-    document.removeEventListener('click', f);
-  }, { once: true });
-}
 
 // ========================================
-// PRODUCTOS
-// ========================================
-let products = [];
+  // PRODUCTOS - Carga y procesamiento JSON catálogo
+  // ========================================
+  // Array global productos procesados (formato normalizado)
+  let products = [];
 
-async function loadProducts() {
-  try {
-    const response = await fetch("data/products.json");
-    const data = await response.json();
-    products = data.map(p => {
-      const mainImg    = p.images?.main || "";
-      const rawGallery = p.images?.gallery;
-      const extraImgs  = Array.isArray(rawGallery) ? rawGallery : [];
-      const gallery    = [mainImg, ...extraImgs.filter(u => u && u !== mainImg)].filter(Boolean);
-      return {
-        id:        p.name.toLowerCase().replace(/\s+/g, '-'),
-        name:      p.name.toUpperCase(),
-        cat:       p.category || "Parlantes",
-        badge:     "Producto",
-        desc:      p.description || "Producto de audio profesional",
-        imgs:      gallery,
-        watermark: p.images?.watermark || null,
-        specs:     p.specs ? Object.entries(p.specs).filter(([k]) => k !== 'aplicaciones') : [],
-        apps:      p.specs?.aplicaciones
+  // Función asíncrona carga datos JSON y normaliza estructura productos
+  async function loadProducts() {
+    try {
+      // Fetch asíncrono archivo JSON productos
+      const response = await fetch("data/products.json");
+      // Parsea JSON respuesta a objeto data
+      const data = await response.json();
+      // Transforma array raw → formato interno normalizado
+      products = data.map(p => {
+        // Extrae imagen principal o cadena vacía si no existe
+        const mainImg    = p.images?.main || "";
+        // Obtiene array gallery raw del producto
+        const rawGallery = p.images?.gallery;
+        // Convierte a array si existe, sino array vacío
+        const extraImgs  = Array.isArray(rawGallery) ? rawGallery : [];
+        // Gallery final = main + extras únicos (sin duplicados main)
+        const gallery    = [mainImg, ...extraImgs.filter(u => u && u !== mainImg)].filter(Boolean);
+        return {
+          // ID único lowercase-kebab-case desde name
+          id:        p.name.toLowerCase().replace(/\s+/g, '-'),
+          // Nombre en mayúsculas
+          name:      p.name.toUpperCase(),
+          // Categoría o "Parlantes" por defecto
+          cat:       p.category || "Parlantes",
+          badge:     "Producto", // Badge fijo todos productos
+          // Descripción o texto por defecto
+          desc:      p.description || "Producto de audio profesional",
+          imgs:      gallery, // Array imágenes procesado
+          // Watermark opcional
+          watermark: p.images?.watermark || null,
+          // Specs como array pares key-value (excluye 'aplicaciones')
+          specs:     p.specs ? Object.entries(p.specs).filter(([k]) => k !== 'aplicaciones') : [],
+          // Aplicaciones procesadas desde specs.aplicaciones
+          apps:      p.specs?.aplicaciones
                      ? (typeof p.specs.aplicaciones === 'string'
-                         ? p.specs.aplicaciones.split(',').map(s => s.trim())
-                         : p.specs.aplicaciones)
+                         ? p.specs.aplicaciones.split(',').map(s => s.trim()) // String → array limpio
+                         : p.specs.aplicaciones) // Ya array
                      : [],
-        tags:      [],
-        video:     p.video || null,
-        doc:       p.document || null
-      };
-    });
-    renderBanner();
-    renderProducts();
-  } catch (e) { console.error("Error cargando products.json:", e); }
-}
+          tags:      [], // Placeholder tags futuros
+          video:     p.video || null, // URL video opcional
+          doc:       p.document || null // PDF ficha técnica opcional
+        };
+      });
+      // Renderiza banner con productos cargados
+      renderBanner();
+      // Renderiza grid productos inicial
+      renderProducts();
+    } catch (e) {
+      // Log error consola (desarrollo/debug)
+      console.error("Error cargando products.json:", e);
+    }
+  }
 
 // ========================================
 // BANNER
@@ -365,14 +426,14 @@ function setupCatalogFilters() {
     });
   }
   if (ce) ce.addEventListener('change', () => { PAGINATION_CONFIG.currentPage = 1; renderProducts(); document.getElementById('products').scrollIntoView({ behavior: 'instant' }); });
-if (mob_c) mob_c.addEventListener('change', () => { 
-  const nl = document.getElementById('navLinks');
-  if (nl && nl.classList.contains('open')) toggleMobileMenu(); // ✅ Cierra hamburguesa
-  if (ce) ce.value=mob_c.value; 
-  PAGINATION_CONFIG.currentPage=1; 
-  renderProducts(); 
-  document.getElementById('products').scrollIntoView({behavior:'instant'}); 
-});
+  if (mob_c) mob_c.addEventListener('change', () => {
+    const nl = document.getElementById('navLinks');
+    if (nl && nl.classList.contains('open')) toggleMobileMenu();
+    if (ce) ce.value = mob_c.value;
+    PAGINATION_CONFIG.currentPage = 1;
+    renderProducts();
+    document.getElementById('products').scrollIntoView({ behavior: 'instant' });
+  });
   if (mob_s) {
     mob_s.addEventListener('input', () => { if (se) { se.value = mob_s.value; PAGINATION_CONFIG.currentPage = 1; renderProducts(); } });
     mob_s.addEventListener('keydown', e => {
@@ -399,8 +460,8 @@ function openModal(id) {
   const p = products.find(x => x.id === id);
   if (!p) return;
 
-  // ✅ INICIALIZAR ZOOM MODAL
-  modalZoomInit();
+  // Inicializar zoom del modal
+  if (typeof modalZoomInit === 'function') modalZoomInit();
 
   const mainWrap = document.getElementById('modalImgMain').parentElement;
   const oldVideo = mainWrap.querySelector('.modal-video-wrap');
@@ -426,7 +487,7 @@ function openModal(id) {
   mainImg.alt = 'Imagen de ' + p.name;
   mainImg.removeAttribute('srcset');
   mainImg.removeAttribute('sizes');
-  mainImg.style.cursor = 'zoom-in grab';
+  mainImg.style.cursor = 'zoom-in';
   mainImg.onclick = (e) => { e.stopPropagation(); abrirLightbox(mainImg.src, p.name); };
 
   mainWrap.querySelectorAll('.modal-nav-arrow').forEach(a => a.remove());
@@ -434,11 +495,11 @@ function openModal(id) {
     const arrowL = document.createElement('button');
     arrowL.className = 'modal-nav-arrow left'; arrowL.innerHTML = '&#8249;';
     arrowL.setAttribute('aria-label', 'Imagen anterior');
-    arrowL.onclick = (e) => { e.stopPropagation(); modalZoomCleanup(); navegarGaleria(-1); };
+    arrowL.onclick = (e) => { e.stopPropagation(); if (typeof modalZoomCleanup==='function') modalZoomCleanup(); navegarGaleria(-1); };
     const arrowR = document.createElement('button');
     arrowR.className = 'modal-nav-arrow right'; arrowR.innerHTML = '&#8250;';
     arrowR.setAttribute('aria-label', 'Imagen siguiente');
-    arrowR.onclick = (e) => { e.stopPropagation(); modalZoomCleanup(); navegarGaleria(1); };
+    arrowR.onclick = (e) => { e.stopPropagation(); if (typeof modalZoomCleanup==='function') modalZoomCleanup(); navegarGaleria(1); };
     mainWrap.appendChild(arrowL);
     mainWrap.appendChild(arrowR);
   }
@@ -450,7 +511,7 @@ function openModal(id) {
   if (totalItems > 1) {
     const imgThumbs = p.imgs.map((img, i) => `
       <div class="modal-thumb ${i === 0 ? 'active' : ''}"
-           onclick="modalZoomCleanup(); cambiarImg('${escapeAttr(img)}', this)"
+           onclick="if(typeof modalZoomCleanup==='function')modalZoomCleanup(); cambiarImg('${escapeAttr(img)}', this)"
            role="tab" data-type="img" aria-label="Imagen ${i + 1} de ${p.imgs.length}">
         <img src="${escapeAttr(img)}" alt="Vista ${i + 1}" loading="lazy"/>
       </div>`).join('');
@@ -461,7 +522,7 @@ function openModal(id) {
         : '';
       return `
         <div class="modal-thumb modal-thumb-video"
-             onclick="modalZoomCleanup(); cambiarAVideo('${escapeAttr(p.video)}', this)"
+             onclick="if(typeof modalZoomCleanup==='function')modalZoomCleanup(); cambiarAVideo('${escapeAttr(p.video)}', this)"
              role="tab" data-type="video" ${thumbBg} aria-label="Ver video del producto">
           <span class="thumb-play-icon">&#9654;</span>
         </div>`;
@@ -497,8 +558,8 @@ function openModal(id) {
   const enfocables = document.getElementById('modal').querySelectorAll('button,[href],input,select,textarea,[tabindex]:not([tabindex="-1"])');
   const first = enfocables[0], last = enfocables[enfocables.length - 1];
   function trap(e) {
-    if (e.key === 'ArrowRight') { modalZoomCleanup(); navegarGaleria(1); return; }
-    if (e.key === 'ArrowLeft')  { modalZoomCleanup(); navegarGaleria(-1); return; }
+    if (e.key === 'ArrowRight') { if (typeof modalZoomCleanup==='function') modalZoomCleanup(); navegarGaleria(1); return; }
+    if (e.key === 'ArrowLeft')  { if (typeof modalZoomCleanup==='function') modalZoomCleanup(); navegarGaleria(-1); return; }
     if (e.key !== 'Tab') return;
     if (e.shiftKey) { if (document.activeElement === first) { e.preventDefault(); last.focus(); } }
     else            { if (document.activeElement === last)  { e.preventDefault(); first.focus(); } }
@@ -529,16 +590,14 @@ function cambiarAVideo(url, el) {
   const videoWrap = document.createElement('div');
   videoWrap.className = 'modal-video-wrap';
   if (embed.type === 'iframe') {
-    videoWrap.innerHTML = `
-      <iframe src="${embed.src}" frameborder="0" allowfullscreen
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        title="Video del producto" style="width:100%;height:100%;border:none;"></iframe>`;
+    videoWrap.innerHTML = `<iframe src="${embed.src}" frameborder="0" allowfullscreen
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      title="Video del producto" style="width:100%;height:100%;border:none;"></iframe>`;
   } else {
-    videoWrap.innerHTML = `
-      <video controls autoplay playsinline preload="auto"
-             style="width:100%;height:100%;object-fit:contain;background:#000;">
-        <source src="${embed.src}" type="video/mp4"/>
-      </video>`;
+    videoWrap.innerHTML = `<video controls autoplay playsinline preload="auto"
+      style="width:100%;height:100%;object-fit:contain;background:#000;">
+      <source src="${embed.src}" type="video/mp4"/>
+    </video>`;
   }
   mainWrap.appendChild(videoWrap);
   document.querySelectorAll('.modal-thumb').forEach(t => t.classList.remove('active'));
@@ -552,7 +611,6 @@ function cambiarImg(src, el) {
   if (videoWrap) videoWrap.remove();
   mainImg.style.display = '';
   mainWrap.querySelectorAll('.modal-nav-arrow').forEach(a => a.style.display = '');
-  ZOOM_CONFIG.currentZoom  = 1;
   mainImg.style.transform  = 'scale(1)';
   mainImg.style.opacity    = '0';
   mainImg.style.transition = 'opacity 0.15s ease';
@@ -562,6 +620,8 @@ function cambiarImg(src, el) {
     mainImg.style.opacity = '1';
     mainImg.style.cursor  = 'zoom-in';
     mainImg.onclick = (e) => { e.stopPropagation(); abrirLightbox(src, ''); };
+    // Reinicializar zoom para la nueva imagen
+    if (typeof modalZoomInit === 'function') modalZoomInit();
   }, 150);
   document.querySelectorAll('.modal-thumb').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
@@ -570,10 +630,9 @@ function cambiarImg(src, el) {
 }
 
 function cerrarModal(e) { if (e.target === document.getElementById('modalOverlay')) cerrarModalBtn(); }
+
 function cerrarModalBtn() {
-  // ✅ LIMPIAR ZOOM MODAL
-  modalZoomCleanup();
-  
+  if (typeof modalZoomCleanup === 'function') modalZoomCleanup();
   const mainWrap = document.getElementById('modalImgMain')?.parentElement;
   if (mainWrap) {
     const videoWrap = mainWrap.querySelector('.modal-video-wrap');
@@ -637,9 +696,11 @@ function toggleMobileMenu() {
 }
 
 // ========================================
-// LIGHTBOX — zoom hasta 5x + paneo libre
+// LIGHTBOX — min 1x, max 4x, pan libre
 // ========================================
 const LBState = { scale: 1, x: 0, y: 0, dragging: false, lastX: 0, lastY: 0, pinchDist: 0, pinchScale: 1 };
+const LB_MIN = 1;
+const LB_MAX = 1.12;  // Restricción política: máximo 12% aumento lightbox
 
 function lbApply() {
   const img = document.getElementById('lbImg');
@@ -651,7 +712,7 @@ function lbReset() {
   if (img) { img.style.transition = 'transform .3s ease'; lbApply(); setTimeout(() => { if (img) img.style.transition = 'none'; }, 320); }
 }
 function lbZoom(delta) {
-  LBState.scale = Math.max(0.5, Math.min(5, LBState.scale + delta));
+  LBState.scale = Math.max(LB_MIN, Math.min(LB_MAX, LBState.scale + delta));
   lbApply();
 }
 
@@ -708,11 +769,14 @@ function abrirLightbox(src, nombre) {
         LBState.lastX = e.touches[0].clientX; LBState.lastY = e.touches[0].clientY; lbApply();
       } else if (e.touches.length === 2) {
         const d = Math.hypot(e.touches[0].clientX-e.touches[1].clientX, e.touches[0].clientY-e.touches[1].clientY);
-        LBState.scale = Math.max(0.5, Math.min(5, LBState.pinchScale * (d / LBState.pinchDist))); lbApply();
+        // Restringir entre LB_MIN y LB_MAX
+        LBState.scale = Math.max(LB_MIN, Math.min(LB_MAX, LBState.pinchScale * (d / LBState.pinchDist)));
+        lbApply();
       }
     }, { passive: false });
   }
 
+  // Reset al abrir — siempre empieza en 1x
   LBState.scale = 1; LBState.x = 0; LBState.y = 0; LBState.dragging = false;
   const img = document.getElementById('lbImg');
   img.src = src; img.alt = nombre || '';
@@ -724,7 +788,7 @@ function abrirLightbox(src, nombre) {
 function cerrarLightbox() {
   const lb = document.getElementById('lightboxOverlay');
   if (lb) { lb.classList.remove('open'); lbReset(); }
-  // No tocar body overflow — el modal sigue abierto
+  // No tocar body overflow — modal sigue abierto
 }
 
 // ========================================
