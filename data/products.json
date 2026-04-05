@@ -446,8 +446,8 @@
     }
   },
   {
-     "id": 19,
-     "name": "PA10MB",
+    "id": 19,
+    "name": "PA10MB",
     "category": "Woofer",
     "images":{
       "main": "https://res.cloudinary.com/djlr3wszq/image/upload/v1774999490/pa10mb_uzabdo.png",
@@ -468,6 +468,34 @@
       "dimensiones": "", 
       "Peso neto": "",
       "aplicaciones": ""
+    }
+  },
+  {
+    "id": 20,
+    "name": "BNT 44",
+    "category": "Drivers",
+    "images":{
+      "main": "https://res.cloudinary.com/djlr3wszq/image/upload/v1775000953/bnt44neodimio_xf24qp.png",
+      "gallery":["https://res.cloudinary.com/djlr3wszq/image/upload/v1775000953/bnt44neodimio1_mnbk4d.png"]
+    },
+    "description": "El driver de compresión  BNT 44 está diseñado para sistemas profesionales de sonido que requieren alta eficiencia, claridad y excelente respuesta en altas frecuencias. Incorpora diafragma de titanio y bobina de 44 mm en alambre plano, lo que garantiza una rproducción precisa, baja distorsión y alta resistencia térmica durante trabajos exigentes.",
+    "document":"https://res.cloudinary.com/djlr3wszq/image/upload/v1775323213/FICHA_TECNICA_DRIVER_BNT44_bb9shf.pdf",
+    "specs":{
+      "Tipo": "Driver de compresión BNT 44",
+      "Diámetro de salida": "1'",
+      "Potencia (RMS)": "50 W",
+      "Potencia programa": "100 W",
+      "Impedancia nominal": "8 Ω",
+      "Sensibilidad": "108 dB",
+      "Rango de frecuencia": "1.2 kHz - 20 kHz",
+      "Frecuencia recomendada de corte": "≥ 1.5kHz",
+      "Material del diáfragma": "Titanio",
+      "Material de bobina": "Kapton / alambre plano",
+      "Diámetro de bobina": "44 mm (1.75 pulgadas)",
+      "Tipo de imán": "Neodimio",
+      "Ángulo de dispersión": "Dependiente de la guía de onda",
+      "Peso aproximado": "1.6 kg",
+      "aplicaciones": "Cabimas activas y pasivas profesionales, Sistemas de sonido en vivo, Sistemas Line arrays, Monitores, Sistemas de perifoneo"
     }
   }
 ]
