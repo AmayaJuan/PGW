@@ -70,7 +70,7 @@
   },
   {
     "id": 3,
-    "name": "woofer lf18x401+",
+    "name": "lf18x401+",
     "category": "Woofer",
     "images": {
       "main": "https://res.cloudinary.com/djlr3wszq/image/upload/v1774910048/lf18x-1_whg5pa.png",
@@ -78,24 +78,24 @@
         "https://res.cloudinary.com/djlr3wszq/image/upload/v1774822247/lf18x-2_mo3t5g.png"
       ]
     },
-    "description": "El LF18X401+ es un woofer profesional de alto rendimiento con 1900 W RMS y 3800 W de potencia continua.",
+    "description": "El LF18X401+  es un woofer profesional de alto rendimiento diseñado para sistemas de refuerzo sonoro que requieren <gran potencia, eficiencia y confiabilidad. Cuenta con 1900 W RMS y 3800 W de potencia continua lo que garantiza un rendimiento confiable incluso en altas exigencias de trabajo. Su campo magnético de 180 oz de carga y doble ventilación de aire permite que la bobina mantenga refrigerada por largo tiempo de trabajo. Su bobina de 4.5 pulgadas, fabricada en TIL con diseño IN-OUT, proporciona una excelente disipación térmica y una respuesta precisa. El cono en cartón prensado con partículas de fibra de vidrio, con revestimiento semi-impermeable, asegura gran resistencia y proyección sonora clara, sensibilidad de 98 dB, impedancia de 8 ohmios y rango de frecuencia de 30 Hz a 1.000 Hz.",
     "document": "https://res.cloudinary.com/djlr3wszq/image/upload/v1773528333/FICHA_TECNICA_PARLANTE_LF18X401_kxqd5v.pdf",
     "specs": {
-      "diametro nominal": "18 pulgadas (457 mm)",
-      "carga magnetica": "180 onzas",
-      "impedancia nominal": "8 ohmios",
-      "potencia programada": "3800 W",
-      "potencia rms": "1900 W",
-      "sensibilidad": "98 dB",
-      "rango de frecuencia": "30 Hz - 1000 Hz",
-      "excursion maxima": "54 mm (2.13 pulgadas)",
-      "diametro de bobina": "4.5 pulgadas (114 mm)",
-      "material de bobina": "Til / Alambre Cobre",
-      "numero de capas de bobina": "2 capas (Inside/Outside)",
-      "material del cono": "Carton prensado con particulas de Fibra de vidrio",
-      "diametro total": "465 mm",
-      "altura total": "212 mm",
-      "aplicaciones": "Instalaciones Fijas: teatros., auditorios y clubes nocturnos."
+      "Diámetro nominal": "18 pulgadas (457 mm)",
+      "Carga magnetica": "180 onzas",
+      "Impedancia nominal": "8 ohmios",
+      "Potencia programada": "3800 W",
+      "Potencia RMS": "1900 W",
+      "Sensibilidad": "98 dB",
+      "Rango de frecuencia": "30 Hz - 1000 Hz",
+      "Excursión máxima": "54 mm (2.13 pulgadas)",
+      "Diámetro de bobina": "4.5 pulgadas (114 mm)",
+      "Material de bobina": "Til / Alambre Cobre",
+      "Número de capas de Bobina": "2 capas (Inside/Outside)",
+      "Material del cono": "Carton prensado con particulas de Fibra de vidrio",
+      "Diámetro total": "465 mm",
+      "Altura total": "212 mm",
+      "aplicaciones": "Este Woofer está diseñado para cajas de alto desempeño, cajas bass réflex o frontales y diseños de cuarto orden, Sistemas de Sonido Profesional: Ideal para conciertos en vivo y eventos de gran formato, Subwoofers de Alta Potencia: Adecuado para aplicaciones que requieren bajos profundos y potentes, Instalaciones Fijas: teatros, auditorios y clubes nocturnos"
     }
   },
   {
@@ -143,20 +143,24 @@
   },
   {
     "id": 6,
-    "name": "pa8n600",
+    "name": "PA8N-600",
     "category": "Woofer",
     "images": {
       "main": "https://res.cloudinary.com/djlr3wszq/image/upload/v1774998687/pa8n600-1_dqgf6s.png",
       "gallery": ["https://res.cloudinary.com/djlr3wszq/image/upload/v1774997485/pa8n600_sj1err.png", "https://res.cloudinary.com/djlr3wszq/image/upload/v1774997485/pa8n600-1_ubwyjp.png"]
     },
-    "description": "El PA8N-600 es un Woofer profesional de 8 pulgadas con iman de neodimio, para aplicaciones de refuerzo sonoro de rango medio y alta eficiencia.",
+    "description": "El PA8N-600 es un Woofer profesional de 8 pulgadas con imán de neodimio, para aplicaciones de refuerzo sonoro de rango medio y alta eficiencia. Su construcción robusta y bobina de 2 púlgadas IN-OUT permite una excelente respuesta térmica y un desempeño confiable.",
     "document": "https://res.cloudinary.com/djlr3wszq/image/upload/v1773528038/FICHA_TECNICA_WOOFER_PA8N600_g2bphm.pdf",
     "specs": {
-      "diametro nominal 8 pulgadas": "Impedancia Nominal 8 ohmios",
-      "potencia programada 600 w": "Potencia RMS 300 W",
-      "sensibilidad 97 db": "Rango de Frecuencia 70 Hz - 3000 Hz",
-      "diametro de bobina": "2 pulgadas",
-      "aplicaciones": "Cajas de dos vias., Sistemas line array., Monitores de escenarios., Cajas turbo., Car audio."
+      "Diámetro nominal": "8 pulgadas",
+      "Impedancia nominal": "8 ohmios",
+      "Potencia programa": "600 W",
+      "Potencia RMS": "300 W",
+      "Sensibilidad": "97 dB",
+      "Rango de frecuencia": "70 Hz - 3000 Hz",
+      "Diámetro de Bobina": "2 pulgadas",
+      "Número de capas de Bobina": "2 capas (IN - OUT)",
+      "aplicaciones": "Cajas de dos vías, Sistemas line array, Monitores de escenarios, Cajas turbo, Car audio, Sistema pickup, Cajas turbo, Proyectos donde se requiera ligereza más potencia"
     }
   },
   {
@@ -214,9 +218,9 @@
     "category": "Woofer",
     "images": {
       "main": "https://res.cloudinary.com/djlr3wszq/image/upload/v1773526030/woofer18lw2420_-1_q5rmoz.png",
-      "gallery": ["https://res.cloudinary.com/djlr3wszq/image/upload/v1774999715/18lw2420_-1_wlk8fr.png"]
+      "gallery": ["https://res.cloudinary.com/djlr3wszq/image/upload/v1774998027/18lw2420_xuufjh.png", "https://res.cloudinary.com/djlr3wszq/image/upload/v1774998027/18lw2420_-1_eq51nf.png"]
     },
-    "description": "El 18LW2420+ es un woofer profesional de alto rendimiento diseñado para sistemas de refuerzo sonoro que requieren gran potencia, eficiencia y confiabilidad. Cuenta con 1300 W RMS y 2600 W de potencia  continua lo que garaniza un rendimiento confiable incluso en altas exigencias de trabajo. Esta construido con un imán de ferrita compacto especial para bajas frecuencias. Cuenta con su sistema de ventilación en la parte posterior para expulsar el aire caliente, su bobina de 4 pulgadas. El diseño del chasis es robusto su material es de antimonio. Su impedancia es de 8 ohmios con una sensibilidad de 98 Db, su rango  de frecuencia empieza desde 30Hz a 250Hz.",
+    "description": "El 18LW2420+ es un woofer profesional de alto rendimiento diseñado para sistemas de refuerzo sonoro que requieren gran potencia, eficiencia y confiabilidad. Cuenta con 1300 W RMS y 2600 W de potencia continua lo que garaniza un rendimiento confiable incluso en altas exigencias de trabajo. Esta construido con un imán de ferrita compacto especial para bajas frecuencias. Cuenta con su sistema de ventilación en la parte posterior para expulsar el aire caliente, su bobina de 4 pulgadas. El diseño del chasis es robusto su material es de antimonio. Su impedancia es de 8 ohmios con una sensibilidad de 98 Db, su rango  de frecuencia empieza desde 30Hz a 250Hz.",
     "document": "https://res.cloudinary.com/djlr3wszq/image/upload/v1775359931/FICHA_TECNICA_WOOFER_18LW2420_gjr96p.pdf",
     "specs": {
       "Sensibilidad": "98 dB SPL",
@@ -227,6 +231,7 @@
       "Rango de frecuencia": "30Hz - 2500 Hz",
       "Diámetro de Bobina": "4 pulgadas",
       "Material de Bobina": "Til / Alambre Cobre",
+      "Impedancia nominal": "8 ohmios",
       "Diámetro nominal": "18 pulgadas (457 mm)",
       "Número de capas de Bobina": "2 capas (Inside/Outside)",
       "aplicaciones": "Este Woofer esta diseñado para cajas de alto desempeño, cajas bass réflex o frontales y diseños de cuatro orden, Sistemas de sonido profesionales: ideal para conciertos en vivo y eventos d gran formato, Subwoofers de Alta Potencia: Adecuado para aplicaciones que requieren bajos profundos y potentes, Instalaciones Fijas: Perfecto para teatros auditoriosy clubes nocturnos"
@@ -531,7 +536,56 @@
       "Material de la bobina": "Kapton, alambre aleación de cobre y aluminio",
       "Tapa de aluminio": "Para mayor control de calor hacia la bobina",
       "Inductancia": "0.11 Mh",
-      "Nivel presión sonora": "(SPL)"
+      "Nivel presión sonora": "(SPL) 108 dB 1w a un metro",
+      "Material del diáfragma": "Titanio",
+      "Densidad del flujo": "1.85T",
+      "Material imán": "Ferrita",
+      "Aplicaciones": "Cabinas activas y pasivas profesionales, Sistemas de sonido en vivo, Sistemas Line arrays, Monitores, Sistemas de perifoneo"
+    }
+  },
+  {
+    "id": 22,
+    "name": "PA516",
+    "category": "Drivers",
+    "images":{
+       "main": "https://res.cloudinary.com/djlr3wszq/image/upload/v1775084971/pa516_b8frhb.png",
+       "gallery":["https://res.cloudinary.com/djlr3wszq/image/upload/v1775084971/pa516-1_llpidk.png", "https://res.cloudinary.com/djlr3wszq/image/upload/v1775084971/pa516-2_nwvmgy.png", "https://res.cloudinary.com/djlr3wszq/image/upload/v1775084423/pa516-3_nev79j.png"]
+    },
+    "description": "Driver profesional de alta potencia diseñado para sistemas de sonido profesional y aplicaciones de refuerzo sonoro. Incorpora una bobina de 51.6 mm fabricada con alambre redondo que permite una excelente disipación térmica, mayor eficiencia y alta resistencia al trabajo continuo. Su respuesta en frecuencia de 1 kHz a 16 kHz garantiza una reproducción clara y definida de medios-altos y altas frecuencias, logrando excelente proyección sonora y alta inteligibilidad vocal. Ideal para sistemas PA, cabinas profesionales, sonido móvil y refuerzo en eventos en vivo.",
+    "document": "https://res.cloudinary.com/djlr3wszq/image/upload/v1775323179/FICHA_TECNICA_DRIVER_PA516_e4w5t2.pdf",
+    "specs":{
+      "Tipo de producto": "Driver de compresión profesional",
+      "Potencia maxima":"1000 W",
+      "Diámetro de bobina": "51.6 mm",
+      "Tipo de alambre" : "Alambre redondo",
+      "Nivel máximo SPL": "100 dB",
+      "Respuesta de frecuencia": "1 kHz - 16 kHz",
+      "Aplicación": "Medios-altos y altas frecuencias",
+      "Aplicaciones": "Cabinas activas y pasivas profesionales, Sistemas de sonido en vivo, Sistemas Line arrays, Monitores, Sistemas de perifoneo"
+    }
+  },
+  {
+    "id": 23,
+    "name": "PA72F",
+    "category": "Drivers",
+    "images":{
+       "main": "https://res.cloudinary.com/djlr3wszq/image/upload/v1775000792/pa72f_mfzklk.png",
+       "gallery":["https://res.cloudinary.com/djlr3wszq/image/upload/v1775000792/pa72f-1_euqfzp.png"]
+    },
+    "description": "El driver de compresión PA 72F es un transductor profesional de altas frecuencias diseñado para aplicaciones exigentes de refuerzo sonoro donde se requiere elevada presión acústica, alta definición vocal y excelente proyección. Este driver incorpora una garganta de salida de 2 pulgadas (50 mm) que permite una eficiente transferencia acústica hacia trompetas o guías de onda profesionales, optimizando la dispersión y el alcance del sonido en espacios abiertos y recintos de gran tamaño. Su diafragma de titanio proporciona una respuesta rápida y precisa, ofreciendo una reproducción extremadamente clara en frecuencias medias-altas y alta. El titanio aporta alta rigidez estructural y resistencia térmica, reduciendo deformaciones mecánicas incluso bajo condiciones de trabajo continuo a altos niveles de potencia.",
+    "document": "https://res.cloudinary.com/djlr3wszq/image/upload/v1775264302/FICHA_TECNICA_DRIVER_PA_72_F_gh1wm8.pdf",
+    "specs":{
+      "Tipo": "Driver de compresión",
+      "Diámetro de la garganta":"50mm (2.0in)",
+      "Impedancia nominal": "8 ohmios",
+      "Potencia" : "120 W",
+      "Sensibilidad": "112 Db",
+      "Rango de frecuencia": "500 Hz - 18 kHz",
+      "Material de bobina": "Kapton, alambre plano",
+      "Diámetro bobina": "72.2mm",
+      "Material del diáfragma": "Titanio",
+      "Material de imán": "Ferrita",
+      "Aplicaciones": "Cabinas activas y pasivas profesionales, Sistemas de sonido en vivo, Sistemas Line arrays, Monitores, Sistemas de perifoneo"
     }
   }
 ]
