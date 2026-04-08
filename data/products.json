@@ -239,25 +239,28 @@
   },
   {
     "id": 10,
-    "name": "pa120r400w",
+    "name": "PA120R400W",
     "category": "Cabinas",
     "images": {
       "main": "https://res.cloudinary.com/djlr3wszq/image/upload/v1775084202/pa120r400w_c5yqgi.png",
       "gallery": ["https://res.cloudinary.com/djlr3wszq/image/upload/v1775084221/pa120r400w-1_xsxxa4.png"]
     },
-    "description": "Cabina de 12 pulgadas con reproductor mp3, usb, bluetooth y radio FM, con sistema DSP. Potencia 400 W RMS.",
-    "document": "",
+    "description": "La cabina activa de 12” está diseñada para ofrecer un rendimiento sólido, versátil y confiable en aplicaciones de sonido en vivo, eventos sociales y uso profesional. Incorpora un sistema de amplificación eficiente con una potencia de 400W RMS y 800W programa, garantizando una reproducción clara, potente y con excelente respuesta. Tiene un parlante de 12 pulgadas con imán de ferrita de 80 onzas y bobina de 3”, esta cabina proporciona una excelente reproducción de frecuencias bajas con buena profundidad; ideal para música en vivo, DJ y reproducción de contenido multimedia. Complementa su desempeño un driver de compresión de 1” con bobina de 1.75”, que asegura una adecuada definición en altas frecuencias, logrando un sonido balanceado. El sistema integra procesamiento digital DSP, optimizando la respuesta sonora y permitiendo una mejor adaptación a diferentes entornos acústicos. Además, cuenta con efecto de reverberación (reverb), ideal para aplicaciones como karaoke o presentaciones vocales. En términos de conectividad la cabina ofrece 2 entradas de micrófono tipo TR y 2 entradas de linea, permitiendo múltiples fuentes de audio simultáneas. Incluye también salida para conexión a una cabina activa adicional y una pasiva, ampliando la cobertura del sistema de sonido.",
+    "document": "https://res.cloudinary.com/djlr3wszq/image/upload/v1775690442/FICHA_TECNICA_PA120R400W_yusajv.pdf",
     "specs": {
-      "sensibilidad": "",
-      "potencia programa": "",
-      "potencia rms": "400 W",
-      "impedancia nominal": "",
-      "rango de frecuencia": "",
-      "diametro de bobina": "1.75 pulgadas",
-      "material de bobina": "ABS",
-      "diametro nominal": "",
-      "numero de capas de bobina": "",
-      "aplicaciones": "."
+      "Potencia RMS": "400 W",
+      "Potencia programa": "800W",
+      "Driver": "1” con bobina de 1,75”",
+      "Parlante": "12” Imán Ferrita, 3” voice coil 80 Onzas",
+      "Entradas de micrófono": "2 (conector TR)",
+      "Entrada de linea": "2 (TR)",
+      "Salidas": "Salida para una cabina activa y una pasiva",
+      "Funciones adicionales": "Reproductor MP3, USB, Bluetooth, radio FM",
+      "DSP incorporado": "Si",
+      "Efectos": "Rever (reverberación)",
+      "Material de caja":"ABS",
+      "Acabando":"Textura tipo cuero",
+      "aplicaciones": "Eventos en vivo, Karaoke, Presentaciones, Sonido en auditorios, Uso profesional portátil"
     }
   },
   {
@@ -273,8 +276,8 @@
     "specs": {
       "Potencia RMS": "400 W",
       "Potencia programa": "800 W",
-      "Driver": "1' con bobina de 1,75'",
-      "Parlante": "15' Iman Ferrita. 3' voice coil 80 Onzas",
+      "Driver": "1” con bobina de 1,75”",
+      "Parlante": "15” Iman Ferrita. 3” voice coil 80 Onzas",
       "Entradas de micrófono": "2 (conector TR)",
       "Entrada de linea": "2 (TR)",
       "Salidas": "Salida para una cabina activa y una pasiva",
@@ -322,7 +325,7 @@
       "main": "https://res.cloudinary.com/djlr3wszq/image/upload/v1774827252/12ndl76_ylwz2t.png",
       "gallery": ["https://res.cloudinary.com/djlr3wszq/image/upload/v1774912000/neodimio10-1_dzvuiz.png"]
     },
-    "description": "El woofer de 12' 12NDL76 ha sido diseñado para aplicaciones de sonido que requieren alta  eficiencia, excelente definición en frecuencias medias. Gracias a su potente bobina de 3 pulgadas y su estructura magnética de neodimio, ofrece un rendimiento superior con menor peso, ideal para sistemas portátiles y configuraciones de alto desempeño. Cuenta con una potencia RMS de 500W y una potencia en programa de 1000W, garantizado una reproducción sonora limpia, estable y confiable incluso en condiciones de trabajo exigentes. Su sensibilidad de 100Db permite una excelente proyección. El sistema de enfriamiento con Buje de cobre en el núcleo magnetico mejora la disipación térmica, reduciendo la compresión de potencia y aumentado la durabilidad. Su respuesta  en frecuenciade 50 Hz a 3500 Hz lo convierte en una opción ideal para  reproducción de medios y medios-bajos con gran claridad y presencia.",
+    "description": "El woofer de 12” 12NDL76 ha sido diseñado para aplicaciones de sonido que requieren alta  eficiencia, excelente definición en frecuencias medias. Gracias a su potente bobina de 3 pulgadas y su estructura magnética de neodimio, ofrece un rendimiento superior con menor peso, ideal para sistemas portátiles y configuraciones de alto desempeño. Cuenta con una potencia RMS de 500W y una potencia en programa de 1000W, garantizado una reproducción sonora limpia, estable y confiable incluso en condiciones de trabajo exigentes. Su sensibilidad de 100Db permite una excelente proyección. El sistema de enfriamiento con Buje de cobre en el núcleo magnetico mejora la disipación térmica, reduciendo la compresión de potencia y aumentado la durabilidad. Su respuesta  en frecuenciade 50 Hz a 3500 Hz lo convierte en una opción ideal para  reproducción de medios y medios-bajos con gran claridad y presencia.",
     "document": "https://res.cloudinary.com/djlr3wszq/image/upload/v1775260690/FICHA_TECNICA_PARLANTE_12NDL76_k24ncm.pdf",
     "specs": {
       "Tipo": "Parlante 12NDL76",
@@ -423,21 +426,20 @@
       "main": "https://res.cloudinary.com/djlr3wszq/image/upload/v1775070189/344mm_ceiung.png",
       "gallery": ["https://res.cloudinary.com/djlr3wszq/image/upload/v1775083899/34.4mm_xn8qg2.png"]
     },
-    "description": "Driver de compresión de 1 pulgada, diseñado para sistemas ",
+    "description": "Driver de compresión de 1 pulgada, diseñado para sistemas de sonido que requieren alta definición en frecuencias medias-altas y altas. Cuenta con bobina de 34.4 mm fábricada con alambre redondo, lo que permite una mejor dispación térmica mayor estabilidad operativa y excelente rendimiento continuo incluso en trabajos exigentes. Su diseño ofrece una reproducción clara y precisa de voces e instrumentos, garantizando alta inteligibilidad sonora, baja distorsión y excelente proyección. Es ideal para cajas acústicas, sistemas PA, sonido en vivo y aplicaciones móviles o fijas. ",
     "document": "https://res.cloudinary.com/djlr3wszq/image/upload/v1775682659/FICHA_TECNICA_DRIVER_34.4MM_yxwe98.pdf",
     "specs":{
-      "impedancia nominal" :"",
-      "sensibilidad (1W/1m)": "",
-      "Radio de frecuencia - medio": "",
-      "Radio de frecuencia - agudo": "",
-      "Potencia (RMS)": "",
-      "Potencia Pico": "",
-      "Diámetro de bobina (Medio)": "",
-      "Diámetro de bobina (Agudo)": "",
-      "material de bobina": "",
-      "dimensiones": "", 
-      "Peso neto": "",
-      "aplicaciones": ""
+      "Tipo" :"Driver de compresión 34.4MM",
+      "Diámetro de salida": "1”",
+      "Potencia máxima": "500 W",
+      "Impedancia nominal": "8 Ω",
+      "Rango de frecuencia": "1.5 kHz - 20 kHz",
+      "Material del diafragma": "Titanio",
+      "Material de bobina": "Kapton / Alambre redondo",
+      "Diámetro de bobina": "34.4 mm",
+      "Tipo de imán": "Ferrita",
+      "Conexion": "Terminals tipo push", 
+      "aplicaciones": "Cabinas activas y pasivas, Sistemas de sonido en vivo, Sistemas Line arrays, Monitores, Sistemas de perifoneo"
     }
   }, 
   {
@@ -448,21 +450,20 @@
       "main": "https://res.cloudinary.com/djlr3wszq/image/upload/v1775001051/drive44.4_ivvwzr.png",
       "gallery": ["https://res.cloudinary.com/djlr3wszq/image/upload/v1775001051/drivee44.4mm_rmc1pd.png"]
     },
-    "description": "",
-    "document": "",
+    "description": "Driver compresión de 1 pulgada, diseñado para sistemas de sonido que requieren alta definición en frecuencias medias-altas y altas. Cuenta con bobina de 44.41 mm fabricada con alambre redondo, lo que permite una mejor dispación térmica. mayor estabilidad operativa y excelente rendimiento continuo incluso en trabajos exigentes. Su diseño ofrece unba reproducción clara y precisa de voces e instrumentos, garantizando alta inteligencia sonora, baja distorsión y excelente proyección. Es ideal para cajas acústicas, sistemas PA, sonido en vivo y aplicaciones móviles o fijas.",
+    "document": "https://res.cloudinary.com/djlr3wszq/image/upload/v1775686872/FICHA_TECNICA_DRIVER_44.4MM_l36h8q.pdf",
     "specs":{
-      "impedancia nominal" :"",
-      "sensibilidad (1W/1m)": "",
-      "Radio de frecuencia - medio": "",
-      "Radio de frecuencia - agudo": "",
-      "Potencia (RMS)": "",
-      "Potencia Pico": "",
-      "Diámetro de bobina (Medio)": "",
-      "Diámetro de bobina (Agudo)": "",
-      "material de bobina": "",
-      "dimensiones": "", 
-      "Peso neto": "",
-      "aplicaciones": ""
+      "Tipo" :"Driver de compresión 44.4MM",
+      "Diámetro de salida": "1”",
+      "Potencia máxima": "700 W",
+      "Impedancia nominal": "8 Ω",
+      "Rango de frecuencia": "1.2 kHz - 20 kHz",
+      "Material del diafragma": "Titanio",
+      "Material de bobina": "Kapton / Alambre redondo",
+      "Diámetro de bobina": "44.4 mm",
+      "Tipo de imán": "ferrita", 
+      "Conexion":"Terminals tipo push",
+      "aplicaciones": "Cabimas activas y pasivas, Sistemas de sonido en vivo, Sistemas Line arrays, Monitores, Sistemas de perifoneo"
     }
   },
   {
@@ -500,7 +501,7 @@
     "document":"https://res.cloudinary.com/djlr3wszq/image/upload/v1775323213/FICHA_TECNICA_DRIVER_BNT44_bb9shf.pdf",
     "specs":{
       "Tipo": "Driver de compresión BNT 44",
-      "Diámetro de salida": "1'",
+      "Diámetro de salida": "1”",
       "Potencia (RMS)": "50 W",
       "Potencia programa": "100 W",
       "Impedancia nominal": "8 Ω",
