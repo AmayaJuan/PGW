@@ -591,5 +591,40 @@
       "Material de imán": "Ferrita",
       "Aplicaciones": "Cabinas activas y pasivas profesionales, Sistemas de sonido en vivo, Sistemas Line arrays, Monitores, Sistemas de perifoneo"
     }
+  }, 
+  {
+    "id": 24,
+    "name": "HL20A",
+    "category": "Line Array",
+    "images": {
+      "main": "https://res.cloudinary.com/djlr3wszq/image/upload/v1775532517/hl20a-3_sapzoj.png",
+      "gallery": ["https://res.cloudinary.com/djlr3wszq/image/upload/v1775532517/hl20a-1_yvmoxp.png", "https://res.cloudinary.com/djlr3wszq/image/upload/v1775532517/hl20a-2_hjb9pw.png", "https://res.cloudinary.com/djlr3wszq/image/upload/v1775532516/hl20a-4_qzyo20.png", "https://res.cloudinary.com/djlr3wszq/image/upload/v1775086982/hl20a_adpxrv.png"]
+    },
+    "description": "",
+    "document": "",
+    "specs": {
+      "Modulo": "",
+      "Tipo": "",
+      "Potencia Pico": "",
+      "Potencia (RMS)": "",
+      "Potencia LF (parlantes)": "",
+      "Potencia HF (driver compresor)": "",
+      "Respuesta en frecuencia": "",
+      "SPL máximo (1 m)": "",
+      "Cobertura horizontal": "",
+      "cobertura vertical": "",
+      "Transductores": "",
+      "Conector de salida link": "",
+      "Sensibilidad de entrada": "",
+      "Frecuencia de cruce (crossover)": "",
+      "Protección / limitadores": "",
+      "Alimentacion": "",
+      "Material": "",
+      "Herrajes / rigging": "",
+      "Dimensiones": "",
+      "Peso neto": "",
+      "Color / acabados": "",
+      "aplicaciones": ""
+    }
   }
 ]
