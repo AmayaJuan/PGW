@@ -193,8 +193,8 @@ nav { position: sticky; top: 0; z-index: 200; display: flex; align-items: center
 .banner-wrap {
   width: 100%;
   overflow: hidden;
-  background: var(--bg2);
-  border-top: 1px solid var(--borde);
+  background: #000;
+  border-top: 1px solid #1a1a1a;
   border-bottom: 1px solid var(--borde);
   padding: 1rem 0;
   position: relative;
@@ -209,8 +209,8 @@ nav { position: sticky; top: 0; z-index: 200; display: flex; align-items: center
 .banner-item {
   width: 500px;
   height: 570px;
-  background: #ffffff;
-  border: 1px solid var(--borde);
+  background: #000;
+  border: 1px solid #1a1a1a;
   border-radius: 16px;
   display: flex;
   align-items: center;
