@@ -2,7 +2,7 @@
   {
     "id": 1,
     "name": "hl10a",
-    "category": "Line Array",
+    "category": "Cabinas",
     "images": {
       "main": "https://res.cloudinary.com/djlr3wszq/image/upload/v1775083413/hl10a-1_ehys5y.png",
       "gallery": ["https://res.cloudinary.com/djlr3wszq/image/upload/v1775083410/hl10a-2_dwo2ic.png", "https://res.cloudinary.com/djlr3wszq/image/upload/v1775083415/hl10a_fvjqkk.png", "https://res.cloudinary.com/djlr3wszq/image/upload/v1775083408/hl10a-3_m1mrs5.png"]
@@ -37,7 +37,7 @@
   {
     "id": 2,
     "name": "hl30a",
-    "category": "Line Array",
+    "category": "Cabinas",
     "images": {
       "main": "https://res.cloudinary.com/djlr3wszq/image/upload/v1775260459/hl30a_xybxrb.png",
       "gallery": ["https://res.cloudinary.com/djlr3wszq/image/upload/v1775085205/hl30a-2_dpgtum.png","https://res.cloudinary.com/djlr3wszq/image/upload/v1775085185/hl30a-3_suvnal.png", "https://res.cloudinary.com/djlr3wszq/image/upload/v1775085148/hl30a_pk2r2n.png", "https://res.cloudinary.com/djlr3wszq/image/upload/v1775085117/hl30a-1_vjxhig.png"]
@@ -615,7 +615,7 @@
   {
     "id": 24,
     "name": "HL20A",
-    "category": "Line Array",
+    "category": "Cabinas",
     "bannerImg": "https://res.cloudinary.com/djlr3wszq/image/upload/v1775771047/pahl20a_ut5z8j.jpg",
     "images": {
       "main": "https://res.cloudinary.com/djlr3wszq/image/upload/v1775532517/hl20a-3_sapzoj.png",
