@@ -283,7 +283,7 @@ function getFilteredProducts() {
   return list;
 }
 function getUniqueCategories() {
-  const fixed = ['Line Array','Woofer','Drivers','Cabinas'];
+  const fixed = ['Woofer','Drivers','Cabinas'];
   const from  = [];
   products.forEach(p => { if (p.cat && !from.includes(p.cat)) from.push(p.cat); });
   return [...new Set([...fixed, ...from])];
