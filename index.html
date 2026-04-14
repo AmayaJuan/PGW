@@ -45,36 +45,14 @@
 </a>
 
 <!-- NAVEGACIÓN -->
-<nav aria-label="Navegación principal">
+<nav aria-label="Navegación principal" id="mainNavbar">
   <div class="nav-logo">
     <a href="#" onclick="handleLogoClick(event); return false;">
       <img src="https://res.cloudinary.com/djlr3wszq/image/upload/v1774903848/LOGO_PA_alta_resolucion_tisjr6.png" alt="P.Acoustic" loading="lazy"/>
     </a>
   </div>
 
-  <div class="nav-mobile-overlay" id="navMobileOverlay" onclick="toggleMobileMenu()"></div>
-
-  <ul class="nav-links" id="navLinks">
-    <li class="nav-mobile-search">
-      <input type="search" id="mobileMenuSearch" class="nav-mobile-search-input" placeholder="Buscar productos..." autocomplete="off" aria-label="Buscar productos"/>
-    </li>
-    <li class="nav-mobile-category">
-      <label class="nav-mobile-category-label">Filtrar por categoría</label>
-      <select id="mobileMenuCategory" class="nav-mobile-category-select">
-        <option value="">Todas las categorías</option>
-      </select>
-    </li>
-    <li><a href="#products" class="nav-link" onclick="handleNavClick(event,'products')">Productos</a></li>
-    <li><a href="#nosotros" class="nav-link" onclick="handleNavClick(event,'nosotros')">Nosotros</a></li>
-    <li><a href="#contacto" class="nav-link" onclick="handleNavClick(event,'contacto')">Contacto</a></li>
-    <li class="nav-wp-mobile">
-      <a href="https://wa.me/573053402732?text=Hola,%20quiero%20más%20información" target="_blank" rel="noopener noreferrer">
-        <svg viewBox="0 0 24 24"><use href="#ico-wp"/></svg>
-        WhatsApp
-      </a>
-    </li>
-  </ul>
-
+  <!-- Desktop catalog controls -->
   <div class="nav-catalog-controls">
     <div class="nav-search-box" id="navSearchBox">
       <button type="button" class="nav-search-trigger" id="navSearchTrigger" title="Buscar" aria-label="Abrir búsqueda" aria-expanded="false" aria-controls="catalogSearch">
@@ -87,9 +65,16 @@
     </select>
   </div>
 
-  <button type="button" class="nav-hamburger" id="navHamburger" onclick="toggleMobileMenu()" aria-label="Abrir menú" aria-expanded="false">
-    <span></span><span></span><span></span>
-  </button>
+  <!-- Mobile controls -->
+  <div class="nav-mobile-controls">
+    <input type="search" id="mobileMenuSearch" class="nav-mobile-search-input" placeholder="Buscar..." autocomplete="off" aria-label="Buscar productos"/>
+    <select id="mobileMenuCategory" class="nav-mobile-category-select">
+      <option value="">Categorías</option>
+    </select>
+    <button type="button" class="nav-sidebar-toggle" id="navSidebarToggle" onclick="toggleSidebar()" aria-label="Menú lateral">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
 
   <a class="nav-wp" href="https://wa.me/573053402732?text=Hola,%20quiero%20más%20información" target="_blank" rel="noopener noreferrer">
     <svg viewBox="0 0 24 24"><use href="#ico-wp"/></svg>
@@ -97,6 +82,25 @@
   </a>
 </nav>
 
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <h3>Catálogo</h3>
+  </div>
+  <nav class="sidebar-nav" aria-label="Navegación secundaria">
+    <ul id="sidebarCategories">
+      <!-- Dynamic categories populated by JS -->
+    </ul>
+    <hr class="sidebar-divider">
+    <ul class="sidebar-section">
+      <li><a href="#nosotros" class="sidebar-link" onclick="handleSidebarLink(event, 'nosotros')">Nosotros</a></li>
+      <li><a href="#contacto" class="sidebar-link" onclick="handleSidebarLink(event, 'contacto')">Contacto</a></li>
+    </ul>
+  </nav>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main id="main-content">
 <!-- HERO -->
 <section class="hero">
   <div class="hero-bg"></div>
@@ -200,6 +204,7 @@
 </section>
 
 <!-- FOOTER -->
+</main>
 <footer>
   <div class="footer-logo"><img src="https://res.cloudinary.com/djlr3wszq/image/upload/v1774903848/LOGO_PA_alta_resolucion_tisjr6.png" alt="P.Acoustic"/></div>
   <div class="footer-info">
