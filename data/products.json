@@ -3,6 +3,7 @@
     "id": 1,
     "name": "hl10a",
     "category": "Cabinas",
+    "subcategory": "Line Array",
     "images": {
       "main": "https://res.cloudinary.com/djlr3wszq/image/upload/v1775083413/hl10a-1_ehys5y.png",
       "gallery": ["https://res.cloudinary.com/djlr3wszq/image/upload/v1775083410/hl10a-2_dwo2ic.png", "https://res.cloudinary.com/djlr3wszq/image/upload/v1775083415/hl10a_fvjqkk.png", "https://res.cloudinary.com/djlr3wszq/image/upload/v1775083408/hl10a-3_m1mrs5.png"]
@@ -38,6 +39,7 @@
     "id": 2,
     "name": "hl30a",
     "category": "Cabinas",
+    "subcategory": "Line Array",
     "images": {
       "main": "https://res.cloudinary.com/djlr3wszq/image/upload/v1775260459/hl30a_xybxrb.png",
       "gallery": ["https://res.cloudinary.com/djlr3wszq/image/upload/v1775085205/hl30a-2_dpgtum.png","https://res.cloudinary.com/djlr3wszq/image/upload/v1775085185/hl30a-3_suvnal.png", "https://res.cloudinary.com/djlr3wszq/image/upload/v1775085148/hl30a_pk2r2n.png", "https://res.cloudinary.com/djlr3wszq/image/upload/v1775085117/hl30a-1_vjxhig.png"]
@@ -73,6 +75,7 @@
     "id": 3,
     "name": "lf18x401+",
     "category": "Woofer",
+    "subcategory": "Ferrita",
     "bannerImg": "https://res.cloudinary.com/djlr3wszq/image/upload/v1775765590/lf18x401_enks9g.jpg",
     "images": {
       "main": "https://res.cloudinary.com/djlr3wszq/image/upload/v1774910048/lf18x-1_whg5pa.png",
@@ -103,6 +106,7 @@
     "id": 4,
     "name": "pa10n-900",
     "category": "Woofer",
+    "subcategory": "Line Array",
     "bannerImg": "https://res.cloudinary.com/djlr3wszq/image/upload/v1775766120/pa10n900_qbmz76.jpg",
     "images": {
       "main": "https://res.cloudinary.com/djlr3wszq/image/upload/v1774999066/pa10n900_qagfmz.png",
@@ -127,6 +131,7 @@
     "id": 5,
     "name": "pa12n1000",
     "category": "Woofer",
+    "subcategory": "Line Array",
     "bannerImg": "https://res.cloudinary.com/djlr3wszq/image/upload/v1775766336/pa12n1000_hahmae.jpg",
     "images": {
       "main": "https://res.cloudinary.com/djlr3wszq/image/upload/v1773505883/pa12n1000-1_qaoenb.png",
@@ -150,6 +155,7 @@
     "id": 6,
     "name": "PA8N-600",
     "category": "Woofer",
+    "subcategory": "Neodimio",
     "images": {
       "main": "https://res.cloudinary.com/djlr3wszq/image/upload/v1774998687/pa8n600-1_dqgf6s.png",
       "gallery": ["https://res.cloudinary.com/djlr3wszq/image/upload/v1774997485/pa8n600_sj1err.png", "https://res.cloudinary.com/djlr3wszq/image/upload/v1774997485/pa8n600-1_ubwyjp.png"]
@@ -173,6 +179,7 @@
     "id": 7,
     "name": "parlante 10 sheffieeld",
     "category": "Woofer",
+    "subcategory": "Ferrita",
     "images": {
       "main": "https://res.cloudinary.com/djlr3wszq/image/upload/v1774912809/parlante_10_sheffieeld-1_yh3ldi.png",
       "gallery": ["https://res.cloudinary.com/djlr3wszq/image/upload/v1775083755/sheffield10_clvemq.png"]
@@ -199,6 +206,7 @@
     "id": 8,
     "name": "parlante 12 sheffield",
     "category": "Woofer",
+    "subcategory": "Ferrita",
     "images": {
       "main": "https://res.cloudinary.com/djlr3wszq/image/upload/v1774913135/parlante_12_sheffield-1_f9g9c2.png",
       "gallery": []
@@ -224,6 +232,7 @@
     "id": 9,
     "name": "18lw2420+",
     "category": "Woofer",
+    "subcategory": "Ferrita",
     "bannerImg": "https://res.cloudinary.com/djlr3wszq/image/upload/v1775766737/18lw2420_g7cuhe.jpg",
     "images": {
       "main": "https://res.cloudinary.com/djlr3wszq/image/upload/v1773526030/woofer18lw2420_-1_q5rmoz.png",
@@ -251,6 +260,7 @@
     "id": 10,
     "name": "PA120R400W",
     "category": "Cabinas",
+    "subcategory": "Ferrita",
     "images": {
       "main": "https://res.cloudinary.com/djlr3wszq/image/upload/v1775084202/pa120r400w_c5yqgi.png",
       "gallery": ["https://res.cloudinary.com/djlr3wszq/image/upload/v1775084221/pa120r400w-1_xsxxa4.png"]
@@ -277,6 +287,7 @@
     "id": 11,
     "name": "PA150r400w",
     "category": "Cabinas",
+    "subcategory": "Activas",
     "bannerImg":"https://res.cloudinary.com/djlr3wszq/image/upload/v1775765409/150r400w_g4chfo.jpg",
     "images": {
       "main": "https://res.cloudinary.com/djlr3wszq/image/upload/v1774997345/pa150r400w_djrlzr.png",
@@ -305,6 +316,7 @@
     "id": 12,
     "name": "10ndl76",
     "category": "Woofer",
+    "subcategory": "Neodimio",
     "images": {
       "main": "https://res.cloudinary.com/djlr3wszq/image/upload/v1774911555/neodimio10_c0alet.png",
       "gallery": ["https://res.cloudinary.com/djlr3wszq/image/upload/v1774827083/10ndl76_n88ylu.png", "https://res.cloudinary.com/djlr3wszq/image/upload/v1774912000/neodimio10-1_dzvuiz.png"]
@@ -333,6 +345,7 @@
     "id": 13,
     "name": "12ndl76",
     "category": "Woofer",
+    "subcategory": "Neodimio",
     "images": {
       "main": "https://res.cloudinary.com/djlr3wszq/image/upload/v1774827252/12ndl76_ylwz2t.png",
       "gallery": ["https://res.cloudinary.com/djlr3wszq/image/upload/v1774912000/neodimio10-1_dzvuiz.png"]
@@ -358,6 +371,7 @@
     "id": 14,
     "name": "12md26",
     "category": "Woofer",
+    "subcategory": "Ferrita",
     "images": {
       "main": "https://res.cloudinary.com/djlr3wszq/image/upload/v1774912604/12md26_drfdsu.png",
       "gallery": ["https://res.cloudinary.com/djlr3wszq/image/upload/v1774830391/12md26-1_p6e9hu.png"]
@@ -381,6 +395,7 @@
     "id": 15,
     "name": "Pax-One",
     "category": "Cabinas",
+    "subcategory": "Activas",
     "bannerImg": "https://res.cloudinary.com/djlr3wszq/image/upload/v1775766968/pax-one_usva2r.jpg",
     "images": {
       "main": "https://res.cloudinary.com/djlr3wszq/image/upload/v1774988691/subwoofer_arjn8u.png",
@@ -412,6 +427,7 @@
     "id": 16,
     "name": "MN4582",
     "category": "Drivers",
+    "subcategory": "Neodimio",
     "images":{
       "main": "https://res.cloudinary.com/djlr3wszq/image/upload/v1774826798/mn4582_v6x12u.png",
       "gallery": ["https://res.cloudinary.com/djlr3wszq/image/upload/v1774826798/mn4582_v6x12u.png", "https://res.cloudinary.com/djlr3wszq/image/upload/v1774826843/mn4582-1_zepyth.png", "https://res.cloudinary.com/djlr3wszq/image/upload/v1774826951/mn4582-2_kqviop.png"]
@@ -438,6 +454,7 @@
      "id": 17,
      "name": "34.4 mm",
     "category": "Drivers",
+    "subcategory": "Ferrita",
     "images":{
       "main": "https://res.cloudinary.com/djlr3wszq/image/upload/v1775070189/344mm_ceiung.png",
       "gallery": ["https://res.cloudinary.com/djlr3wszq/image/upload/v1775083899/34.4mm_xn8qg2.png"]
@@ -462,6 +479,7 @@
      "id": 18,
      "name": "44,4 mm",
     "category": "Drivers",
+    "subcategory": "Ferrita",
     "images":{
       "main": "https://res.cloudinary.com/djlr3wszq/image/upload/v1775001051/drive44.4_ivvwzr.png",
       "gallery": ["https://res.cloudinary.com/djlr3wszq/image/upload/v1775001051/drivee44.4mm_rmc1pd.png"]
@@ -510,6 +528,7 @@
     "id": 20,
     "name": "BNT 44",
     "category": "Drivers",
+    "subcategory": "Neodimio",
     "bannerImg": "https://res.cloudinary.com/djlr3wszq/image/upload/v1775765801/btn44_xhwebh.jpg",
     "images":{
       "main": "https://res.cloudinary.com/djlr3wszq/image/upload/v1775000953/bnt44neodimio_xf24qp.png",
@@ -540,6 +559,7 @@
     "id": 21,
     "name": "PA-4449S",
     "category": "Drivers",
+    "subcategory": "Ferrita",
     "images":{
        "main": "https://res.cloudinary.com/djlr3wszq/image/upload/v1775616798/PA4449S_x6z1t7.png",
        "gallery":["https://res.cloudinary.com/djlr3wszq/image/upload/v1775003690/pa4449s_vyqpj3.png"]
@@ -570,6 +590,7 @@
     "id": 22,
     "name": "PA516",
     "category": "Drivers",
+    "subcategory": "Ferrita",
     "bannerImg":"https://res.cloudinary.com/djlr3wszq/image/upload/v1775765103/516_qwm4lt.jpg",
     "images":{
        "main": "https://res.cloudinary.com/djlr3wszq/image/upload/v1775084971/pa516_b8frhb.png",
@@ -592,6 +613,7 @@
     "id": 23,
     "name": "PA72F",
     "category": "Drivers",
+    "subcategory": "Ferrita",
     "images":{
        "main": "https://res.cloudinary.com/djlr3wszq/image/upload/v1775000792/pa72f_mfzklk.png",
        "gallery":["https://res.cloudinary.com/djlr3wszq/image/upload/v1775000792/pa72f-1_euqfzp.png"]
@@ -617,6 +639,7 @@
     "id": 24,
     "name": "HL20A",
     "category": "Cabinas",
+    "subcategory": "Line Array",
     "bannerImg": "https://res.cloudinary.com/djlr3wszq/image/upload/v1775771047/pahl20a_ut5z8j.jpg",
     "images": {
       "main": "https://res.cloudinary.com/djlr3wszq/image/upload/v1775532517/hl20a-3_sapzoj.png",
@@ -654,6 +677,7 @@
     "id": 25,
     "name": "PA1570-8",
     "category": "Woofer",
+    "subcategory": "Ferrita",
     "bannerImg": "",
     "images": {
       "main": "https://res.cloudinary.com/djlr3wszq/image/upload/v1775000384/pa1570-8-2_v9ojf2.png",
@@ -685,5 +709,43 @@
       "Color / acabados": "",
       "aplicaciones": ""
     }
+  },
+  {
+    "id": 26,
+    "name": "Crossover para subwoofer",
+    "category": "Woofer",
+    "subcategory": "Subwoofer",
+    "bannerImg": "",
+    "images": {
+      "main": "https://res.cloudinary.com/djlr3wszq/image/upload/v1775085304/crosover_x02v8h.jpg",
+      "gallery": []
+    },
+    "description": "",
+    "document": "",
+    "specs": {
+      "Modulo": "",
+      "Tipo": "",
+      "Potencia Pico": "",
+      "Potencia (RMS)": "",
+      "Potencia LF (parlantes)": "",
+      "Potencia HF (driver compresor)": "",
+      "Respuesta en frecuencia": "",
+      "SPL máximo (1 m)": "",
+      "Cobertura horizontal": "",
+      "cobertura vertical": "",
+      "Transductores": "",
+      "Conector de salida link": "",
+      "Sensibilidad de entrada": "",
+      "Frecuencia de cruce (crossover)": "",
+      "Protección / limitadores": "",
+      "Alimentacion": "",
+      "Material": "",
+      "Herrajes / rigging": "",
+      "Dimensiones": "",
+      "Peso neto": "",
+      "Color / acabados": "",
+      "aplicaciones": ""
+    }
+
   }
 ]
