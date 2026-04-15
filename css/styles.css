@@ -30,8 +30,10 @@ body { background: var(--bg); color: var(--texto); font-family: 'Nunito', sans-s
 .page-watermark {
   position: fixed; top: 0; left: 0; width: 100%; height: 100%;
   pointer-events: none; z-index: -1; opacity: 0.30;
-  background-image: url('https://res.cloudinary.com/djlr3wszq/image/upload/v1773503945/mafondo_mo86qx.png');
-  background-size: contain; background-repeat: repeat; background-position: center;
+  background-image: url('https://res.cloudinary.com/djlr3wszq/image/upload/v1776290344/mafondo_mo86qx.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
   mix-blend-mode: normal; filter: grayscale(100%) brightness(0.7);
 }
 

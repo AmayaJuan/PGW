@@ -896,6 +896,12 @@ function setSidebarOpen(open) {
 function toggleSidebar() {
   const sb = document.getElementById('sidebar');
   if (!sb) return;
+  const mobile = window.matchMedia('(max-width: 1024px)').matches;
+  const fly = document.getElementById('sidebarFlyout');
+  if (mobile && sb.classList.contains('open') && fly?.classList.contains('is-open')) {
+    hideCategoryFlyout();
+    return;
+  }
   setSidebarOpen(!sb.classList.contains('open'));
 }
 
@@ -1575,24 +1581,17 @@ document.addEventListener('DOMContentLoaded', function () {
       const sub = btn.getAttribute('data-sub') || '';
       const tapFlyout = window.matchMedia('(max-width: 1024px)').matches;
       if (btn.classList.contains('sidebar-cat--parent') && btn.getAttribute('data-has-subs') === '1' && tapFlyout) {
-        const curCatV = (document.getElementById('catalogCategory')?.value || '').trim();
-        const curSubV = (document.getElementById('catalogSubcategory')?.value || '').trim();
-        // Con sub activa: un tap en la categoría padre quita la sub (toda la categoría), no solo reabre el panel
-        if (curSubV && normFilterStr(curCatV) === normFilterStr(cat)) {
-          selectCatalogFilter(cat, '');
-          return;
-        }
         const fly = document.getElementById('sidebarFlyout');
         const openSame =
           fly?.classList.contains('is-open') &&
           normFilterStr(fly?.dataset.openCat || '') === normFilterStr(cat);
-        if (!openSame) {
-          clearSidebarFlyoutHideTimer();
-          showCategoryFlyout(btn);
+        // Primero: mismo padre con panel abierto → solo cerrar el panel (no selectCatalogFilter: cerraría el menú).
+        if (openSame) {
+          hideCategoryFlyout();
           return;
         }
-        // Segundo toque en el mismo padre: solo cerrar subcategorías (no aplicar filtro ni cerrar el menú).
-        hideCategoryFlyout();
+        clearSidebarFlyoutHideTimer();
+        showCategoryFlyout(btn);
         return;
       }
       selectCatalogFilter(cat, sub);
