@@ -776,21 +776,22 @@ body { background: var(--bg); color: var(--texto); font-family: 'Nunito', sans-s
 
 .prod-badge { position: absolute; top: .75rem; left: .75rem; background: var(--rojo); color: white; font-size: 0.6rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; padding: .2rem .6rem; border-radius: 4px; z-index: 2; }
 
-/* Badge contador de fotos en galería */
+/* Contador de medios en la tarjeta (no estilo “chip de categoría”) */
 .prod-gallery-count {
   position: absolute;
-  bottom: .6rem;
-  right: .6rem;
-  background: rgba(13,27,42,0.62);
-  color: #fff;
-  font-size: 0.62rem;
-  font-weight: 600;
-  padding: .18rem .55rem;
-  border-radius: 20px;
-  backdrop-filter: blur(4px);
+  bottom: .55rem;
+  right: .55rem;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--titulo);
+  font-size: 0.58rem;
+  font-weight: 700;
+  padding: 0.2rem 0.45rem;
+  border-radius: 4px;
+  border: 1px solid var(--borde);
   z-index: 2;
   pointer-events: none;
-  letter-spacing: .02em;
+  letter-spacing: 0.06em;
+  box-shadow: none;
 }
 
 .prod-body { padding: 1.25rem; background: #ffffff; }
@@ -1388,9 +1389,10 @@ footer p { font-size: 0.72rem; color: var(--muted); }
   }
 }
 
-/* Oculto en escritorio; el bloque móvil redefine display en @media (max-width: 768px) */
+/* Categoría en catálogo: solo vía sidebar / hamburguesa (el <select> sigue en el DOM para sincronía JS) */
+#mobileCatalogCategoryWrap,
 .mobile-catalog-category-wrap {
-  display: none;
+  display: none !important;
 }
 
 /* ── RESPONSIVE MÓVIL ── */
@@ -1485,47 +1487,21 @@ footer p { font-size: 0.72rem; color: var(--muted); }
   .products-count {
     width: 100%;
     justify-content: center;
-    padding: 0.65rem 0.75rem;
-    gap: 0.55rem 0.85rem;
+    padding: 0.65rem 0.85rem;
+    gap: 0.55rem 0.75rem;
   }
   .products-count .count-total-wrap {
     margin-left: 0;
+    padding-left: 0;
+    border-left: none;
     justify-content: center;
+    flex: 1 1 100%;
+    margin-top: 0.15rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid rgba(13, 27, 42, 0.1);
   }
   .products-count .count-total-num {
     font-size: 1.1rem;
-  }
-
-  .mobile-catalog-category-wrap {
-    display: flex;
-    flex-direction: column;
-    gap: 0.35rem;
-    margin-bottom: 1.25rem;
-    width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
-    padding: 0 clamp(0.25rem, 1vw, 0.5rem);
-  }
-  .mobile-catalog-category-select {
-    width: 100%;
-    max-width: 100%;
-    padding: 0.65rem 2.25rem 0.65rem 1rem;
-    background: var(--bg);
-    border: 1px solid var(--borde);
-    border-radius: 8px;
-    color: var(--texto);
-    font-family: 'Nunito', sans-serif;
-    font-size: 0.9rem;
-    cursor: pointer;
-    appearance: none;
-    box-sizing: border-box;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%235a6a7a' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 1rem center;
-  }
-  .mobile-catalog-category-select:focus {
-    outline: none;
-    border-color: var(--rojo);
   }
 
   .sidebar-nav-scroll {
@@ -1611,34 +1587,55 @@ footer p { font-size: 0.72rem; color: var(--muted); }
 
 .mobile-catalog-controls { display: none; position: fixed; bottom: 1rem; left: 0; right: 0; padding: 0.75rem 1rem; background: var(--bg2); border-top: 1px solid var(--borde); z-index: 150; gap: 0.75rem; justify-content: center; }
 
-/* ── CONTADOR ── */
+/* ── CONTADOR (contrasta con .sec blanco; contorno claro) ── */
 .products-count {
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: 0.5rem 0.75rem;
-  padding: 0.55rem 1rem;
-  background: linear-gradient(135deg, rgba(196,30,58,0.08) 0%, rgba(196,30,58,0.04) 100%);
-  border: 1px solid rgba(196,30,58,0.2);
-  border-radius: 8px;
-  margin-bottom: 1.5rem;
+  gap: 0.65rem 1rem;
+  padding: 0.75rem 1.15rem;
+  margin-bottom: 1.35rem;
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
+  background: var(--bg);
+  border: 2px solid #b8c5d6;
+  border-top: 3px solid var(--rojo);
+  border-radius: 10px;
+  box-shadow: none;
+  filter: none;
 }
-.products-count .count-page-group {
+/* Ej.: "Página 1 6-6" = productos en esta página / máx. por página */
+.products-count .count-page-line {
   display: inline-flex;
-  align-items: center;
+  align-items: baseline;
   flex-wrap: wrap;
-  gap: 0.35rem 0.5rem;
+  gap: 0.28rem;
   min-width: 0;
   flex: 1 1 auto;
+  font-family: 'Rajdhani', sans-serif;
 }
-.products-count .count-label { color: var(--rojo); font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; }
-.products-count .count-current { color: var(--titulo); font-weight: 700; font-size: 0.95rem; font-family: 'Rajdhani', sans-serif; min-width: 20px; text-align: center; }
+.products-count .count-page-prefix {
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  letter-spacing: 0.04em;
+}
+.products-count .count-page-num {
+  color: var(--titulo);
+  font-weight: 700;
+  font-size: 1rem;
+  min-width: 0.65rem;
+}
+.products-count .count-page-range {
+  color: var(--texto);
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+}
 .products-count .count-separator { color: var(--muted); margin: 0 0.1rem; font-weight: 400; }
-.products-count .count-range { color: var(--texto); font-weight: 600; font-size: 0.9rem; }
 /* Total: tipografía de dato (no botón rojo, para no confundir con categorías) */
 .products-count .count-total-wrap {
   display: inline-flex;
@@ -1647,6 +1644,12 @@ footer p { font-size: 0.72rem; color: var(--muted); }
   gap: 0.3rem 0.5rem;
   flex: 0 0 auto;
   font-family: 'Rajdhani', sans-serif;
+  box-shadow: none;
+  background: none;
+  border: none;
+  padding: 0 0 0 1rem;
+  margin: 0 0 0 0.35rem;
+  border-left: 1px solid rgba(13, 27, 42, 0.12);
 }
 .products-count .count-total-kicker {
   font-size: 0.65rem;
@@ -1673,21 +1676,68 @@ footer p { font-size: 0.72rem; color: var(--muted); }
 }
 @media (min-width: 1025px) {
   .products-count {
-    padding: 0.65rem 1.15rem;
-    gap: 0.65rem 1rem;
+    padding: 0.8rem 1.35rem;
+    gap: 0.75rem 1.15rem;
+    border-radius: 12px;
   }
   .products-count .count-total-num {
     font-size: 1.35rem;
   }
 }
+
+/* Refuerzo: mismo fondo que .sec (#fff) hacía invisible el borde; #products alza especificidad */
+#products #productsCount.products-count.catalog-stats {
+  background: var(--bg);
+  border: 2px solid #9aacbd;
+  border-top: 3px solid var(--rojo);
+  box-shadow: none;
+}
+
 .products-count .count-total { color: var(--titulo); font-weight: 700; font-size: 0.9rem; font-family: 'Rajdhani', sans-serif; }
 .products-count .count-suffix { color: var(--muted); font-size: 0.75rem; font-weight: 500; margin-left: 0.15rem; }
 
 /* ── CATEGORÍA ACTIVA ── */
-.category-active { display: flex; align-items: center; flex-wrap: wrap; gap: 0.5rem; padding: 0.6rem 1rem; background: linear-gradient(135deg, rgba(196,30,58,0.08) 0%, rgba(196,30,58,0.04) 100%); border: 1px solid rgba(196,30,58,0.2); border-radius: 8px; margin-bottom: 1.5rem; width: 100%; max-width: 100%; box-sizing: border-box; animation: fadeUp 0.4s ease; }
+.category-active {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0.45rem 0;
+  margin-bottom: 1rem;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--borde);
+  border-radius: 0;
+  box-shadow: none;
+  animation: fadeUp 0.4s ease;
+}
 .category-active .categoria-badge { font-size: 0.7rem; font-weight: 600; color: var(--rojo); text-transform: uppercase; letter-spacing: 0.08em; }
-.category-active .category-name { font-size: 0.85rem; font-weight: 600; background: var(--rojo); color: white; padding: 0.25rem 0.75rem; border-radius: 4px; }
-.categoria-activa { display: inline-flex; align-items: center; gap: 0.75rem; padding: 0.6rem 1rem; background: linear-gradient(135deg, rgba(196,30,58,0.08) 0%, rgba(196,30,58,0.04) 100%); border: 1px solid rgba(196,30,58,0.2); border-radius: 8px; margin-bottom: 1.5rem; flex-wrap: wrap; }
+.category-active .category-name {
+  font-size: 0.85rem;
+  font-weight: 700;
+  font-family: 'Rajdhani', sans-serif;
+  background: transparent;
+  color: var(--titulo);
+  padding: 0;
+  border-radius: 0;
+  box-shadow: none;
+  letter-spacing: 0.04em;
+}
+.categoria-activa {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.45rem 0;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--borde);
+  border-radius: 0;
+}
 .categoria-activa .categoria-badge { font-size: 0.7rem; font-weight: 600; color: var(--rojo); text-transform: uppercase; letter-spacing: 0.08em; }
 .categoria-activa .categoria-nombre { font-size: 0.85rem; font-weight: 600; color: var(--titulo); }
 

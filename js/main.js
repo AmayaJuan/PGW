@@ -968,9 +968,10 @@ function renderProducts() {
     const cp = PAGINATION_CONFIG.currentPage;
     const itemStart = total ? (cp - 1) * ip + 1 : 0;
     const itemEnd = Math.min(cp * ip, total);
+    const onThisPage = total ? itemEnd - itemStart + 1 : 0;
+    const pageRangeLabel = `${onThisPage}-${ip}`;
     if (total > 0) {
-      pc.innerHTML = `<span class="count-page-group"><span class="count-label">Página</span><span class="count-current">${cp}</span>
-        <span class="count-range">${itemStart}–${itemEnd}</span></span>
+      pc.innerHTML = `<span class="count-page-line" aria-label="Página ${cp}, ítems ${itemStart} a ${itemEnd} de ${total} (${onThisPage} en esta página de hasta ${ip})"><span class="count-page-prefix">Página</span> <span class="count-page-num">${cp}</span> <span class="count-page-range">${pageRangeLabel}</span></span>
         <span class="count-total-wrap" role="status"><span class="count-total-kicker">Total</span><strong class="count-total-num">${total}</strong><span class="count-total-suffix">producto${total === 1 ? '' : 's'}</span></span>`;
       pc.style.display = 'flex';
     } else { pc.style.display = 'none'; }
@@ -1167,8 +1168,7 @@ function setupCatalogFilters() {
     PAGINATION_CONFIG.currentPage = 1;
     updateSidebarCategoryActive();
     renderProducts();
-    const p = document.getElementById('products');
-    if (p) p.scrollIntoView({ behavior: 'instant' });
+    scrollWindowToProductsSection();
   }
 
   if (ce) {
