@@ -497,7 +497,7 @@ function getUniqueCategories() {
     const c = (p.cat || '').trim();
     if (c) set.add(c);
   });
-  const preferred = ['Cabinas', 'Woofer', 'Drivers'];
+  const preferred = ['Cabinas', 'Woofer', 'Drivers', 'Crossover'];
   const rest = [...set].filter(c => !preferred.includes(c)).sort((a, b) => a.localeCompare(b, 'es'));
   const ordered = [];
   preferred.forEach(p => { if (set.has(p)) ordered.push(p); });
@@ -548,6 +548,7 @@ function getCategoryIcon(cat) {
     Cabinas: '▣',
     Woofer: '◉',
     Drivers: '△',
+    Crossover: '↔',
     Parlantes: '◇'
   };
   return icons[cat] || '▸';

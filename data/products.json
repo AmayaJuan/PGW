@@ -711,39 +711,26 @@
   {
     "id": 26,
     "name": "Crossover para subwoofer",
-    "category": "Woofer",
-    "subcategory": "Subwoofer",
-    "bannerImg": "",
+    "category": "Crossover",
+    "subcategory": "Pasivo",
+    "bannerImg": "https://res.cloudinary.com/djlr3wszq/image/upload/v1775085304/crosover_x02v8h.jpg",
     "images": {
       "main": "https://res.cloudinary.com/djlr3wszq/image/upload/v1775085304/crosover_x02v8h.jpg",
       "gallery": []
     },
-    "description": "",
+    "description": "Crossover pasivo para integrar subwoofer en sistemas de refuerzo, con ajuste de frecuencia de corte y conexiones pensadas para rack o instalación fija.",
     "document": "",
     "specs": {
-      "Modulo": "",
-      "Tipo": "",
-      "Potencia Pico": "",
-      "Potencia (RMS)": "",
-      "Potencia LF (parlantes)": "",
-      "Potencia HF (driver compresor)": "",
-      "Respuesta en frecuencia": "",
-      "SPL máximo (1 m)": "",
-      "Cobertura horizontal": "",
-      "cobertura vertical": "",
-      "Transductores": "",
-      "Conector de salida link": "",
-      "Sensibilidad de entrada": "",
-      "Frecuencia de cruce (crossover)": "",
-      "Protección / limitadores": "",
-      "Alimentacion": "",
-      "Material": "",
-      "Herrajes / rigging": "",
+      "Tipo": "Crossover pasivo / filtro para subwoofer",
+      "Vías / función": "División o corte LF hacia subwoofer (según modelo)",
+      "Frecuencia de cruce (crossover)": "Ajustable según versión",
+      "Impedancia de trabajo": "",
+      "Conectores": "",
+      "Alimentacion": "No requiere alimentación (pasivo)",
+      "Material / acabado": "",
       "Dimensiones": "",
       "Peso neto": "",
-      "Color / acabados": "",
-      "aplicaciones": ""
+      "aplicaciones": "Sistemas con subwoofer, bi-amping pasivo, refuerzo en vivo, instalaciones fijas"
     }
-
   }
 ]
