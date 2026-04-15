@@ -259,22 +259,45 @@ function renderBanner() {
   initBannerItemSizing(track);
 }
 
+function rootRemPx() {
+  const fs = parseFloat(getComputedStyle(document.documentElement).fontSize);
+  return Number.isFinite(fs) && fs > 0 ? fs : 16;
+}
+
+/** Misma lógica que styles.css (.banner-item en desktop / 1024 / 768 / 480 / 360). */
+function getBannerSlideTargetWidth() {
+  const vw = window.innerWidth || document.documentElement.clientWidth || 400;
+  const rem = rootRemPx();
+  const wrap = document.querySelector('.banner-wrap');
+  const inner = wrap ? wrap.clientWidth : vw;
+  let slot;
+  if (vw <= 360) slot = vw - 2 * rem;
+  else if (vw <= 480) slot = vw - 2.25 * rem;
+  else if (vw <= 768) slot = vw - 2.75 * rem;
+  else slot = Math.min(600, vw - 3.5 * rem);
+  slot = Math.floor(slot);
+  slot = Math.min(slot, Math.max(80, Math.floor(inner - 4)));
+  return Math.max(100, slot);
+}
+
 /** Ajusta cada .banner-item al ratio real de su imagen (sin bandas) respetando ancho CSS y tope de altura. */
 function layoutBannerItemFromImage(img) {
   const item = img.closest('.banner-item');
   if (!item || img.naturalWidth < 2 || img.naturalHeight < 2) return;
+  const vw = window.innerWidth || document.documentElement.clientWidth || 400;
   const nw = img.naturalWidth;
   const nh = img.naturalHeight;
   item.style.width = '';
   item.style.height = '';
   item.style.flex = '';
   void item.offsetWidth;
-  let w = item.getBoundingClientRect().width;
-  if (!w || w < 48) {
-    const wrap = document.querySelector('.banner-wrap');
-    w = wrap ? Math.max(120, wrap.getBoundingClientRect().width - 16) : Math.min(600, window.innerWidth - 48);
+  let w = getBannerSlideTargetWidth();
+  const rectW = item.getBoundingClientRect().width;
+  if (rectW > 60 && rectW <= vw + 20) {
+    w = Math.min(w, Math.round(rectW));
   }
-  const maxH = Math.min(window.innerHeight * 0.88, 760);
+  const vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+  const maxH = Math.min(vh * 0.88, 760);
   let h = (w * nh) / nw;
   if (h > maxH) {
     h = maxH;
@@ -296,6 +319,9 @@ function bindBannerItemImage(img) {
 function initBannerItemSizing(track) {
   if (!track) return;
   track.querySelectorAll('.banner-item img').forEach(bindBannerItemImage);
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => relayoutAllBannerItems());
+  });
 }
 
 function relayoutAllBannerItems() {
@@ -1475,6 +1501,10 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     scheduleBannerRelayout();
   });
+  window.addEventListener('orientationchange', () => scheduleBannerRelayout());
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', () => scheduleBannerRelayout());
+  }
 
   document.getElementById('sidebarCloseBtn')?.addEventListener('click', () => closeSidebarMobile());
 
