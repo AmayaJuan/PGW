@@ -969,10 +969,9 @@ function renderProducts() {
     const itemStart = total ? (cp - 1) * ip + 1 : 0;
     const itemEnd = Math.min(cp * ip, total);
     if (total > 0) {
-      pc.innerHTML = `<span class="count-label">Página</span><span class="count-current">${cp}</span>
-        <span class="count-range">${itemStart}-${itemEnd}</span>
-        ${!category && !subcat && !query ? `<span class="count-label">Total:</span>
-        <span class="categoria-badge" style="background:var(--rojo);color:#fff;padding:0.2rem 0.7rem;border-radius:20px;font-size:0.75rem;font-weight:600;">${total} productos</span>` : ''}`;
+      pc.innerHTML = `<span class="count-page-group"><span class="count-label">Página</span><span class="count-current">${cp}</span>
+        <span class="count-range">${itemStart}–${itemEnd}</span></span>
+        <span class="count-total-badge" aria-label="${total} producto${total === 1 ? '' : 's'}">${total} producto${total === 1 ? '' : 's'}</span>`;
       pc.style.display = 'inline-flex';
     } else { pc.style.display = 'none'; }
   }
@@ -982,7 +981,7 @@ function renderProducts() {
   if (ca && cn) {
     if (category) {
       const label = subcat ? `${category} · ${subcat}` : category;
-      cn.textContent = `${label} (${filtered.length} productos)`;
+      cn.textContent = label;
       ca.style.display = 'inline-flex';
     } else { ca.style.display = 'none'; }
   }

@@ -24,7 +24,7 @@
   <link rel="sitemap" type="application/xml" href="/sitemap.xml"/>
   <link rel="icon" type="image/png" href="https://res.cloudinary.com/djlr3wszq/image/upload/v1774903848/LOGO_PA_alta_resolucion_tisjr6.png"/>
   <title>P.Acoustic — Audio Profesional | Audio Pro Medellín</title>
-<link rel="stylesheet" href="css/styles.css?v=20260416"/>
+<link rel="stylesheet" href="css/styles.css?v=20260418"/>
 <link rel="stylesheet" href="css/pdf-btn.css"/>
 <link rel="stylesheet" href="css/chat-advisor.css"/>
 </head>
@@ -159,11 +159,11 @@
     <h2 class="sec-titulo" id="titulo-products">Catálogo de productos</h2>
     <div class="products-count" id="productsCount"></div>
     <div class="mobile-catalog-category-wrap" id="mobileCatalogCategoryWrap">
-      <label for="mobileCatalogCategory" class="mobile-catalog-category-label">Categoría</label>
-      <select id="mobileCatalogCategory" class="mobile-catalog-category-select" aria-label="Filtrar catálogo por categoría"></select>
+      <label for="mobileCatalogCategory" class="mobile-catalog-category-label visually-hidden">Categoría del catálogo</label>
+      <select id="mobileCatalogCategory" class="mobile-catalog-category-select" aria-label="Categoría del catálogo"></select>
     </div>
-    <div id="categoryActive" class="category-active" style="display:none;">
-      <span class="categoria-badge">Categoría:</span>
+    <div id="categoryActive" class="category-active" style="display:none;" role="status" aria-live="polite">
+      <span class="categoria-badge visually-hidden">Filtro activo</span>
       <span id="categoryName" class="category-name"></span>
     </div>
   </div>
@@ -261,7 +261,7 @@
 </audio>
 
 <script src="js/modalZoom.js"></script>
-<script src="js/main.js?v=20260416"></script>
+<script src="js/main.js?v=20260418"></script>
 <script src="js/chatAdvisor.js" defer></script>
 
 </body>
