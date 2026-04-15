@@ -381,6 +381,7 @@ function scheduleSidebarFlyoutHide() {
 
 function hideCategoryFlyout() {
   clearSidebarFlyoutHideTimer();
+  document.getElementById('sidebar')?.classList.remove('sidebar--flyout-preview');
   document.querySelectorAll('.sidebar-cat--parent.is-flyout-open').forEach(el => el.classList.remove('is-flyout-open'));
   const fly = document.getElementById('sidebarFlyout');
   if (!fly) return;
@@ -465,6 +466,7 @@ function showCategoryFlyout(anchorBtn) {
   fly.dataset.openCat = cat;
   fly.classList.add('is-open');
   fly.setAttribute('aria-hidden', 'false');
+  document.getElementById('sidebar')?.classList.add('sidebar--flyout-preview');
   document.querySelectorAll('.sidebar-cat--parent.is-flyout-open').forEach(el => el.classList.remove('is-flyout-open'));
   anchorBtn.classList.add('is-flyout-open');
 }
