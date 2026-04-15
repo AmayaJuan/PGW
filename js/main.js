@@ -971,8 +971,8 @@ function renderProducts() {
     if (total > 0) {
       pc.innerHTML = `<span class="count-page-group"><span class="count-label">Página</span><span class="count-current">${cp}</span>
         <span class="count-range">${itemStart}–${itemEnd}</span></span>
-        <span class="count-total-badge" aria-label="${total} producto${total === 1 ? '' : 's'}">${total} producto${total === 1 ? '' : 's'}</span>`;
-      pc.style.display = 'inline-flex';
+        <span class="count-total-wrap" role="status"><span class="count-total-kicker">Total</span><strong class="count-total-num">${total}</strong><span class="count-total-suffix">producto${total === 1 ? '' : 's'}</span></span>`;
+      pc.style.display = 'flex';
     } else { pc.style.display = 'none'; }
   }
 
