@@ -254,7 +254,7 @@ function renderBanner() {
   const dup = [...items, ...items, ...items];
   track.innerHTML = dup.map(({ src, alt, id }) => `
     <div class="banner-item" onclick="onBannerItemClick('${id}')" role="button" tabindex="0" aria-label="Ver ${escapeAttr(alt)}">
-      <img src="${escapeAttr(src)}" alt="${escapeAttr(alt)}" loading="lazy"/>
+      <img src="${escapeAttr(src)}" alt="${escapeAttr(alt)}" loading="eager" decoding="async"/>
     </div>`).join('');
   initBannerItemSizing(track);
 }
@@ -280,17 +280,25 @@ function getBannerSlideTargetWidth() {
   return Math.max(100, slot);
 }
 
+/** Una muestra por URL (el carrusel duplica slides; el ratio es el mismo por src). */
+function getBannerUniqueLoadedImages(track) {
+  const bySrc = new Map();
+  track.querySelectorAll('.banner-item img').forEach(img => {
+    if (img.naturalWidth < 2) return;
+    const key = img.currentSrc || img.src || '';
+    if (!key) return;
+    if (!bySrc.has(key)) bySrc.set(key, img);
+  });
+  return [...bySrc.values()];
+}
+
 /**
- * Todos los slides comparten el mismo alto de fila (mínimo necesario, con tope),
- * para que el flex del carrusel no use la altura del banner más alto y deje un bloque negro enorme debajo.
+ * Misma altura H para todos los slides + altura explícita del #bannerTrack (evita hueco negro enorme en móvil).
+ * Sin imágenes cargadas aún: fallback compacto en móvil.
  */
 function relayoutAllBannerItems() {
   const track = document.getElementById('bannerTrack');
   if (!track) return;
-  const imgs = [...track.querySelectorAll('.banner-item img')];
-  const loaded = imgs.filter(img => img.naturalWidth > 1);
-  if (!loaded.length) return;
-
   const vw = window.innerWidth || document.documentElement.clientWidth || 400;
   const vh = window.visualViewport?.height || window.innerHeight;
   let w = getBannerSlideTargetWidth();
@@ -305,25 +313,44 @@ function relayoutAllBannerItems() {
     }
   }
 
-  const rowCap = vw <= 768 ? Math.min(vh * 0.58, 520) : Math.min(vh * 0.88, 760);
+  const rowCap = vw <= 768 ? Math.min(vh * 0.48, 420) : Math.min(vh * 0.82, 680);
+  const uniqueLoaded = getBannerUniqueLoadedImages(track);
 
   let maxH = 0;
-  loaded.forEach(img => {
+  uniqueLoaded.forEach(img => {
     maxH = Math.max(maxH, (w * img.naturalHeight) / img.naturalWidth);
   });
-  const H = Math.round(Math.min(Math.max(maxH, 120), rowCap));
+
+  let H;
+  if (!uniqueLoaded.length) {
+    if (vw <= 768) {
+      H = Math.round(Math.min(Math.max(vw * 0.55, 200), rowCap));
+    } else {
+      H = Math.round(Math.min(280, rowCap));
+    }
+  } else {
+    H = Math.round(Math.min(Math.max(maxH, 120), rowCap));
+  }
 
   track.querySelectorAll('.banner-item').forEach(item => {
     item.style.width = `${Math.round(w)}px`;
     item.style.flex = `0 0 ${Math.round(w)}px`;
     item.style.height = `${H}px`;
   });
+
+  track.style.height = `${H}px`;
+  track.style.maxHeight = `${H}px`;
+  track.style.minHeight = '0';
+  track.style.overflow = 'hidden';
 }
 
 function bindBannerItemImage(img) {
   const run = () => relayoutAllBannerItems();
   if (img.complete && img.naturalWidth > 1) run();
-  else img.addEventListener('load', run, { once: true });
+  else {
+    img.addEventListener('load', run, { once: true });
+    img.addEventListener('error', run, { once: true });
+  }
 }
 
 function initBannerItemSizing(track) {
@@ -332,6 +359,19 @@ function initBannerItemSizing(track) {
   requestAnimationFrame(() => {
     requestAnimationFrame(() => relayoutAllBannerItems());
   });
+  ensureBannerLayoutObserver();
+}
+
+let _bannerLayoutIo = null;
+function ensureBannerLayoutObserver() {
+  const wrap = document.querySelector('.banner-wrap');
+  if (!wrap || wrap.dataset.bannerLayoutIo === '1') return;
+  wrap.dataset.bannerLayoutIo = '1';
+  _bannerLayoutIo = new IntersectionObserver(
+    () => scheduleBannerRelayout(),
+    { root: null, rootMargin: '120px 0px 120px 0px', threshold: [0, 0.01] }
+  );
+  _bannerLayoutIo.observe(wrap);
 }
 
 let _bannerResizeT = null;

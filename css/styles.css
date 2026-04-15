@@ -813,6 +813,8 @@ body { background: var(--bg); color: var(--texto); font-family: 'Nunito', sans-s
   gap: 0;
   animation: bannerScroll 48s linear infinite;
   width: max-content;
+  min-height: 0;
+  box-sizing: border-box;
 }
 .banner-wrap:hover .banner-track { animation-play-state: paused; }
 .banner-item {
