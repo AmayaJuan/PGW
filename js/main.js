@@ -68,6 +68,21 @@ const WP_SVG = `<svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.75
   /** Estado del audio intro (hero); compartido para pausar al abrir catálogo o modal. */
   const introAudioState = { started: false };
 
+  function introAudioInHeroZone() {
+    const hero = document.querySelector('.hero');
+    if (!hero) return window.scrollY < 120;
+    const bottom = hero.getBoundingClientRect().bottom;
+    return bottom > window.innerHeight * 0.52;
+  }
+
+  function forceStopIntroAudio() {
+    introAudioState.started = false;
+    const audio = document.getElementById('introAudio');
+    if (!audio) return;
+    audio.pause();
+    audio.volume = 0.6;
+  }
+
   // Función placeholder - Zoom controlado por modalZoom.js separado
   // Mantenida para compatibilidad futura
   function initZoomControls() {}
@@ -89,6 +104,7 @@ const WP_SVG = `<svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.75
   }
   // Event handler click enlaces navegación principal
   function handleNavClick(e, sectionId) {
+    if (sectionId === 'products') forceStopIntroAudio();
     // Obtiene referencia lista enlaces navegación
     const nl = document.getElementById('navLinks');
     // Si menú móvil abierto, cerrarlo automáticamente
@@ -105,44 +121,33 @@ const WP_SVG = `<svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.75
 // ========================================
   // AUDIO - Sistema introductorio controlado por scroll
   // ========================================
-  // Inicializa reproducción audio intro en homepage (solo scrollY < 100px)
+  // Inicializa reproducción audio intro solo en la zona del hero (no en catálogo ni al abrir modal)
   function initIntroAudio() {
-    // Obtiene referencia elemento audio HTML
     const audio = document.getElementById('introAudio');
-    // Si audio no existe en DOM, sale tempranamente
     if (!audio) return;
-    // Función fade out gradual volumen hasta silencio
     function stop() {
-      // Intervalo fade 80ms decremental 0.05 volumen
       let fade = setInterval(() => {
-        // Reduce volumen hasta mínimo 0.05
         if (audio.volume > 0.05) audio.volume -= 0.05;
-        // Cuando volumen bajo, pausa y reset
         else { clearInterval(fade); audio.pause(); audio.volume = 0.6; introAudioState.started = false; }
       }, 80);
     }
-    // Función inicio reproducción con volumen bajo (política autoplay)
     function play() {
-      // Sale si ya activo o scroll >= 100px (solo homepage visible)
-      if (introAudioState.started || window.scrollY >= 100) return;
-      // Marca como activo y volumen inicial suave
-      introAudioState.started = true; audio.volume = 0.5;
-      // Intenta reproducir (catch bloquea autoplay browsers)
+      if (introAudioState.started || !introAudioInHeroZone()) return;
+      introAudioState.started = true;
+      audio.volume = 0.5;
       audio.play().catch(() => { introAudioState.started = false; });
     }
-    // Listener scroll pasivo (performance) - controla play/stop
     window.addEventListener('scroll', () => {
-      // Si scroll >=100px y activo, fade out
-      if (window.scrollY >= 100 && introAudioState.started) stop();
-      // Si scroll <100px y inactivo, play
-      if (window.scrollY < 100 && !introAudioState.started) play();
+      if (!introAudioInHeroZone() && introAudioState.started) stop();
+      if (introAudioInHeroZone() && !introAudioState.started) play();
     }, { passive: true });
-    // Intento inicial (puede fallar por autoplay del navegador)
-    play();
-    // Solo reintenta con clic si el clic es en el hero (inicio); no al abrir productos/modal/sidebar
+    if (introAudioInHeroZone()) play();
     document.addEventListener('click', function f(e) {
-      if (window.scrollY < 100 && e.target.closest('.hero')) play();
+      if (introAudioInHeroZone() && e.target.closest('.hero')) play();
     }, { once: true, capture: true });
+    document.addEventListener('pointerdown', e => {
+      if (e.target.closest('#products, .banner-wrap')) forceStopIntroAudio();
+    }, { capture: true });
   }
 
 // ========================================
@@ -211,6 +216,11 @@ async function loadProducts() {
       };
     });
     products.sort(compareProductsCatalog);
+    window.PAcousticCatalog = products;
+    // document (no window): CustomEvent no burbujea por defecto; chatAdvisor escucha en document.
+    try {
+      document.dispatchEvent(new CustomEvent('pacoustic:catalog-ready', { bubbles: true }));
+    } catch (_) {}
     // Renderiza banner con productos cargados
     renderBanner();
     fillCategorySelect();
@@ -220,6 +230,10 @@ async function loadProducts() {
   } catch (e) {
     // Log error consola (desarrollo/debug)
     console.error("Error cargando products.json:", e);
+    window.PAcousticCatalog = [];
+    try {
+      document.dispatchEvent(new CustomEvent('pacoustic:catalog-ready', { bubbles: true }));
+    } catch (_) {}
   }
 }
 
@@ -227,6 +241,7 @@ async function loadProducts() {
 // BANNER
 // ========================================
 function onBannerItemClick(id) {
+  forceStopIntroAudio();
   document.getElementById('products').scrollIntoView({ behavior: 'instant' });
   setTimeout(() => openModal(id), 450);
 }
@@ -275,6 +290,17 @@ function getVideoEmbed(url) {
 // ========================================
 function normFilterStr(s) {
   return String(s || '').trim().toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '');
+}
+
+/** Fila/tile del flyout activo si coincide categoría + sub con el filtro del catálogo. */
+function isFlyoutItemActive(flyCategory, btnSub) {
+  const curCat = (document.getElementById('catalogCategory')?.value || '').trim();
+  const curSub = (document.getElementById('catalogSubcategory')?.value || '').trim();
+  if (normFilterStr(flyCategory) !== normFilterStr(curCat)) return false;
+  const s = String(btnSub == null ? '' : btnSub).trim();
+  const cs = String(curSub || '').trim();
+  if (!cs && !s) return true;
+  return normFilterStr(cs) === normFilterStr(s);
 }
 
 /** Catálogo: A–Z por categoría, luego subcategoría, luego nombre (números en orden natural). */
@@ -432,7 +458,7 @@ function showCategoryFlyout(anchorBtn) {
     fly.innerHTML = `
       <div class="sidebar-flyout-title">${escapeHtml(cat)}</div>
       <div class="sidebar-flyout-inner sidebar-flyout-inner--grid" role="group" aria-label="Subcategorías de ${escapeAttr(cat)}">
-        <button type="button" class="sidebar-flyout-tile" data-cat="${escapeAttr(cat)}" data-sub="">
+        <button type="button" class="sidebar-flyout-tile${isFlyoutItemActive(cat, '') ? ' active' : ''}" data-cat="${escapeAttr(cat)}" data-sub="">
           <div class="sidebar-flyout-tile-img">${imgAll ? `<img src="${escapeAttr(imgAll)}" alt="" loading="lazy"/>` : '<span class="sidebar-flyout-placeholder" aria-hidden="true"></span>'}</div>
           <span class="sidebar-flyout-pill">Ver todos</span>
           <span class="sidebar-flyout-tile-n">${countAll}</span>
@@ -442,7 +468,7 @@ function showCategoryFlyout(anchorBtn) {
       p => (p.cat || '').toLowerCase() === cat.toLowerCase() && (p.subcat || '').trim().toLowerCase() === sub.toLowerCase()
     ).length;
     const img = getRepresentativeImage(cat, sub);
-    return `<button type="button" class="sidebar-flyout-tile" data-cat="${escapeAttr(cat)}" data-sub="${escapeAttr(sub)}">
+    return `<button type="button" class="sidebar-flyout-tile${isFlyoutItemActive(cat, sub) ? ' active' : ''}" data-cat="${escapeAttr(cat)}" data-sub="${escapeAttr(sub)}">
           <div class="sidebar-flyout-tile-img">${img ? `<img src="${escapeAttr(img)}" alt="" loading="lazy"/>` : '<span class="sidebar-flyout-placeholder" aria-hidden="true"></span>'}</div>
           <span class="sidebar-flyout-pill">${escapeHtml(sub)}</span>
           <span class="sidebar-flyout-tile-n">${n}</span>
@@ -453,14 +479,14 @@ function showCategoryFlyout(anchorBtn) {
     fly.innerHTML = `
     <div class="sidebar-flyout-title">${escapeHtml(cat)}</div>
     <div class="sidebar-flyout-inner sidebar-flyout-inner--list" role="group" aria-label="Subcategorías de ${escapeAttr(cat)}">
-      <button type="button" class="sidebar-flyout-row" data-cat="${escapeAttr(cat)}" data-sub="">
+      <button type="button" class="sidebar-flyout-row${isFlyoutItemActive(cat, '') ? ' active' : ''}" data-cat="${escapeAttr(cat)}" data-sub="">
         <span>Ver todos</span><span class="sidebar-flyout-n">${countAll}</span>
       </button>
       ${subs.map(sub => {
     const n = products.filter(
       p => (p.cat || '').toLowerCase() === cat.toLowerCase() && (p.subcat || '').trim().toLowerCase() === sub.toLowerCase()
     ).length;
-    return `<button type="button" class="sidebar-flyout-row" data-cat="${escapeAttr(cat)}" data-sub="${escapeAttr(sub)}">
+    return `<button type="button" class="sidebar-flyout-row${isFlyoutItemActive(cat, sub) ? ' active' : ''}" data-cat="${escapeAttr(cat)}" data-sub="${escapeAttr(sub)}">
         <span>${escapeHtml(sub)}</span><span class="sidebar-flyout-n">${n}</span>
       </button>`;
   }).join('')}
@@ -574,6 +600,14 @@ function updateSidebarCategoryActive() {
     const c = (btn.getAttribute('data-cat') || '').trim();
     btn.classList.toggle('has-sub-filter', !!curSub && curCat === c);
   });
+  const fly = document.getElementById('sidebarFlyout');
+  if (fly?.classList.contains('is-open')) {
+    const openCat = fly.dataset.openCat || '';
+    fly.querySelectorAll('.sidebar-flyout-row, .sidebar-flyout-tile').forEach(btn => {
+      const s = btn.getAttribute('data-sub');
+      btn.classList.toggle('active', isFlyoutItemActive(openCat, s == null ? '' : s));
+    });
+  }
 }
 
 function selectCatalogFilter(rawCat, rawSub) {
@@ -593,6 +627,7 @@ function selectCatalogFilter(rawCat, rawSub) {
   if (sec) sec.scrollIntoView({ behavior: 'instant', block: 'start' });
   closeSidebarMobile();
 }
+if (typeof window !== 'undefined') window.selectCatalogFilter = selectCatalogFilter;
 
 /**
  * Bloquea el scroll de la página (html + body + fixed, compatible con iOS).
@@ -813,6 +848,72 @@ function changePage(page) {
   if (sec) sec.scrollIntoView({ behavior: 'instant', block: 'start' });
 }
 
+function setupVoiceCatalogSearch() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const se = document.getElementById('catalogSearch');
+  const mob = document.getElementById('mobileMenuSearch');
+  const btnDesk = document.getElementById('catalogSearchVoiceBtn');
+  const btnMob = document.getElementById('mobileMenuSearchVoiceBtn');
+  const secure =
+    window.isSecureContext ||
+    /^localhost$|^127\.0\.0\.1$/i.test(window.location.hostname || '');
+  if (!SR || !se || !secure) {
+    btnDesk?.remove();
+    btnMob?.remove();
+    return;
+  }
+  btnDesk?.removeAttribute('hidden');
+  btnMob?.removeAttribute('hidden');
+
+  let recognition = null;
+  let listening = false;
+
+  function setListening(on) {
+    listening = on;
+    [btnDesk, btnMob].forEach(b => b?.classList.toggle('nav-voice-btn--active', on));
+  }
+
+  function applyVoiceTranscript(text) {
+    const t = String(text || '').trim();
+    if (!t) return;
+    se.value = t;
+    if (mob) mob.value = t;
+    PAGINATION_CONFIG.currentPage = 1;
+    renderProducts();
+    document.getElementById('products')?.scrollIntoView({ behavior: 'instant' });
+  }
+
+  function onMicClick(e) {
+    e.preventDefault();
+    if (listening && recognition) {
+      try { recognition.abort(); } catch (_) {}
+      setListening(false);
+      return;
+    }
+    recognition = new SR();
+    recognition.lang = 'es-CO';
+    recognition.interimResults = false;
+    recognition.continuous = false;
+    recognition.maxAlternatives = 1;
+    setListening(true);
+    recognition.onresult = ev => {
+      const t = ev.results && ev.results[0] && ev.results[0][0] ? ev.results[0][0].transcript : '';
+      applyVoiceTranscript(t);
+    };
+    recognition.onerror = () => setListening(false);
+    recognition.onend = () => setListening(false);
+    try {
+      recognition.start();
+    } catch (_) {
+      setListening(false);
+    }
+  }
+
+  [btnDesk, btnMob].forEach(btn => {
+    if (btn) btn.addEventListener('click', onMicClick);
+  });
+}
+
 function setupCatalogFilters() {
   fillCategorySelect();
   const se = document.getElementById('catalogSearch');
@@ -863,12 +964,7 @@ function openModal(id) {
   const p = products.find(x => x.id === id);
   if (!p) return;
 
-  const intro = document.getElementById('introAudio');
-  if (intro && !intro.paused) {
-    intro.pause();
-    intro.volume = 0.6;
-    introAudioState.started = false;
-  }
+  forceStopIntroAudio();
 
   // Inicializar zoom del modal
   if (typeof modalZoomInit === 'function') modalZoomInit();
@@ -1257,6 +1353,7 @@ document.addEventListener('DOMContentLoaded', function () {
   initIntroAudio();
   loadProducts();
   setupCatalogFilters();
+  setupVoiceCatalogSearch();
   initActiveMenuLink();
   initZoomControls();
 

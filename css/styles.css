@@ -498,6 +498,14 @@ body { background: var(--bg); color: var(--texto); font-family: 'Nunito', sans-s
   background: rgba(196, 30, 58, 0.06);
   color: var(--rojo);
 }
+.sidebar-flyout-row.active {
+  background: rgba(196, 30, 58, 0.12);
+  color: var(--rojo);
+  box-shadow: inset 3px 0 0 var(--rojo);
+}
+.sidebar-flyout-row.active .sidebar-flyout-n {
+  color: var(--rojo);
+}
 .sidebar-flyout-n {
   font-size: 0.62rem;
   font-weight: 700;
@@ -532,6 +540,19 @@ body { background: var(--bg); color: var(--texto); font-family: 'Nunito', sans-s
   -webkit-tap-highlight-color: transparent;
 }
 .sidebar-flyout-tile:active { transform: scale(0.98); }
+.sidebar-flyout-tile.active .sidebar-flyout-tile-img {
+  border-color: var(--rojo);
+  box-shadow: 0 0 0 2px rgba(196, 30, 58, 0.22);
+  background: linear-gradient(145deg, rgba(196, 30, 58, 0.06) 0%, #eef2f7 100%);
+}
+.sidebar-flyout-tile.active .sidebar-flyout-pill {
+  background: rgba(196, 30, 58, 0.12);
+  color: var(--rojo);
+  border-color: var(--rojo);
+}
+.sidebar-flyout-tile.active .sidebar-flyout-tile-n {
+  color: var(--rojo);
+}
 .sidebar-flyout-tile-img {
   width: 100%;
   aspect-ratio: 1;
@@ -617,6 +638,60 @@ body { background: var(--bg); color: var(--texto); font-family: 'Nunito', sans-s
 }
 .nav-search-input::placeholder { color: var(--muted); opacity: 0.85; }
 .nav-search-input:focus { outline: none; }
+
+.nav-voice-btn {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: none;
+  border-radius: 8px;
+  background: rgba(13, 27, 42, 0.07);
+  color: #4a5a6a;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.nav-voice-btn:hover {
+  background: rgba(196, 30, 58, 0.14);
+  color: var(--rojo);
+}
+.nav-voice-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(196, 30, 58, 0.35);
+}
+.nav-voice-btn--active {
+  background: rgba(196, 30, 58, 0.22);
+  color: var(--rojo);
+  animation: navVoicePulse 1.1s ease-in-out infinite;
+}
+@keyframes navVoicePulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(196, 30, 58, 0.35); }
+  50% { box-shadow: 0 0 0 7px rgba(196, 30, 58, 0); }
+}
+.nav-voice-icon {
+  width: 20px;
+  height: 20px;
+  display: block;
+  flex-shrink: 0;
+  overflow: visible;
+  color: inherit;
+}
+
+#mainNavbar .nav-voice-btn--mobile {
+  background: rgba(255, 255, 255, 0.14);
+  color: rgba(255, 255, 255, 0.9);
+}
+#mainNavbar .nav-voice-btn--mobile:hover {
+  background: rgba(255, 255, 255, 0.24);
+  color: #fff;
+}
+#mainNavbar .nav-voice-btn--mobile.nav-voice-btn--active {
+  background: rgba(196, 30, 58, 0.45);
+  color: #fff;
+}
 
 .nav-wp { display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1.2rem; background: var(--wp); color: white; border-radius: 6px; text-decoration: none; font-size: 0.8rem; font-weight: 700; transition: all .2s; flex-shrink: 0; }
 .nav-wp:hover { background: #1e6b35; box-shadow: 0 0 20px rgba(45,140,78,0.4); }

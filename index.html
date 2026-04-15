@@ -26,6 +26,7 @@
   <title>P.Acoustic — Audio Profesional | Audio Pro Medellín</title>
 <link rel="stylesheet" href="css/styles.css" media="print" onload="this.media='all'"/>
 <link rel="stylesheet" href="css/pdf-btn.css"/>
+<link rel="stylesheet" href="css/chat-advisor.css"/>
 </head>
 
 <body data-theme="light">
@@ -54,11 +55,25 @@
     <div class="nav-search-field">
       <span class="nav-search-icon" aria-hidden="true">🔍</span>
       <input type="search" id="catalogSearch" class="nav-search-input" placeholder="Buscar en catálogo…" autocomplete="off" aria-label="Buscar productos"/>
+      <button type="button" id="catalogSearchVoiceBtn" class="nav-voice-btn" hidden aria-label="Buscar por voz" title="Buscar por voz (español)">
+        <svg class="nav-voice-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true">
+          <rect x="9" y="3" width="6" height="11" rx="3" stroke="currentColor" stroke-width="2"/>
+          <path d="M5 11v1a7 7 0 0014 0v-1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <path d="M12 18v3M8 21h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
     </div>
   </div>
 
   <div class="nav-mobile-controls" id="navMobileSearchPanel">
     <input type="search" id="mobileMenuSearch" class="nav-mobile-search-input" placeholder="Buscar productos…" autocomplete="off" aria-label="Buscar productos"/>
+    <button type="button" id="mobileMenuSearchVoiceBtn" class="nav-voice-btn nav-voice-btn--mobile" hidden aria-label="Buscar por voz" title="Buscar por voz (español)">
+      <svg class="nav-voice-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true">
+        <rect x="9" y="3" width="6" height="11" rx="3" stroke="currentColor" stroke-width="2"/>
+        <path d="M5 11v1a7 7 0 0014 0v-1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        <path d="M12 18v3M8 21h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
   </div>
 
   <div class="nav-mobile-trailing">
@@ -243,6 +258,7 @@
 
 <script src="js/modalZoom.js"></script>
 <script src="js/main.js"></script>
+<script src="js/chatAdvisor.js" defer></script>
 
 </body>
 </html>
