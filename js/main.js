@@ -1583,12 +1583,17 @@ document.addEventListener('DOMContentLoaded', function () {
           return;
         }
         const fly = document.getElementById('sidebarFlyout');
-        const openSame = fly?.classList.contains('is-open') && fly?.dataset.openCat === cat;
+        const openSame =
+          fly?.classList.contains('is-open') &&
+          normFilterStr(fly?.dataset.openCat || '') === normFilterStr(cat);
         if (!openSame) {
           clearSidebarFlyoutHideTimer();
           showCategoryFlyout(btn);
           return;
         }
+        // Segundo toque en el mismo padre: solo cerrar subcategorías (no aplicar filtro ni cerrar el menú).
+        hideCategoryFlyout();
+        return;
       }
       selectCatalogFilter(cat, sub);
     });
@@ -1649,10 +1654,24 @@ document.addEventListener('DOMContentLoaded', function () {
 
   document.getElementById('sidebarCloseBtn')?.addEventListener('click', () => closeSidebarMobile());
 
+  document.getElementById('sidebarOverlay')?.addEventListener('click', () => {
+    const fly = document.getElementById('sidebarFlyout');
+    if (fly?.classList.contains('is-open')) {
+      hideCategoryFlyout();
+      return;
+    }
+    closeSidebarMobile();
+  });
+
   document.addEventListener('keydown', e => {
     if (e.key !== 'Escape') return;
     const mobile = window.matchMedia('(max-width: 1024px)').matches;
     const sb = document.getElementById('sidebar');
+    const fly = document.getElementById('sidebarFlyout');
+    if (mobile && fly?.classList.contains('is-open')) {
+      hideCategoryFlyout();
+      return;
+    }
     if (mobile && sb?.classList.contains('open')) closeSidebarMobile();
   });
 
