@@ -611,6 +611,7 @@ function hideCategoryFlyout() {
 }
 
 function showCategoryFlyout(anchorBtn) {
+  clearSidebarFlyoutHideTimer();
   const cat = anchorBtn.getAttribute('data-cat');
   if (!cat) return;
   const subs = getSubcategoriesForCategory(cat);
@@ -704,6 +705,9 @@ function onSidebarParentLeave() {
 function bindSidebarFlyoutTriggers() {
   const ul = document.getElementById('sidebarCategories');
   if (!ul) return;
+  // Solo escritorio con ratón: en táctil, mouseleave entre filas programa un cierre
+  // que mata el flyout recién abierto al cambiar de categoría (hace falta tocar dos veces).
+  if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
   ul.querySelectorAll('.sidebar-cat--parent[data-has-subs="1"]').forEach(btn => {
     btn.addEventListener('mouseenter', onSidebarParentEnter);
     btn.addEventListener('mouseleave', onSidebarParentLeave);
@@ -1556,7 +1560,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const fly = document.getElementById('sidebarFlyout');
         const openSame = fly?.classList.contains('is-open') && fly?.dataset.openCat === cat;
         if (!openSame) {
-          if (fly) fly.dataset.openCat = cat;
+          clearSidebarFlyoutHideTimer();
           showCategoryFlyout(btn);
           return;
         }
