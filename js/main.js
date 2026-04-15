@@ -602,12 +602,16 @@ function hideCategoryFlyout() {
   document.getElementById('sidebar')?.classList.remove('sidebar--flyout-preview');
   document.querySelectorAll('.sidebar-cat--parent.is-flyout-open').forEach(el => el.classList.remove('is-flyout-open'));
   const fly = document.getElementById('sidebarFlyout');
-  if (!fly) return;
+  if (!fly) {
+    updateSidebarCategoryActive();
+    return;
+  }
   fly.classList.remove('is-open', 'sidebar-flyout--sheet');
   fly.removeAttribute('data-open-cat');
   fly.setAttribute('aria-hidden', 'true');
   fly.innerHTML = '';
   fly.style.left = fly.style.top = fly.style.right = fly.style.bottom = fly.style.transform = fly.style.maxHeight = '';
+  updateSidebarCategoryActive();
 }
 
 function showCategoryFlyout(anchorBtn) {
@@ -689,6 +693,7 @@ function showCategoryFlyout(anchorBtn) {
   document.getElementById('sidebar')?.classList.add('sidebar--flyout-preview');
   document.querySelectorAll('.sidebar-cat--parent.is-flyout-open').forEach(el => el.classList.remove('is-flyout-open'));
   anchorBtn.classList.add('is-flyout-open');
+  updateSidebarCategoryActive();
 }
 
 function onSidebarParentEnter(e) {
@@ -698,7 +703,7 @@ function onSidebarParentEnter(e) {
 }
 
 function onSidebarParentLeave() {
-  if (!window.matchMedia('(hover: hover)').matches) return;
+  if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
   scheduleSidebarFlyoutHide();
 }
 
@@ -755,6 +760,10 @@ function renderSidebarCategories() {
 function updateSidebarCategoryActive() {
   const curCat = (document.getElementById('catalogCategory')?.value || '').trim();
   const curSub = (document.getElementById('catalogSubcategory')?.value || '').trim();
+  const fly = document.getElementById('sidebarFlyout');
+  const flyOpen = fly?.classList.contains('is-open');
+  const openCat = (fly?.dataset.openCat || '').trim();
+
   document.querySelectorAll('#sidebarCategories .sidebar-cat').forEach(btn => {
     const c = (btn.getAttribute('data-cat') || '').trim();
     const s = (btn.getAttribute('data-sub') || '').trim();
@@ -762,20 +771,36 @@ function updateSidebarCategoryActive() {
     if (!c && !s) {
       on = !curCat && !curSub;
       if (document.getElementById('sidebar')?.dataset.todasActiveSuppressed === '1') on = false;
-    } else if (c && !s) on = curCat === c && !curSub;
-    else on = curCat === c && curSub === s;
+      if (flyOpen && openCat) on = false;
+    } else if (btn.classList.contains('sidebar-cat--parent')) {
+      const hasSubs = btn.getAttribute('data-has-subs') === '1';
+      if (hasSubs && flyOpen && openCat) {
+        on = normFilterStr(c) === normFilterStr(openCat);
+      } else if (c && !s) {
+        on = curCat === c && !curSub;
+      } else {
+        on = curCat === c && curSub === s;
+      }
+    } else if (c && !s) {
+      on = curCat === c && !curSub;
+    } else {
+      on = curCat === c && curSub === s;
+    }
     btn.classList.toggle('active', on);
   });
   document.querySelectorAll('#sidebarCategories .sidebar-cat--parent').forEach(btn => {
     const c = (btn.getAttribute('data-cat') || '').trim();
-    btn.classList.toggle('has-sub-filter', !!curSub && curCat === c);
+    if (flyOpen && openCat) {
+      btn.classList.toggle('has-sub-filter', normFilterStr(c) === normFilterStr(openCat) && !!curSub && normFilterStr(curCat) === normFilterStr(c));
+    } else {
+      btn.classList.toggle('has-sub-filter', !!curSub && curCat === c);
+    }
   });
-  const fly = document.getElementById('sidebarFlyout');
   if (fly?.classList.contains('is-open')) {
-    const openCat = fly.dataset.openCat || '';
+    const oc = fly.dataset.openCat || '';
     fly.querySelectorAll('.sidebar-flyout-row, .sidebar-flyout-tile').forEach(btn => {
       const s = btn.getAttribute('data-sub');
-      btn.classList.toggle('active', isFlyoutItemActive(openCat, s == null ? '' : s));
+      btn.classList.toggle('active', isFlyoutItemActive(oc, s == null ? '' : s));
     });
   }
 }
@@ -1571,8 +1596,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
   const sidebarFlyout = document.getElementById('sidebarFlyout');
   if (sidebarFlyout) {
-    sidebarFlyout.addEventListener('mouseenter', clearSidebarFlyoutHideTimer);
-    sidebarFlyout.addEventListener('mouseleave', scheduleSidebarFlyoutHide);
+    sidebarFlyout.addEventListener('mouseenter', () => {
+      if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+      clearSidebarFlyoutHideTimer();
+    });
+    sidebarFlyout.addEventListener('mouseleave', () => {
+      if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+      scheduleSidebarFlyoutHide();
+    });
     sidebarFlyout.addEventListener('click', e => {
       const row = e.target.closest('.sidebar-flyout-row, .sidebar-flyout-tile');
       if (!row) return;
