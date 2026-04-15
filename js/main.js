@@ -76,6 +76,7 @@ const WP_SVG = `<svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.75
   function handleLogoClick(e) {
     // Previene navegación por defecto del enlace
     e.preventDefault();
+    hideCategoryFlyout();
     // Scroll suave instantáneo a posición 0 (top página)
     window.scrollTo({ top: 0, behavior: 'instant' });
     // Limpia clase 'active' de todos enlaces navegación
@@ -182,6 +183,7 @@ async function loadProducts() {
         name:      p.name.toUpperCase(),
         // Categoría o "Parlantes" por defecto
         cat:       p.category || "Parlantes",
+        subcat:    (p.subcategory && String(p.subcategory).trim()) ? String(p.subcategory).trim() : "",
         badge:     "Producto", // Badge fijo todos productos
         // Descripción o texto por defecto
         desc:      p.description || "Producto de audio profesional",
@@ -265,16 +267,21 @@ function getVideoEmbed(url) {
 // FILTROS
 // ========================================
 function getProductSearchText(p) {
-  return [p.name, p.cat, p.desc, (p.tags||[]).join(' '), (p.apps||[]).join(' ')]
+  return [p.name, p.cat, p.subcat, p.desc, (p.tags||[]).join(' '), (p.apps||[]).join(' ')]
     .join(' ').toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '');
 }
 function getFilteredProducts() {
   const se = document.getElementById('catalogSearch');
   const ce = document.getElementById('catalogCategory');
+  const su = document.getElementById('catalogSubcategory');
   const q  = se?.value ? se.value.trim().toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '') : '';
   const c  = ce?.value ? ce.value.trim().toLowerCase() : '';
+  const s  = su?.value ? su.value.trim().toLowerCase() : '';
   let list = products;
-  if (c) list = list.filter(p => (p.cat||'').toLowerCase() === c);
+  if (c) {
+    list = list.filter(p => (p.cat || '').toLowerCase() === c);
+    if (s) list = list.filter(p => ((p.subcat || '').trim().toLowerCase()) === s);
+  }
   if (q) list = list.filter(p => getProductSearchText(p).includes(q));
   return list;
 }
@@ -293,7 +300,7 @@ function getUniqueCategories() {
 function fillCategorySelect() {
   const sel = document.getElementById('catalogCategory');
   if (!sel) return;
-  const cur = sel.value || '';
+  const cur = (sel.value || '').trim();
   const cats = getUniqueCategories();
   const html = '<option value="">Todas las categorías</option>' +
     cats.map(c => `<option value="${escapeAttr(c)}">${escapeHtml(c)}</option>`).join('');
@@ -301,45 +308,188 @@ function fillCategorySelect() {
   if (!cur) sel.value = '';
   else if (cats.includes(cur)) sel.value = cur;
   else sel.value = '';
+
+  const su = document.getElementById('catalogSubcategory');
+  if (!su) return;
+  const catNow = (sel.value || '').trim();
+  if (!catNow) {
+    su.value = '';
+    return;
+  }
+  const validSubs = getSubcategoriesForCategory(catNow);
+  const curSub = (su.value || '').trim();
+  if (!curSub || !validSubs.some(s => s.toLowerCase() === curSub.toLowerCase())) su.value = '';
+}
+
+function getSubcategoriesForCategory(cat) {
+  const key = (cat || '').trim().toLowerCase();
+  if (!key) return [];
+  const subs = new Set();
+  products.forEach(p => {
+    if ((p.cat || '').trim().toLowerCase() !== key) return;
+    const s = (p.subcat || '').trim();
+    if (s) subs.add(s);
+  });
+  return [...subs].sort((a, b) => a.localeCompare(b, 'es'));
+}
+
+function getCategoryIcon(cat) {
+  const icons = {
+    Cabinas: '▣',
+    Woofer: '◉',
+    Drivers: '△',
+    Parlantes: '◇'
+  };
+  return icons[cat] || '▸';
+}
+
+let sidebarFlyoutHideT = null;
+function clearSidebarFlyoutHideTimer() {
+  if (sidebarFlyoutHideT) {
+    clearTimeout(sidebarFlyoutHideT);
+    sidebarFlyoutHideT = null;
+  }
+}
+function scheduleSidebarFlyoutHide() {
+  clearSidebarFlyoutHideTimer();
+  sidebarFlyoutHideT = setTimeout(() => hideCategoryFlyout(), 200);
+}
+
+function hideCategoryFlyout() {
+  clearSidebarFlyoutHideTimer();
+  const fly = document.getElementById('sidebarFlyout');
+  if (!fly) return;
+  fly.classList.remove('is-open');
+  fly.removeAttribute('data-open-cat');
+  fly.setAttribute('aria-hidden', 'true');
+  fly.innerHTML = '';
+}
+
+function showCategoryFlyout(anchorBtn) {
+  const cat = anchorBtn.getAttribute('data-cat');
+  if (!cat) return;
+  const subs = getSubcategoriesForCategory(cat);
+  if (!subs.length) return;
+  const fly = document.getElementById('sidebarFlyout');
+  const countAll = products.filter(p => (p.cat || '').toLowerCase() === cat.toLowerCase()).length;
+  fly.innerHTML = `
+    <div class="sidebar-flyout-title">${escapeHtml(cat)}</div>
+    <div class="sidebar-flyout-inner" role="group" aria-label="Subcategorías de ${escapeAttr(cat)}">
+      <button type="button" class="sidebar-flyout-row" data-cat="${escapeAttr(cat)}" data-sub="">
+        <span>Ver todos</span><span class="sidebar-flyout-n">${countAll}</span>
+      </button>
+      ${subs.map(sub => {
+    const n = products.filter(
+      p => (p.cat || '').toLowerCase() === cat.toLowerCase() && (p.subcat || '').trim().toLowerCase() === sub.toLowerCase()
+    ).length;
+    return `<button type="button" class="sidebar-flyout-row" data-cat="${escapeAttr(cat)}" data-sub="${escapeAttr(sub)}">
+        <span>${escapeHtml(sub)}</span><span class="sidebar-flyout-n">${n}</span>
+      </button>`;
+  }).join('')}
+    </div>`;
+  const ar = anchorBtn.getBoundingClientRect();
+  const fw = 272;
+  const pad = 10;
+  let left = ar.right + 6;
+  if (left + fw > window.innerWidth - pad) left = Math.max(pad, ar.left - fw - 6);
+  fly.style.left = `${left}px`;
+  let top = ar.top;
+  const maxH = Math.min(window.innerHeight - pad * 2, 440);
+  fly.style.maxHeight = `${maxH}px`;
+  const estH = 48 + subs.length * 44;
+  if (top + estH > window.innerHeight - pad) top = Math.max(pad, window.innerHeight - estH - pad);
+  if (top < pad) top = pad;
+  fly.style.top = `${top}px`;
+  fly.dataset.openCat = cat;
+  fly.classList.add('is-open');
+  fly.setAttribute('aria-hidden', 'false');
+}
+
+function onSidebarParentEnter(e) {
+  if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+  clearSidebarFlyoutHideTimer();
+  showCategoryFlyout(e.currentTarget);
+}
+
+function onSidebarParentLeave() {
+  if (!window.matchMedia('(hover: hover)').matches) return;
+  scheduleSidebarFlyoutHide();
+}
+
+function bindSidebarFlyoutTriggers() {
+  const ul = document.getElementById('sidebarCategories');
+  if (!ul) return;
+  ul.querySelectorAll('.sidebar-cat--parent[data-has-subs="1"]').forEach(btn => {
+    btn.addEventListener('mouseenter', onSidebarParentEnter);
+    btn.addEventListener('mouseleave', onSidebarParentLeave);
+  });
 }
 
 function renderSidebarCategories() {
   const ul = document.getElementById('sidebarCategories');
   if (!ul) return;
+  hideCategoryFlyout();
   const cats = getUniqueCategories();
-  const cur = (document.getElementById('catalogCategory')?.value || '').trim();
-  const rows = [
-    { value: '', label: 'Todas las categorías', count: products.length },
-    ...cats.map(c => ({
-      value: c,
-      label: c,
-      count: products.filter(p => (p.cat || '').toLowerCase() === c.toLowerCase()).length
-    }))
-  ];
-  ul.innerHTML = rows.map(row => {
-    const active = (row.value === '' && cur === '') || (row.value !== '' && row.value === cur);
-    return `<li>
-      <button type="button" class="sidebar-cat${active ? ' active' : ''}" data-cat="${escapeAttr(row.value)}">
-        <span class="sidebar-cat-label">${escapeHtml(row.label)}</span>
-        <span class="sidebar-cat-count" aria-label="${row.count} productos">${row.count}</span>
+  const curCat = (document.getElementById('catalogCategory')?.value || '').trim();
+  const curSub = (document.getElementById('catalogSubcategory')?.value || '').trim();
+
+  const todasActive = !curCat && !curSub;
+  let html = `<li>
+    <button type="button" class="sidebar-cat sidebar-cat--all${todasActive ? ' active' : ''}" data-cat="" data-sub="">
+      <span class="sidebar-cat-ico" aria-hidden="true">⌂</span>
+      <span class="sidebar-cat-label">Todas las categorías</span>
+      <span class="sidebar-cat-meta"><span class="sidebar-cat-count" aria-label="${products.length} productos">${products.length}</span></span>
+    </button>
+  </li>`;
+
+  cats.forEach(cat => {
+    const subs = getSubcategoriesForCategory(cat);
+    const countAll = products.filter(p => (p.cat || '').toLowerCase() === cat.toLowerCase()).length;
+    const parentActive = curCat === cat && !curSub;
+    const hasSubs = subs.length > 0;
+    html += `<li class="sidebar-cat-group">
+      <button type="button" class="sidebar-cat sidebar-cat--parent${parentActive ? ' active' : ''}${hasSubs ? ' has-subs' : ''}" data-cat="${escapeAttr(cat)}" data-sub=""${hasSubs ? ' data-has-subs="1"' : ''}>
+        <span class="sidebar-cat-ico" aria-hidden="true">${getCategoryIcon(cat)}</span>
+        <span class="sidebar-cat-label">${escapeHtml(cat)}</span>
+        <span class="sidebar-cat-meta">
+          <span class="sidebar-cat-count" aria-label="${countAll} productos">${countAll}</span>
+          ${hasSubs ? '<span class="sidebar-cat-chev" aria-hidden="true">›</span>' : ''}
+        </span>
       </button>
     </li>`;
-  }).join('');
+  });
+
+  ul.innerHTML = html;
+  bindSidebarFlyoutTriggers();
 }
 
 function updateSidebarCategoryActive() {
-  const cur = (document.getElementById('catalogCategory')?.value || '').trim();
+  const curCat = (document.getElementById('catalogCategory')?.value || '').trim();
+  const curSub = (document.getElementById('catalogSubcategory')?.value || '').trim();
   document.querySelectorAll('#sidebarCategories .sidebar-cat').forEach(btn => {
-    const v = (btn.getAttribute('data-cat') || '').trim();
-    const on = (v === '' && cur === '') || (v !== '' && v === cur);
+    const c = (btn.getAttribute('data-cat') || '').trim();
+    const s = (btn.getAttribute('data-sub') || '').trim();
+    let on = false;
+    if (!c && !s) on = !curCat && !curSub;
+    else if (c && !s) on = curCat === c && !curSub;
+    else on = curCat === c && curSub === s;
     btn.classList.toggle('active', on);
+  });
+  document.querySelectorAll('#sidebarCategories .sidebar-cat--parent').forEach(btn => {
+    const c = (btn.getAttribute('data-cat') || '').trim();
+    btn.classList.toggle('has-sub-filter', !!curSub && curCat === c);
   });
 }
 
-function selectCategoryFilter(rawCat) {
-  const cat = rawCat == null ? '' : String(rawCat);
+function selectCatalogFilter(rawCat, rawSub) {
+  hideCategoryFlyout();
+  const cat = rawCat == null ? '' : String(rawCat).trim();
+  let sub = rawSub == null ? '' : String(rawSub).trim();
+  if (!cat) sub = '';
   const ce = document.getElementById('catalogCategory');
+  const su = document.getElementById('catalogSubcategory');
   if (ce) ce.value = cat;
+  if (su) su.value = sub;
   PAGINATION_CONFIG.currentPage = 1;
   renderProducts();
   updateSidebarCategoryActive();
@@ -348,6 +498,7 @@ function selectCategoryFilter(rawCat) {
   if (sec) sec.scrollIntoView({ behavior: 'instant', block: 'start' });
   closeSidebarMobile();
 }
+
 
 function setSidebarOpen(open) {
   const sb = document.getElementById('sidebar');
@@ -374,6 +525,7 @@ function toggleSidebar() {
 }
 
 function closeSidebarMobile() {
+  hideCategoryFlyout();
   setSidebarOpen(false);
 }
 
@@ -397,8 +549,10 @@ function renderProducts() {
   if (!grid) return;
   const se       = document.getElementById('catalogSearch');
   const ce       = document.getElementById('catalogCategory');
+  const su       = document.getElementById('catalogSubcategory');
   const query    = se?.value ? se.value.trim() : '';
   const category = ce?.value ? ce.value.trim() : '';
+  const subcat   = su?.value ? su.value.trim() : '';
 
   const pc = document.getElementById('productsCount');
   if (pc) {
@@ -410,7 +564,7 @@ function renderProducts() {
     if (total > 0) {
       pc.innerHTML = `<span class="count-label">Página</span><span class="count-current">${cp}</span>
         <span class="count-range">${start}-${end}</span>
-        ${!category && !query ? `<span class="count-label">Total:</span>
+        ${!category && !subcat && !query ? `<span class="count-label">Total:</span>
         <span class="categoria-badge" style="background:var(--rojo);color:#fff;padding:0.2rem 0.7rem;border-radius:20px;font-size:0.75rem;font-weight:600;">${total} productos</span>` : ''}`;
       pc.style.display = 'inline-flex';
     } else { pc.style.display = 'none'; }
@@ -420,13 +574,13 @@ function renderProducts() {
   const cn = document.getElementById('categoryName');
   if (ca && cn) {
     if (category) {
-      const count = products.filter(p => (p.cat||'').toLowerCase() === category.toLowerCase()).length;
-      cn.textContent = category + ' (' + count + ' productos)';
+      const label = subcat ? `${category} · ${subcat}` : category;
+      cn.textContent = `${label} (${filtered.length} productos)`;
       ca.style.display = 'inline-flex';
     } else { ca.style.display = 'none'; }
   }
 
-  if (filtered.length === 0 && (query || category)) {
+  if (filtered.length === 0 && (query || category || subcat)) {
     grid.innerHTML = `<div class="catalog-empty" style="grid-column:1/-1;text-align:center;padding:3rem 2rem;background:var(--bg3);border:1px solid var(--borde);border-radius:12px;">
       <p style="font-size:1rem;color:var(--texto);margin-bottom:.5rem;">No hay productos con los filtros seleccionados.</p>
       <p style="font-size:.85rem;color:var(--muted);">Cambia la categoría o el texto de búsqueda.</p></div>`;
@@ -464,7 +618,7 @@ function renderProducts() {
               ${hasMedia ? `<span class="prod-gallery-count">${mediaIcon} ${mediaCount}</span>` : ''}
             </div>
             <div class="prod-body">
-              <div class="prod-cat">${escapeHtml(p.cat)}</div>
+              <div class="prod-cat">${escapeHtml(p.cat)}${p.subcat ? ` <span class="prod-sub">· ${escapeHtml(p.subcat)}</span>` : ''}</div>
               <div class="prod-name">${escapeHtml(p.name)}</div>
               <div class="prod-desc">${escapeHtml(p.desc)}</div>
               <div class="prod-specs">${(p.tags||[]).map(t=>`<span class="spec-tag">${escapeHtml(t)}</span>`).join('')}</div>
@@ -526,6 +680,25 @@ function setupCatalogFilters() {
   }
   if (ce) {
     ce.addEventListener('change', () => {
+      const subEl = document.getElementById('catalogSubcategory');
+      if (subEl) {
+        const catNow = (ce.value || '').trim();
+        if (!catNow) subEl.value = '';
+        else {
+          const ok = getSubcategoriesForCategory(catNow).map(s => s.toLowerCase());
+          if (!ok.includes((subEl.value || '').trim().toLowerCase())) subEl.value = '';
+        }
+      }
+      PAGINATION_CONFIG.currentPage = 1;
+      updateSidebarCategoryActive();
+      renderProducts();
+      const p = document.getElementById('products');
+      if (p) p.scrollIntoView({ behavior: 'instant' });
+    });
+  }
+  const subSel = document.getElementById('catalogSubcategory');
+  if (subSel) {
+    subSel.addEventListener('change', () => {
       PAGINATION_CONFIG.currentPage = 1;
       updateSidebarCategoryActive();
       renderProducts();
@@ -637,7 +810,7 @@ function openModal(id) {
 
   document.getElementById('modalInfo').innerHTML = `
     <span class="modal-badge">${escapeHtml(p.badge)}</span>
-    <div class="modal-cat">${escapeHtml(p.cat)}</div>
+    <div class="modal-cat">${escapeHtml(p.cat)}${p.subcat ? ` <span class="modal-subcat">· ${escapeHtml(p.subcat)}</span>` : ''}</div>
     <div class="modal-name">${escapeHtml(p.name)}</div>
     <div class="modal-desc">${escapeHtml(p.desc)}</div>
     <table class="modal-tabla">
@@ -940,11 +1113,35 @@ document.addEventListener('DOMContentLoaded', function () {
     sidebarCatUl.addEventListener('click', e => {
       const btn = e.target.closest('.sidebar-cat');
       if (!btn) return;
-      selectCategoryFilter(btn.getAttribute('data-cat') || '');
+      const cat = btn.getAttribute('data-cat') || '';
+      const sub = btn.getAttribute('data-sub') || '';
+      const tapFlyout = window.matchMedia('(max-width: 1024px)').matches;
+      if (btn.classList.contains('sidebar-cat--parent') && btn.getAttribute('data-has-subs') === '1' && tapFlyout) {
+        const fly = document.getElementById('sidebarFlyout');
+        const openSame = fly?.classList.contains('is-open') && fly?.dataset.openCat === cat;
+        if (!openSame) {
+          if (fly) fly.dataset.openCat = cat;
+          showCategoryFlyout(btn);
+          return;
+        }
+      }
+      selectCatalogFilter(cat, sub);
+    });
+  }
+
+  const sidebarFlyout = document.getElementById('sidebarFlyout');
+  if (sidebarFlyout) {
+    sidebarFlyout.addEventListener('mouseenter', clearSidebarFlyoutHideTimer);
+    sidebarFlyout.addEventListener('mouseleave', scheduleSidebarFlyoutHide);
+    sidebarFlyout.addEventListener('click', e => {
+      const row = e.target.closest('.sidebar-flyout-row');
+      if (!row) return;
+      selectCatalogFilter(row.getAttribute('data-cat') || '', row.getAttribute('data-sub') || '');
     });
   }
 
   window.addEventListener('resize', () => {
+    hideCategoryFlyout();
     if (!window.matchMedia('(max-width: 1024px)').matches) closeSidebarMobile();
   });
 
