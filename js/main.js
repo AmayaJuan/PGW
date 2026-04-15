@@ -184,7 +184,7 @@ async function loadProducts() {
       return {
         // ID único lowercase-kebab-case desde name
         id:        p.name.toLowerCase().replace(/\s+/g, '-'),
-        // Orden estable desde JSON (id numérico)
+        // Id numérico original JSON (referencia; el listado se ordena por nombre)
         nid,
         // Nombre en mayúsculas
         name:      p.name.toUpperCase(),
@@ -211,10 +211,9 @@ async function loadProducts() {
         doc:       p.document || null // PDF ficha técnica opcional
       };
     });
-    products.sort((a, b) => {
-      if (a.nid !== b.nid) return a.nid - b.nid;
-      return String(a.name).localeCompare(String(b.name), 'es', { sensitivity: 'base', numeric: true });
-    });
+    products.sort((a, b) =>
+      String(a.name).localeCompare(String(b.name), 'es', { sensitivity: 'base', numeric: true })
+    );
     // Renderiza banner con productos cargados
     renderBanner();
     fillCategorySelect();
