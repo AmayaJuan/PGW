@@ -1443,9 +1443,9 @@ footer p { font-size: 0.72rem; color: var(--muted); }
 
   .prod-btn { padding: 0.55rem 1rem; min-height: 36px; }
 
-  /* Banner — poco padding lateral; el JS usa clientWidth del wrap para llenar casi todo */
+  /* Banner — poco padding; alto del bloque lo acota el JS (misma fila para todos los slides) */
   .banner-wrap {
-    padding: 0.9rem max(0.35rem, env(safe-area-inset-left, 0px)) 0.9rem max(0.35rem, env(safe-area-inset-right, 0px));
+    padding: 0.55rem max(0.35rem, env(safe-area-inset-left, 0px)) 0.65rem max(0.35rem, env(safe-area-inset-right, 0px));
   }
   .banner-track { animation: bannerScroll 62s linear infinite; }
   .banner-item {

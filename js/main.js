@@ -280,40 +280,48 @@ function getBannerSlideTargetWidth() {
   return Math.max(100, slot);
 }
 
-/** Ajusta cada .banner-item al ratio real de su imagen (sin bandas) respetando ancho CSS y tope de altura. */
-function layoutBannerItemFromImage(img) {
-  const item = img.closest('.banner-item');
-  if (!item || img.naturalWidth < 2 || img.naturalHeight < 2) return;
+/**
+ * Todos los slides comparten el mismo alto de fila (mínimo necesario, con tope),
+ * para que el flex del carrusel no use la altura del banner más alto y deje un bloque negro enorme debajo.
+ */
+function relayoutAllBannerItems() {
+  const track = document.getElementById('bannerTrack');
+  if (!track) return;
+  const imgs = [...track.querySelectorAll('.banner-item img')];
+  const loaded = imgs.filter(img => img.naturalWidth > 1);
+  if (!loaded.length) return;
+
   const vw = window.innerWidth || document.documentElement.clientWidth || 400;
-  const nw = img.naturalWidth;
-  const nh = img.naturalHeight;
-  item.style.width = '';
-  item.style.height = '';
-  item.style.flex = '';
-  void item.offsetWidth;
+  const vh = window.visualViewport?.height || window.innerHeight;
   let w = getBannerSlideTargetWidth();
   if (vw > 768) {
-    const rectW = item.getBoundingClientRect().width;
-    if (rectW > 60 && rectW <= vw + 20) {
-      w = Math.min(w, Math.round(rectW));
+    const probe = track.querySelector('.banner-item');
+    if (probe) {
+      probe.style.width = '';
+      probe.style.flex = '';
+      void probe.offsetWidth;
+      const rw = probe.getBoundingClientRect().width;
+      if (rw > 60 && rw <= vw + 24) w = Math.min(w, Math.round(rw));
     }
   }
-  const vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
-  const maxH = Math.min(vh * 0.88, 760);
-  let h = (w * nh) / nw;
-  if (h > maxH) {
-    h = maxH;
-    w = (h * nw) / nh;
-  }
-  w = Math.round(Math.max(80, w));
-  h = Math.round(Math.max(60, h));
-  item.style.width = `${w}px`;
-  item.style.height = `${h}px`;
-  item.style.flex = `0 0 ${w}px`;
+
+  const rowCap = vw <= 768 ? Math.min(vh * 0.58, 520) : Math.min(vh * 0.88, 760);
+
+  let maxH = 0;
+  loaded.forEach(img => {
+    maxH = Math.max(maxH, (w * img.naturalHeight) / img.naturalWidth);
+  });
+  const H = Math.round(Math.min(Math.max(maxH, 120), rowCap));
+
+  track.querySelectorAll('.banner-item').forEach(item => {
+    item.style.width = `${Math.round(w)}px`;
+    item.style.flex = `0 0 ${Math.round(w)}px`;
+    item.style.height = `${H}px`;
+  });
 }
 
 function bindBannerItemImage(img) {
-  const run = () => layoutBannerItemFromImage(img);
+  const run = () => relayoutAllBannerItems();
   if (img.complete && img.naturalWidth > 1) run();
   else img.addEventListener('load', run, { once: true });
 }
@@ -323,12 +331,6 @@ function initBannerItemSizing(track) {
   track.querySelectorAll('.banner-item img').forEach(bindBannerItemImage);
   requestAnimationFrame(() => {
     requestAnimationFrame(() => relayoutAllBannerItems());
-  });
-}
-
-function relayoutAllBannerItems() {
-  document.querySelectorAll('#bannerTrack .banner-item img').forEach(img => {
-    if (img.naturalWidth > 1) layoutBannerItemFromImage(img);
   });
 }
 
