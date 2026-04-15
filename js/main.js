@@ -22,14 +22,8 @@ const WP_SVG = `<svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.75
     domCache.navMobileOverlay   = document.getElementById('navMobileOverlay');
     // Cache input búsqueda catálogo desktop
     domCache.catalogSearch      = document.getElementById('catalogSearch');
-    // Cache selector categoría desktop
+    // Cache selector categoría (sincronizado con sidebar; puede estar oculto)
     domCache.catalogCategory    = document.getElementById('catalogCategory');
-    // Cache contenedor caja búsqueda navbar
-    domCache.navSearchBox       = document.getElementById('navSearchBox');
-    // Cache botón trigger búsqueda navbar
-    domCache.navSearchTrigger   = document.getElementById('navSearchTrigger');
-    // Cache selector categoría menú móvil
-    domCache.mobileMenuCategory = document.getElementById('mobileMenuCategory');
     // Cache input búsqueda menú móvil
     domCache.mobileMenuSearch   = document.getElementById('mobileMenuSearch');
     // Cache grid contenedor tarjetas productos
@@ -210,6 +204,8 @@ async function loadProducts() {
     });
     // Renderiza banner con productos cargados
     renderBanner();
+    fillCategorySelect();
+    renderSidebarCategories();
     // Renderiza grid productos inicial
     renderProducts();
   } catch (e) {
@@ -283,20 +279,111 @@ function getFilteredProducts() {
   return list;
 }
 function getUniqueCategories() {
-  const fixed = ['Woofer','Drivers','Cabinas'];
-  const from  = [];
-  products.forEach(p => { if (p.cat && !from.includes(p.cat)) from.push(p.cat); });
-  return [...new Set([...fixed, ...from])];
+  const set = new Set();
+  products.forEach(p => {
+    const c = (p.cat || '').trim();
+    if (c) set.add(c);
+  });
+  const preferred = ['Cabinas', 'Woofer', 'Drivers'];
+  const rest = [...set].filter(c => !preferred.includes(c)).sort((a, b) => a.localeCompare(b, 'es'));
+  const ordered = [];
+  preferred.forEach(p => { if (set.has(p)) ordered.push(p); });
+  return [...ordered, ...rest];
 }
 function fillCategorySelect() {
-  const sel  = document.getElementById('catalogCategory');
-  const mob  = document.getElementById('mobileMenuCategory');
-  const cur  = sel?.value || '';
+  const sel = document.getElementById('catalogCategory');
+  if (!sel) return;
+  const cur = sel.value || '';
   const cats = getUniqueCategories();
   const html = '<option value="">Todas las categorías</option>' +
     cats.map(c => `<option value="${escapeAttr(c)}">${escapeHtml(c)}</option>`).join('');
-  if (sel) { sel.innerHTML = html; if (cats.includes(cur)) sel.value = cur; }
-  if (mob) mob.innerHTML = html;
+  sel.innerHTML = html;
+  if (!cur) sel.value = '';
+  else if (cats.includes(cur)) sel.value = cur;
+  else sel.value = '';
+}
+
+function renderSidebarCategories() {
+  const ul = document.getElementById('sidebarCategories');
+  if (!ul) return;
+  const cats = getUniqueCategories();
+  const cur = (document.getElementById('catalogCategory')?.value || '').trim();
+  const rows = [
+    { value: '', label: 'Todas las categorías', count: products.length },
+    ...cats.map(c => ({
+      value: c,
+      label: c,
+      count: products.filter(p => (p.cat || '').toLowerCase() === c.toLowerCase()).length
+    }))
+  ];
+  ul.innerHTML = rows.map(row => {
+    const active = (row.value === '' && cur === '') || (row.value !== '' && row.value === cur);
+    return `<li>
+      <button type="button" class="sidebar-cat${active ? ' active' : ''}" data-cat="${escapeAttr(row.value)}">
+        <span class="sidebar-cat-label">${escapeHtml(row.label)}</span>
+        <span class="sidebar-cat-count" aria-label="${row.count} productos">${row.count}</span>
+      </button>
+    </li>`;
+  }).join('');
+}
+
+function updateSidebarCategoryActive() {
+  const cur = (document.getElementById('catalogCategory')?.value || '').trim();
+  document.querySelectorAll('#sidebarCategories .sidebar-cat').forEach(btn => {
+    const v = (btn.getAttribute('data-cat') || '').trim();
+    const on = (v === '' && cur === '') || (v !== '' && v === cur);
+    btn.classList.toggle('active', on);
+  });
+}
+
+function selectCategoryFilter(rawCat) {
+  const cat = rawCat == null ? '' : String(rawCat);
+  const ce = document.getElementById('catalogCategory');
+  if (ce) ce.value = cat;
+  PAGINATION_CONFIG.currentPage = 1;
+  renderProducts();
+  updateSidebarCategoryActive();
+  document.querySelectorAll('.sidebar-section .sidebar-link').forEach(a => a.classList.remove('active'));
+  const sec = document.getElementById('products');
+  if (sec) sec.scrollIntoView({ behavior: 'instant', block: 'start' });
+  closeSidebarMobile();
+}
+
+function setSidebarOpen(open) {
+  const sb = document.getElementById('sidebar');
+  const ov = document.getElementById('sidebarOverlay');
+  const btn = document.getElementById('navSidebarToggle');
+  if (!sb) return;
+  sb.classList.toggle('open', open);
+  if (ov) {
+    ov.classList.toggle('open', open);
+    ov.setAttribute('aria-hidden', open ? 'false' : 'true');
+  }
+  if (btn) {
+    btn.classList.toggle('active', open);
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  }
+  const mobile = window.matchMedia('(max-width: 1024px)').matches;
+  document.body.style.overflow = mobile && open ? 'hidden' : '';
+}
+
+function toggleSidebar() {
+  const sb = document.getElementById('sidebar');
+  if (!sb) return;
+  setSidebarOpen(!sb.classList.contains('open'));
+}
+
+function closeSidebarMobile() {
+  setSidebarOpen(false);
+}
+
+function handleSidebarLink(e, sectionId) {
+  e.preventDefault();
+  closeSidebarMobile();
+  const target = document.getElementById(sectionId);
+  if (target) target.scrollIntoView({ behavior: 'instant', block: 'start' });
+  document.querySelectorAll('.sidebar-section .sidebar-link').forEach(a => a.classList.remove('active'));
+  e.currentTarget.classList.add('active');
 }
 function escapeHtml(t) { const d = document.createElement('div'); d.textContent = t||''; return d.innerHTML; }
 function escapeAttr(t) { return String(t||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
@@ -428,27 +515,24 @@ function changePage(page) {
 
 function setupCatalogFilters() {
   fillCategorySelect();
-  const se    = document.getElementById('catalogSearch');
-  const ce    = document.getElementById('catalogCategory');
-  const mob_c = document.getElementById('mobileMenuCategory');
+  const se = document.getElementById('catalogSearch');
+  const ce = document.getElementById('catalogCategory');
   const mob_s = document.getElementById('mobileMenuSearch');
-  const sb    = document.getElementById('navSearchBox');
-  const st    = document.getElementById('navSearchTrigger');
   if (se) {
     se.addEventListener('input', () => { PAGINATION_CONFIG.currentPage = 1; renderProducts(); });
     se.addEventListener('keydown', e => {
       if (e.key === 'Enter') { e.preventDefault(); renderProducts(); document.getElementById('products').scrollIntoView({ behavior: 'instant' }); }
     });
   }
-  if (ce) ce.addEventListener('change', () => { PAGINATION_CONFIG.currentPage = 1; renderProducts(); document.getElementById('products').scrollIntoView({ behavior: 'instant' }); });
-  if (mob_c) mob_c.addEventListener('change', () => {
-    const nl = document.getElementById('navLinks');
-    if (nl && nl.classList.contains('open')) toggleMobileMenu();
-    if (ce) ce.value = mob_c.value;
-    PAGINATION_CONFIG.currentPage = 1;
-    renderProducts();
-    document.getElementById('products').scrollIntoView({ behavior: 'instant' });
-  });
+  if (ce) {
+    ce.addEventListener('change', () => {
+      PAGINATION_CONFIG.currentPage = 1;
+      updateSidebarCategoryActive();
+      renderProducts();
+      const p = document.getElementById('products');
+      if (p) p.scrollIntoView({ behavior: 'instant' });
+    });
+  }
   if (mob_s) {
     mob_s.addEventListener('input', () => { if (se) { se.value = mob_s.value; PAGINATION_CONFIG.currentPage = 1; renderProducts(); } });
     mob_s.addEventListener('keydown', e => {
@@ -460,11 +544,6 @@ function setupCatalogFilters() {
         document.getElementById('products').scrollIntoView({ behavior: 'instant' });
       }
     });
-  }
-  if (sb && st && se) {
-    st.addEventListener('click', () => { const exp = sb.classList.toggle('expanded'); st.setAttribute('aria-expanded', exp); if (exp) se.focus(); });
-    se.addEventListener('blur', () => { setTimeout(() => { sb.classList.remove('expanded'); st.setAttribute('aria-expanded', 'false'); }, 180); });
-    se.addEventListener('keydown', e => { if (e.key === 'Escape') { se.blur(); sb.classList.remove('expanded'); st.setAttribute('aria-expanded', 'false'); } });
   }
 }
 
@@ -855,6 +934,19 @@ document.addEventListener('DOMContentLoaded', function () {
   setupCatalogFilters();
   initActiveMenuLink();
   initZoomControls();
+
+  const sidebarCatUl = document.getElementById('sidebarCategories');
+  if (sidebarCatUl) {
+    sidebarCatUl.addEventListener('click', e => {
+      const btn = e.target.closest('.sidebar-cat');
+      if (!btn) return;
+      selectCategoryFilter(btn.getAttribute('data-cat') || '');
+    });
+  }
+
+  window.addEventListener('resize', () => {
+    if (!window.matchMedia('(max-width: 1024px)').matches) closeSidebarMobile();
+  });
 
   const obs = new IntersectionObserver(entries => {
     entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });

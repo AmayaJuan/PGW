@@ -52,26 +52,17 @@
     </a>
   </div>
 
-  <!-- Desktop catalog controls -->
+  <!-- Catálogo: búsqueda en barra; categorías en el sidebar -->
   <div class="nav-catalog-controls">
-    <div class="nav-search-box" id="navSearchBox">
-      <button type="button" class="nav-search-trigger" id="navSearchTrigger" title="Buscar" aria-label="Abrir búsqueda" aria-expanded="false" aria-controls="catalogSearch">
-        <span class="nav-search-icon" aria-hidden="true">🔍</span>
-      </button>
-      <input type="search" id="catalogSearch" class="nav-search-input" placeholder="Buscar..." autocomplete="off" aria-label="Buscar productos"/>
+    <div class="nav-search-field">
+      <span class="nav-search-icon" aria-hidden="true">🔍</span>
+      <input type="search" id="catalogSearch" class="nav-search-input" placeholder="Buscar en catálogo…" autocomplete="off" aria-label="Buscar productos"/>
     </div>
-    <select id="catalogCategory" class="nav-category-select" title="Filtrar por categoría" aria-label="Filtrar por categoría">
-      <option value="">Todas las categorías</option>
-    </select>
   </div>
 
-  <!-- Mobile controls -->
   <div class="nav-mobile-controls">
-    <input type="search" id="mobileMenuSearch" class="nav-mobile-search-input" placeholder="Buscar..." autocomplete="off" aria-label="Buscar productos"/>
-    <select id="mobileMenuCategory" class="nav-mobile-category-select">
-      <option value="">Categorías</option>
-    </select>
-    <button type="button" class="nav-sidebar-toggle" id="navSidebarToggle" onclick="toggleSidebar()" aria-label="Menú lateral">
+    <input type="search" id="mobileMenuSearch" class="nav-mobile-search-input" placeholder="Buscar…" autocomplete="off" aria-label="Buscar productos"/>
+    <button type="button" class="nav-sidebar-toggle" id="navSidebarToggle" onclick="toggleSidebar()" aria-expanded="false" aria-controls="sidebar" aria-label="Abrir menú de categorías">
       <span></span><span></span><span></span>
     </button>
   </div>
@@ -82,22 +73,26 @@
   </a>
 </nav>
 
+<!-- Estado del filtro por categoría (sincronizado con el sidebar; sin duplicar UI en la barra) -->
+<select id="catalogCategory" class="visually-hidden" aria-hidden="true" tabindex="-1" title="Categoría seleccionada"></select>
+
 <!-- SIDEBAR -->
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-header">
     <h3>Catálogo</h3>
   </div>
-  <nav class="sidebar-nav" aria-label="Navegación secundaria">
-    <ul id="sidebarCategories">
-      <!-- Dynamic categories populated by JS -->
-    </ul>
+  <nav class="sidebar-nav" aria-label="Categorías del catálogo">
+    <p class="sidebar-hint">Elegí una familia de producto</p>
+    <ul id="sidebarCategories"></ul>
     <hr class="sidebar-divider">
+    <p class="sidebar-section-label">Empresa</p>
     <ul class="sidebar-section">
       <li><a href="#nosotros" class="sidebar-link" onclick="handleSidebarLink(event, 'nosotros')">Nosotros</a></li>
       <li><a href="#contacto" class="sidebar-link" onclick="handleSidebarLink(event, 'contacto')">Contacto</a></li>
     </ul>
   </nav>
 </aside>
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebarMobile()" aria-hidden="true"></div>
 
 <!-- MAIN CONTENT -->
 <main id="main-content">
