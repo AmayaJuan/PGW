@@ -264,19 +264,38 @@ function rootRemPx() {
   return Number.isFinite(fs) && fs > 0 ? fs : 16;
 }
 
-/** Ancho del slide: en móvil casi todo el ancho útil del .banner-wrap (evita doble margen vw + padding). */
+/** Ancho útil dentro de .banner-wrap (rect − padding); evita desajuste 100vw vs caja real en móvil. */
+function getBannerInnerWidthPx(wrap) {
+  if (!wrap) return 0;
+  const cs = getComputedStyle(wrap);
+  const pl = parseFloat(cs.paddingLeft) || 0;
+  const pr = parseFloat(cs.paddingRight) || 0;
+  const w = wrap.getBoundingClientRect().width - pl - pr;
+  return w > 48 ? Math.floor(w) : 0;
+}
+
+/** Ancho del slide: en móvil = ancho interior real del wrap (no 100vw, que suele ser más ancho y rompe object-fit). */
 function getBannerSlideTargetWidth() {
   const vw = window.innerWidth || document.documentElement.clientWidth || 400;
   const rem = rootRemPx();
   const wrap = document.querySelector('.banner-wrap');
-  const inner = wrap ? wrap.clientWidth : vw;
 
   if (vw <= 768) {
-    return Math.max(100, Math.floor(inner));
+    const inner = getBannerInnerWidthPx(wrap);
+    if (inner > 48) return Math.max(100, inner);
+    if (wrap) {
+      const cs = getComputedStyle(wrap);
+      const pl = parseFloat(cs.paddingLeft) || 0;
+      const pr = parseFloat(cs.paddingRight) || 0;
+      const inner2 = Math.floor(wrap.clientWidth - pl - pr);
+      if (inner2 > 48) return Math.max(100, inner2);
+    }
+    return Math.max(100, Math.floor(vw));
   }
 
+  const inner = wrap ? getBannerInnerWidthPx(wrap) : 0;
   let slot = Math.min(820, vw - 2.75 * rem);
-  slot = Math.floor(Math.min(slot, inner - 2));
+  slot = Math.floor(Math.min(slot, inner > 48 ? inner : wrap?.clientWidth || vw));
   return Math.max(100, slot);
 }
 
@@ -307,7 +326,11 @@ function relayoutAllBannerItems() {
   const track = document.getElementById('bannerTrack');
   if (!track) return;
   const vw = window.innerWidth || document.documentElement.clientWidth || 400;
-  const vh = window.visualViewport?.height || window.innerHeight;
+  const vh = Math.max(
+    window.innerHeight || 0,
+    window.visualViewport?.height || 0,
+    document.documentElement?.clientHeight || 0
+  ) || 600;
   let w = getBannerSlideTargetWidth();
   if (vw > 768) {
     const probe = track.querySelector('.banner-item');
@@ -320,18 +343,26 @@ function relayoutAllBannerItems() {
     }
   }
 
-  const rowCap = vw <= 768 ? Math.min(vh * 0.72, 640) : Math.min(vh * 0.94, 920);
+  const rowCap = vw <= 768 ? Math.min(vh * 0.82, 780) : Math.min(vh * 0.94, 920);
   const maxH = getBannerMaxDisplayHeightForWidth(track, w);
 
   let H;
   if (maxH < 1) {
     if (vw <= 768) {
-      H = Math.round(Math.min(Math.max(vw * 0.62, 240), rowCap));
+      H = Math.round(Math.min(Math.max(vw * 0.72, 280), rowCap));
     } else {
       H = Math.round(Math.min(380, rowCap));
     }
   } else {
-    H = Math.round(Math.min(Math.max(maxH, 140), rowCap));
+    H = Math.round(Math.min(Math.max(maxH, vw <= 768 ? 160 : 140), rowCap));
+  }
+
+  const wrap = track.parentElement?.classList?.contains('banner-wrap')
+    ? track.parentElement
+    : document.querySelector('.banner-wrap');
+  if (wrap) {
+    if (vw <= 768) wrap.style.setProperty('--banner-slide-w', `${Math.round(w)}px`);
+    else wrap.style.removeProperty('--banner-slide-w');
   }
 
   track.querySelectorAll('.banner-item').forEach(item => {
@@ -1548,6 +1579,7 @@ document.addEventListener('DOMContentLoaded', function () {
     scheduleBannerRelayout();
   });
   window.addEventListener('orientationchange', () => scheduleBannerRelayout());
+  window.addEventListener('load', () => scheduleBannerRelayout(), { once: true });
   if (window.visualViewport) {
     window.visualViewport.addEventListener('resize', () => scheduleBannerRelayout());
   }
