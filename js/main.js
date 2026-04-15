@@ -264,19 +264,19 @@ function rootRemPx() {
   return Number.isFinite(fs) && fs > 0 ? fs : 16;
 }
 
-/** Misma lógica que styles.css (.banner-item en desktop / 1024 / 768 / 480 / 360). */
+/** Ancho del slide: en móvil casi todo el ancho útil del .banner-wrap (evita doble margen vw + padding). */
 function getBannerSlideTargetWidth() {
   const vw = window.innerWidth || document.documentElement.clientWidth || 400;
   const rem = rootRemPx();
   const wrap = document.querySelector('.banner-wrap');
   const inner = wrap ? wrap.clientWidth : vw;
-  let slot;
-  if (vw <= 360) slot = vw - 2 * rem;
-  else if (vw <= 480) slot = vw - 2.25 * rem;
-  else if (vw <= 768) slot = vw - 2.75 * rem;
-  else slot = Math.min(600, vw - 3.5 * rem);
-  slot = Math.floor(slot);
-  slot = Math.min(slot, Math.max(80, Math.floor(inner - 4)));
+
+  if (vw <= 768) {
+    return Math.max(100, Math.floor(inner - 2));
+  }
+
+  let slot = Math.min(600, vw - 3.5 * rem);
+  slot = Math.floor(Math.min(slot, inner - 4));
   return Math.max(100, slot);
 }
 
@@ -292,9 +292,11 @@ function layoutBannerItemFromImage(img) {
   item.style.flex = '';
   void item.offsetWidth;
   let w = getBannerSlideTargetWidth();
-  const rectW = item.getBoundingClientRect().width;
-  if (rectW > 60 && rectW <= vw + 20) {
-    w = Math.min(w, Math.round(rectW));
+  if (vw > 768) {
+    const rectW = item.getBoundingClientRect().width;
+    if (rectW > 60 && rectW <= vw + 20) {
+      w = Math.min(w, Math.round(rectW));
+    }
   }
   const vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
   const maxH = Math.min(vh * 0.88, 760);
