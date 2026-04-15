@@ -735,6 +735,9 @@ body { background: var(--bg); color: var(--texto); font-family: 'Nunito', sans-s
 .marca-item { font-family: 'Rajdhani', sans-serif; font-size: 0.82rem; font-weight: 700; letter-spacing: 0.2em; color: var(--muted); text-transform: uppercase; white-space: nowrap; padding: 0 1rem; }
 
 /* ── SECCIONES ── */
+#products {
+  scroll-margin-top: calc(4.75rem + env(safe-area-inset-top, 0px));
+}
 .sec { padding: 5rem 3rem; background: var(--bg2); }
 .sec-alt { padding: 5rem 3rem; background: var(--bg); }
 .sec-label { font-size: 0.68rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--rojo); margin-bottom: .5rem; }

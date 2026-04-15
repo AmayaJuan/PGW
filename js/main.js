@@ -805,6 +805,29 @@ function updateSidebarCategoryActive() {
   }
 }
 
+/** Scroll del documento a #products bajo la navbar fija (móvil y escritorio). */
+function scrollWindowToProductsSection() {
+  const products = document.getElementById('products');
+  if (!products) return;
+  const nav = document.getElementById('mainNavbar');
+  const pad = 12;
+
+  function run() {
+    const navH = nav ? Math.ceil(nav.getBoundingClientRect().height) : 0;
+    const y = products.getBoundingClientRect().top + window.pageYOffset - navH - pad;
+    window.scrollTo({ top: Math.max(0, Math.round(y)), left: 0, behavior: 'auto' });
+  }
+
+  run();
+  requestAnimationFrame(() => {
+    run();
+    requestAnimationFrame(run);
+  });
+  setTimeout(run, 0);
+  setTimeout(run, 80);
+  setTimeout(run, 200);
+}
+
 function selectCatalogFilter(rawCat, rawSub) {
   hideCategoryFlyout();
   const cat = rawCat == null ? '' : String(rawCat).trim();
@@ -820,15 +843,8 @@ function selectCatalogFilter(rawCat, rawSub) {
   renderProducts();
   updateSidebarCategoryActive();
   document.querySelectorAll('.sidebar-section .sidebar-link').forEach(a => a.classList.remove('active'));
-  closeSidebarMobile();
-  const sec = document.getElementById('products');
-  if (sec) {
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        sec.scrollIntoView({ behavior: 'instant', block: 'start' });
-      });
-    });
-  }
+  closeSidebarMobile({ skipScrollRestore: true });
+  scrollWindowToProductsSection();
 }
 if (typeof window !== 'undefined') window.selectCatalogFilter = selectCatalogFilter;
 
@@ -853,7 +869,7 @@ function acquirePageScrollLock() {
   _pageScrollLockDepth++;
 }
 
-function releasePageScrollLock() {
+function releasePageScrollLock(opts = {}) {
   if (_pageScrollLockDepth <= 0) return;
   _pageScrollLockDepth--;
   if (_pageScrollLockDepth > 0) return;
@@ -864,10 +880,12 @@ function releasePageScrollLock() {
   document.body.style.left = '';
   document.body.style.right = '';
   document.body.style.width = '';
-  window.scrollTo(0, _pageScrollLockY);
+  if (!opts.skipScrollRestore) {
+    window.scrollTo(0, _pageScrollLockY);
+  }
 }
 
-function setSidebarOpen(open) {
+function setSidebarOpen(open, opts = {}) {
   const sb = document.getElementById('sidebar');
   const ov = document.getElementById('sidebarOverlay');
   const btn = document.getElementById('navSidebarToggle');
@@ -884,7 +902,7 @@ function setSidebarOpen(open) {
       btn.setAttribute('aria-expanded', open ? 'true' : 'false');
     }
     if (open) acquirePageScrollLock();
-    else releasePageScrollLock();
+    else releasePageScrollLock(opts);
   } else {
     sb.classList.remove('open');
     if (ov) {
@@ -895,7 +913,7 @@ function setSidebarOpen(open) {
       btn.classList.remove('active');
       btn.setAttribute('aria-expanded', 'false');
     }
-    releasePageScrollLock();
+    releasePageScrollLock(opts);
   }
 }
 
@@ -911,11 +929,11 @@ function toggleSidebar() {
   setSidebarOpen(!sb.classList.contains('open'));
 }
 
-function closeSidebarMobile() {
+function closeSidebarMobile(opts = {}) {
   hideCategoryFlyout();
   document.getElementById('mainNavbar')?.classList.remove('nav-search-open');
   document.getElementById('navMobileSearchToggle')?.setAttribute('aria-expanded', 'false');
-  setSidebarOpen(false);
+  setSidebarOpen(false, opts);
 }
 
 function handleSidebarLink(e, sectionId) {
