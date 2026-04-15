@@ -77,6 +77,8 @@ const WP_SVG = `<svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.75
     // Previene navegación por defecto del enlace
     e.preventDefault();
     hideCategoryFlyout();
+    document.getElementById('mainNavbar')?.classList.remove('nav-search-open');
+    document.getElementById('navMobileSearchToggle')?.setAttribute('aria-expanded', 'false');
     // Scroll suave instantáneo a posición 0 (top página)
     window.scrollTo({ top: 0, behavior: 'instant' });
     // Limpia clase 'active' de todos enlaces navegación
@@ -278,6 +280,12 @@ function getVideoEmbed(url) {
 function normFilterStr(s) {
   return String(s || '').trim().toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '');
 }
+function getRepresentativeImage(cat, subOptional) {
+  const c = normFilterStr(cat);
+  const s = subOptional ? normFilterStr(subOptional) : '';
+  const p = products.find(pr => normFilterStr(pr.cat) === c && (!s || normFilterStr(pr.subcat) === s));
+  return p?.imgs?.[0] || '';
+}
 function getProductSearchText(p) {
   return [p.name, p.cat, p.subcat, p.desc, (p.tags||[]).join(' '), (p.apps||[]).join(' ')]
     .join(' ').toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '');
@@ -373,6 +381,7 @@ function scheduleSidebarFlyoutHide() {
 
 function hideCategoryFlyout() {
   clearSidebarFlyoutHideTimer();
+  document.querySelectorAll('.sidebar-cat--parent.is-flyout-open').forEach(el => el.classList.remove('is-flyout-open'));
   const fly = document.getElementById('sidebarFlyout');
   if (!fly) return;
   fly.classList.remove('is-open', 'sidebar-flyout--sheet');
@@ -389,9 +398,33 @@ function showCategoryFlyout(anchorBtn) {
   if (!subs.length) return;
   const fly = document.getElementById('sidebarFlyout');
   const countAll = products.filter(p => (p.cat || '').toLowerCase() === cat.toLowerCase()).length;
-  fly.innerHTML = `
+  const isMobile = window.innerWidth <= 1024;
+  const imgAll = getRepresentativeImage(cat, '');
+  if (isMobile) {
+    fly.innerHTML = `
+      <div class="sidebar-flyout-title">${escapeHtml(cat)}</div>
+      <div class="sidebar-flyout-inner sidebar-flyout-inner--grid" role="group" aria-label="Subcategorías de ${escapeAttr(cat)}">
+        <button type="button" class="sidebar-flyout-tile" data-cat="${escapeAttr(cat)}" data-sub="">
+          <div class="sidebar-flyout-tile-img">${imgAll ? `<img src="${escapeAttr(imgAll)}" alt="" loading="lazy"/>` : '<span class="sidebar-flyout-placeholder" aria-hidden="true"></span>'}</div>
+          <span class="sidebar-flyout-pill">Ver todos</span>
+          <span class="sidebar-flyout-tile-n">${countAll}</span>
+        </button>
+        ${subs.map(sub => {
+    const n = products.filter(
+      p => (p.cat || '').toLowerCase() === cat.toLowerCase() && (p.subcat || '').trim().toLowerCase() === sub.toLowerCase()
+    ).length;
+    const img = getRepresentativeImage(cat, sub);
+    return `<button type="button" class="sidebar-flyout-tile" data-cat="${escapeAttr(cat)}" data-sub="${escapeAttr(sub)}">
+          <div class="sidebar-flyout-tile-img">${img ? `<img src="${escapeAttr(img)}" alt="" loading="lazy"/>` : '<span class="sidebar-flyout-placeholder" aria-hidden="true"></span>'}</div>
+          <span class="sidebar-flyout-pill">${escapeHtml(sub)}</span>
+          <span class="sidebar-flyout-tile-n">${n}</span>
+        </button>`;
+  }).join('')}
+      </div>`;
+  } else {
+    fly.innerHTML = `
     <div class="sidebar-flyout-title">${escapeHtml(cat)}</div>
-    <div class="sidebar-flyout-inner" role="group" aria-label="Subcategorías de ${escapeAttr(cat)}">
+    <div class="sidebar-flyout-inner sidebar-flyout-inner--list" role="group" aria-label="Subcategorías de ${escapeAttr(cat)}">
       <button type="button" class="sidebar-flyout-row" data-cat="${escapeAttr(cat)}" data-sub="">
         <span>Ver todos</span><span class="sidebar-flyout-n">${countAll}</span>
       </button>
@@ -404,7 +437,7 @@ function showCategoryFlyout(anchorBtn) {
       </button>`;
   }).join('')}
     </div>`;
-  const isMobile = window.innerWidth <= 1024;
+  }
   if (isMobile) {
     fly.classList.add('sidebar-flyout--sheet');
     fly.style.left = '50%';
@@ -412,7 +445,7 @@ function showCategoryFlyout(anchorBtn) {
     fly.style.transform = 'translateX(-50%)';
     fly.style.top = 'auto';
     fly.style.bottom = 'max(12px, env(safe-area-inset-bottom, 12px))';
-    fly.style.maxHeight = 'min(52vh, 380px)';
+    fly.style.maxHeight = 'min(78vh, 560px)';
   } else {
     fly.classList.remove('sidebar-flyout--sheet');
     const ar = anchorBtn.getBoundingClientRect();
@@ -432,6 +465,8 @@ function showCategoryFlyout(anchorBtn) {
   fly.dataset.openCat = cat;
   fly.classList.add('is-open');
   fly.setAttribute('aria-hidden', 'false');
+  document.querySelectorAll('.sidebar-cat--parent.is-flyout-open').forEach(el => el.classList.remove('is-flyout-open'));
+  anchorBtn.classList.add('is-flyout-open');
 }
 
 function onSidebarParentEnter(e) {
@@ -482,7 +517,7 @@ function renderSidebarCategories() {
         <span class="sidebar-cat-label">${escapeHtml(cat)}</span>
         <span class="sidebar-cat-meta">
           <span class="sidebar-cat-count" aria-label="${countAll} productos">${countAll}</span>
-          ${hasSubs ? '<span class="sidebar-cat-chev" aria-hidden="true">›</span>' : ''}
+          ${hasSubs ? '<span class="sidebar-cat-chev" aria-hidden="true"></span>' : ''}
         </span>
       </button>
     </li>`;
@@ -533,18 +568,31 @@ function setSidebarOpen(open) {
   const sb = document.getElementById('sidebar');
   const ov = document.getElementById('sidebarOverlay');
   const btn = document.getElementById('navSidebarToggle');
-  if (!sb) return;
-  sb.classList.toggle('open', open);
-  if (ov) {
-    ov.classList.toggle('open', open);
-    ov.setAttribute('aria-hidden', open ? 'false' : 'true');
-  }
-  if (btn) {
-    btn.classList.toggle('active', open);
-    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-  }
   const mobile = window.matchMedia('(max-width: 1024px)').matches;
-  document.body.style.overflow = mobile && open ? 'hidden' : '';
+  if (!sb) return;
+  if (mobile) {
+    sb.classList.toggle('open', open);
+    if (ov) {
+      ov.classList.toggle('open', open);
+      ov.setAttribute('aria-hidden', open ? 'false' : 'true');
+    }
+    if (btn) {
+      btn.classList.toggle('active', open);
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+    document.body.style.overflow = open ? 'hidden' : '';
+  } else {
+    sb.classList.remove('open');
+    if (ov) {
+      ov.classList.remove('open');
+      ov.setAttribute('aria-hidden', 'true');
+    }
+    if (btn) {
+      btn.classList.remove('active');
+      btn.setAttribute('aria-expanded', 'false');
+    }
+    document.body.style.overflow = '';
+  }
 }
 
 function toggleSidebar() {
@@ -555,6 +603,8 @@ function toggleSidebar() {
 
 function closeSidebarMobile() {
   hideCategoryFlyout();
+  document.getElementById('mainNavbar')?.classList.remove('nav-search-open');
+  document.getElementById('navMobileSearchToggle')?.setAttribute('aria-expanded', 'false');
   setSidebarOpen(false);
 }
 
@@ -1153,7 +1203,7 @@ document.addEventListener('DOMContentLoaded', function () {
     sidebarFlyout.addEventListener('mouseenter', clearSidebarFlyoutHideTimer);
     sidebarFlyout.addEventListener('mouseleave', scheduleSidebarFlyoutHide);
     sidebarFlyout.addEventListener('click', e => {
-      const row = e.target.closest('.sidebar-flyout-row');
+      const row = e.target.closest('.sidebar-flyout-row, .sidebar-flyout-tile');
       if (!row) return;
       e.preventDefault();
       e.stopPropagation();
@@ -1161,9 +1211,38 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
+  const navSearchToggle = document.getElementById('navMobileSearchToggle');
+  if (navSearchToggle) {
+    navSearchToggle.addEventListener('click', () => {
+      const nav = document.getElementById('mainNavbar');
+      if (!nav) return;
+      const open = nav.classList.toggle('nav-search-open');
+      navSearchToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      if (open) {
+        const mob = document.getElementById('mobileMenuSearch');
+        const desk = document.getElementById('catalogSearch');
+        if (mob && desk && desk.value) mob.value = desk.value;
+        mob?.focus();
+      }
+    });
+  }
+
   window.addEventListener('resize', () => {
     hideCategoryFlyout();
-    if (!window.matchMedia('(max-width: 1024px)').matches) closeSidebarMobile();
+    if (!window.matchMedia('(max-width: 1024px)').matches) {
+      setSidebarOpen(false);
+      document.getElementById('mainNavbar')?.classList.remove('nav-search-open');
+      document.getElementById('navMobileSearchToggle')?.setAttribute('aria-expanded', 'false');
+    }
+  });
+
+  document.getElementById('sidebarCloseBtn')?.addEventListener('click', () => closeSidebarMobile());
+
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Escape') return;
+    const mobile = window.matchMedia('(max-width: 1024px)').matches;
+    const sb = document.getElementById('sidebar');
+    if (mobile && sb?.classList.contains('open')) closeSidebarMobile();
   });
 
   const obs = new IntersectionObserver(entries => {
