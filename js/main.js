@@ -211,9 +211,7 @@ async function loadProducts() {
         doc:       p.document || null // PDF ficha técnica opcional
       };
     });
-    products.sort((a, b) =>
-      String(a.name).localeCompare(String(b.name), 'es', { sensitivity: 'base', numeric: true })
-    );
+    products.sort(compareProductsCatalog);
     // Renderiza banner con productos cargados
     renderBanner();
     fillCategorySelect();
@@ -278,6 +276,15 @@ function getVideoEmbed(url) {
 // ========================================
 function normFilterStr(s) {
   return String(s || '').trim().toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '');
+}
+
+/** Catálogo: A–Z por categoría, luego subcategoría, luego nombre (números en orden natural). */
+function compareProductsCatalog(a, b) {
+  const byCat = String(a.cat || '').localeCompare(String(b.cat || ''), 'es', { sensitivity: 'base', numeric: true });
+  if (byCat !== 0) return byCat;
+  const bySub = String(a.subcat || '').localeCompare(String(b.subcat || ''), 'es', { sensitivity: 'base', numeric: true });
+  if (bySub !== 0) return bySub;
+  return String(a.name || '').localeCompare(String(b.name || ''), 'es', { sensitivity: 'base', numeric: true });
 }
 function getRepresentativeImage(cat, subOptional) {
   const c = normFilterStr(cat);
@@ -735,12 +742,13 @@ function renderProducts() {
   if (PAGINATION_CONFIG.currentPage < 1)  PAGINATION_CONFIG.currentPage = 1;
 
   const start   = (PAGINATION_CONFIG.currentPage - 1) * ip;
-  const page    = filtered.slice(start, start + ip);
+  const sorted  = [...filtered].sort(compareProductsCatalog);
+  const page    = sorted.slice(start, start + ip);
   const grouped = {};
   page.forEach(p => { if (!grouped[p.cat]) grouped[p.cat] = []; grouped[p.cat].push(p); });
 
   let html = ''; let delay = 0;
-  Object.keys(grouped).forEach((cat, i) => {
+  Object.keys(grouped).sort((a, b) => a.localeCompare(b, 'es', { sensitivity: 'base', numeric: true })).forEach((cat, i) => {
     if (i > 0) html += `<div class="prod-category-header"><span>${escapeHtml(cat)}</span></div>`;
       grouped[cat].forEach(p => {
         // ✅ Updated for multi-video: count all videos + imgs >1
@@ -1255,6 +1263,13 @@ document.addEventListener('DOMContentLoaded', function () {
       const sub = btn.getAttribute('data-sub') || '';
       const tapFlyout = window.matchMedia('(max-width: 1024px)').matches;
       if (btn.classList.contains('sidebar-cat--parent') && btn.getAttribute('data-has-subs') === '1' && tapFlyout) {
+        const curCatV = (document.getElementById('catalogCategory')?.value || '').trim();
+        const curSubV = (document.getElementById('catalogSubcategory')?.value || '').trim();
+        // Con sub activa: un tap en la categoría padre quita la sub (toda la categoría), no solo reabre el panel
+        if (curSubV && normFilterStr(curCatV) === normFilterStr(cat)) {
+          selectCatalogFilter(cat, '');
+          return;
+        }
         const fly = document.getElementById('sidebarFlyout');
         const openSame = fly?.classList.contains('is-open') && fly?.dataset.openCat === cat;
         if (!openSame) {

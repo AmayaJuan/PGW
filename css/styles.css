@@ -180,12 +180,14 @@ body { background: var(--bg); color: var(--texto); font-family: 'Nunito', sans-s
 
 /* Escritorio: mismo tono que navbar + cabecera roja */
 @media (min-width: 1025px) {
-  /* Misma altura que el navbar (padding + logo) para que la franja roja y la barra queden alineadas */
+  /* Altura exacta del navbar: padding 0.8rem + logo 48px + borde inferior 2px (coincide con .nav-logo img) */
   :root {
-    --topbar-unified-h: calc(0.8rem + 0.8rem + 44px);
+    --topbar-unified-h: calc(0.8rem + 48px + 0.8rem + 2px);
   }
   #mainNavbar {
+    height: var(--topbar-unified-h);
     min-height: var(--topbar-unified-h);
+    max-height: var(--topbar-unified-h);
     box-sizing: border-box;
     /* Solapa 1px el borde del sidebar y evita la “costura” clara entre rojo y barra */
     left: calc(var(--sidebar-w) - 1px);
@@ -205,8 +207,11 @@ body { background: var(--bg); color: var(--texto); font-family: 'Nunito', sans-s
     background: var(--rojo);
     /* Sin sombra hacia la derecha: unifica visualmente con el navbar */
     box-shadow: none;
+    /* Misma caja que #mainNavbar: sin padding vertical extra (evita que el rojo quede más alto) */
     padding: 0 1rem;
+    height: var(--topbar-unified-h);
     min-height: var(--topbar-unified-h);
+    max-height: var(--topbar-unified-h);
     box-sizing: border-box;
     display: flex;
     align-items: center;
@@ -217,7 +222,7 @@ body { background: var(--bg); color: var(--texto); font-family: 'Nunito', sans-s
     color: #fff;
     font-size: clamp(1.1rem, 2.4vw, 1.5rem);
     letter-spacing: 0.12em;
-    line-height: 1.05;
+    line-height: 1.1;
   }
   .sidebar-section-label {
     color: rgba(255, 255, 255, 0.75);
@@ -1027,7 +1032,7 @@ footer p { font-size: 0.72rem; color: var(--muted); }
   }
   .sidebar-cat {
     padding: 0.72rem 0.5rem;
-    font-size: 0.7rem;
+    font-size: 0.82rem;
     letter-spacing: 0.05em;
   }
   .sidebar-cat.active {
@@ -1046,7 +1051,7 @@ footer p { font-size: 0.72rem; color: var(--muted); }
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    font-size: 0.58rem;
+    font-size: 0.64rem;
   }
   .sidebar.sidebar--flyout-preview .sidebar-cat.sidebar-cat--all.active {
     background: #fff;
@@ -1077,11 +1082,26 @@ footer p { font-size: 0.72rem; color: var(--muted); }
   .sidebar-flyout--sheet .sidebar-flyout-title {
     text-align: left;
     padding: 0.75rem 1rem 0.55rem;
-    font-size: 0.78rem;
+    font-size: 0.9rem;
     border-radius: 16px 16px 0 0;
   }
   .sidebar-flyout--sheet .sidebar-flyout-inner--grid {
     padding: 0.65rem 0.75rem 1rem;
+  }
+  .sidebar-flyout-row {
+    font-size: 0.76rem;
+  }
+  .sidebar-flyout-n {
+    font-size: 0.68rem;
+  }
+  .sidebar-flyout-pill {
+    font-size: 0.66rem;
+  }
+  .sidebar-flyout-tile-n {
+    font-size: 0.68rem;
+  }
+  .sidebar-section-label {
+    font-size: 0.76rem;
   }
 
   /* Navbar móvil / tablet — barra oscura marca + logo centrado + acciones */
@@ -1210,7 +1230,7 @@ footer p { font-size: 0.72rem; color: var(--muted); }
     background: rgba(255, 255, 255, 0.1);
     color: #fff;
     font-family: 'Nunito', sans-serif;
-    font-size: 0.88rem;
+    font-size: 1rem;
   }
   #mainNavbar .nav-mobile-search-input::placeholder { color: rgba(255, 255, 255, 0.48); }
   #mainNavbar .nav-mobile-search-input:focus {
