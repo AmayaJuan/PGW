@@ -62,8 +62,8 @@ const WP_SVG = `<svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.75
 // ========================================
   // CONFIG - Configuración global aplicación
   // ========================================
-  // Objeto configuración paginación (8 productos por página, página actual 1)
-  const PAGINATION_CONFIG = { itemsPerPage: 8, currentPage: 1 };
+  // Objeto configuración paginación (6 productos por página, página actual 1)
+  const PAGINATION_CONFIG = { itemsPerPage: 6, currentPage: 1 };
 
   /** Estado del audio intro (hero); compartido para pausar al abrir catálogo o modal. */
   const introAudioState = { started: false };
@@ -739,11 +739,11 @@ function renderProducts() {
     const total = filtered.length;
     const ip = PAGINATION_CONFIG.itemsPerPage;
     const cp = PAGINATION_CONFIG.currentPage;
-    const start = Math.min(total, cp * ip);
-    const end = cp * ip;
+    const itemStart = total ? (cp - 1) * ip + 1 : 0;
+    const itemEnd = Math.min(cp * ip, total);
     if (total > 0) {
       pc.innerHTML = `<span class="count-label">Página</span><span class="count-current">${cp}</span>
-        <span class="count-range">${start}-${end}</span>
+        <span class="count-range">${itemStart}-${itemEnd}</span>
         ${!category && !subcat && !query ? `<span class="count-label">Total:</span>
         <span class="categoria-badge" style="background:var(--rojo);color:#fff;padding:0.2rem 0.7rem;border-radius:20px;font-size:0.75rem;font-weight:600;">${total} productos</span>` : ''}`;
       pc.style.display = 'inline-flex';
