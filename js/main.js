@@ -505,19 +505,26 @@ function getUniqueCategories() {
 }
 function fillCategorySelect() {
   const sel = document.getElementById('catalogCategory');
-  if (!sel) return;
-  const cur = (sel.value || '').trim();
+  const mob = document.getElementById('mobileCatalogCategory');
+  if (!sel && !mob) return;
+  const cur = ((sel && sel.value) || (mob && mob.value) || '').trim();
   const cats = getUniqueCategories();
   const html = '<option value="">Todas las categorías</option>' +
     cats.map(c => `<option value="${escapeAttr(c)}">${escapeHtml(c)}</option>`).join('');
-  sel.innerHTML = html;
-  if (!cur) sel.value = '';
-  else if (cats.includes(cur)) sel.value = cur;
-  else sel.value = '';
+  if (sel) {
+    sel.innerHTML = html;
+    if (!cur) sel.value = '';
+    else if (cats.includes(cur)) sel.value = cur;
+    else sel.value = '';
+  }
+  if (mob) {
+    mob.innerHTML = html;
+    mob.value = sel ? (sel.value || '') : (cats.includes(cur) ? cur : '');
+  }
 
   const su = document.getElementById('catalogSubcategory');
   if (!su) return;
-  const catNow = (sel.value || '').trim();
+  const catNow = ((sel && sel.value) || (mob && mob.value) || '').trim();
   if (!catNow) {
     su.value = '';
     return;
@@ -774,6 +781,8 @@ function selectCatalogFilter(rawCat, rawSub) {
   const ce = document.getElementById('catalogCategory');
   const su = document.getElementById('catalogSubcategory');
   if (ce) ce.value = cat;
+  const mobCat = document.getElementById('mobileCatalogCategory');
+  if (mobCat) mobCat.value = cat;
   if (su) su.value = sub;
   PAGINATION_CONFIG.currentPage = 1;
   renderProducts();
@@ -1081,22 +1090,34 @@ function setupCatalogFilters() {
       if (e.key === 'Enter') { e.preventDefault(); renderProducts(); document.getElementById('products').scrollIntoView({ behavior: 'instant' }); }
     });
   }
-  if (ce) {
-    ce.addEventListener('change', () => {
-      const subEl = document.getElementById('catalogSubcategory');
-      if (subEl) {
-        const catNow = (ce.value || '').trim();
-        if (!catNow) subEl.value = '';
-        else {
-          const ok = getSubcategoriesForCategory(catNow).map(s => normFilterStr(s));
-          if (!ok.includes(normFilterStr(subEl.value))) subEl.value = '';
-        }
+  function onCatalogCategoryChangeFromUI() {
+    const ceLocal = document.getElementById('catalogCategory');
+    const mobLocal = document.getElementById('mobileCatalogCategory');
+    if (ceLocal && mobLocal) mobLocal.value = ceLocal.value;
+    const effective = (ceLocal?.value || '').trim();
+    const subEl = document.getElementById('catalogSubcategory');
+    if (subEl) {
+      if (!effective) subEl.value = '';
+      else {
+        const ok = getSubcategoriesForCategory(effective).map(s => normFilterStr(s));
+        if (!ok.includes(normFilterStr(subEl.value))) subEl.value = '';
       }
-      PAGINATION_CONFIG.currentPage = 1;
-      updateSidebarCategoryActive();
-      renderProducts();
-      const p = document.getElementById('products');
-      if (p) p.scrollIntoView({ behavior: 'instant' });
+    }
+    PAGINATION_CONFIG.currentPage = 1;
+    updateSidebarCategoryActive();
+    renderProducts();
+    const p = document.getElementById('products');
+    if (p) p.scrollIntoView({ behavior: 'instant' });
+  }
+
+  if (ce) {
+    ce.addEventListener('change', onCatalogCategoryChangeFromUI);
+  }
+  const mobCatSel = document.getElementById('mobileCatalogCategory');
+  if (mobCatSel) {
+    mobCatSel.addEventListener('change', () => {
+      if (ce) ce.value = mobCatSel.value;
+      onCatalogCategoryChangeFromUI();
     });
   }
   if (mob_s) {

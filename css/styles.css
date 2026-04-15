@@ -1363,6 +1363,11 @@ footer p { font-size: 0.72rem; color: var(--muted); }
   }
 }
 
+/* Oculto en escritorio; el bloque móvil redefine display en @media (max-width: 768px) */
+.mobile-catalog-category-wrap {
+  display: none;
+}
+
 /* ── RESPONSIVE MÓVIL ── */
 @media (max-width: 768px) {
   #mainNavbar.nav-shell {
@@ -1451,6 +1456,49 @@ footer p { font-size: 0.72rem; color: var(--muted); }
   }
 
   .prod-btn { padding: 0.55rem 1rem; min-height: 36px; }
+
+  .mobile-catalog-category-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    margin-bottom: 1.25rem;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: 0 clamp(0.25rem, 1vw, 0.5rem);
+  }
+  .mobile-catalog-category-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .mobile-catalog-category-select {
+    width: 100%;
+    max-width: 100%;
+    padding: 0.65rem 2.25rem 0.65rem 1rem;
+    background: var(--bg);
+    border: 1px solid var(--borde);
+    border-radius: 8px;
+    color: var(--texto);
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.9rem;
+    cursor: pointer;
+    appearance: none;
+    box-sizing: border-box;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%235a6a7a' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+  }
+  .mobile-catalog-category-select:focus {
+    outline: none;
+    border-color: var(--rojo);
+  }
+
+  .sidebar-nav-scroll {
+    padding-bottom: 2rem;
+  }
 
   /* Banner — ancho slide = --banner-slide-w (JS, interior real del wrap); sin 100vw para no desincronizar object-fit */
   .banner-wrap {
