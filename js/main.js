@@ -280,20 +280,27 @@ function getBannerSlideTargetWidth() {
   return Math.max(100, slot);
 }
 
-/** Una muestra por URL (el carrusel duplica slides; el ratio es el mismo por src). */
-function getBannerUniqueLoadedImages(track) {
-  const bySrc = new Map();
+/** Altura en px si la imagen se escala a ancho `w` manteniendo proporción natural. */
+function getBannerImageDisplayHeight(img, w) {
+  if (img.naturalWidth < 2) return 0;
+  return (w * img.naturalHeight) / img.naturalWidth;
+}
+
+/**
+ * Mayor altura entre todas las imágenes ya decodificadas (la más “larga/alta” marca el marco común).
+ */
+function getBannerMaxDisplayHeightForWidth(track, w) {
+  let maxH = 0;
   track.querySelectorAll('.banner-item img').forEach(img => {
-    if (img.naturalWidth < 2) return;
-    const key = img.currentSrc || img.src || '';
-    if (!key) return;
-    if (!bySrc.has(key)) bySrc.set(key, img);
+    const h = getBannerImageDisplayHeight(img, w);
+    if (h > maxH) maxH = h;
   });
-  return [...bySrc.values()];
+  return maxH;
 }
 
 /**
  * Misma altura H para todos los slides + altura explícita del #bannerTrack (evita hueco negro enorme en móvil).
+ * H = altura al ancho w de la imagen más alta; el resto se centra con object-fit: contain en ese marco.
  * Sin imágenes cargadas aún: fallback compacto en móvil.
  */
 function relayoutAllBannerItems() {
@@ -313,16 +320,11 @@ function relayoutAllBannerItems() {
     }
   }
 
-  const rowCap = vw <= 768 ? Math.min(vh * 0.48, 420) : Math.min(vh * 0.82, 680);
-  const uniqueLoaded = getBannerUniqueLoadedImages(track);
-
-  let maxH = 0;
-  uniqueLoaded.forEach(img => {
-    maxH = Math.max(maxH, (w * img.naturalHeight) / img.naturalWidth);
-  });
+  const rowCap = vw <= 768 ? Math.min(vh * 0.58, 520) : Math.min(vh * 0.88, 780);
+  const maxH = getBannerMaxDisplayHeightForWidth(track, w);
 
   let H;
-  if (!uniqueLoaded.length) {
+  if (maxH < 1) {
     if (vw <= 768) {
       H = Math.round(Math.min(Math.max(vw * 0.55, 200), rowCap));
     } else {
