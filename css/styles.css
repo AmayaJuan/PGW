@@ -1422,8 +1422,9 @@ footer p { font-size: 0.72rem; color: var(--muted); }
 
   .prod-btn { padding: 0.55rem 1rem; min-height: 36px; }
 
-  /* Banner */
+  /* Banner — scroll un poco más pausado en pantallas pequeñas */
   .banner-wrap { padding: 1.1rem 0; }
+  .banner-track { animation: bannerScroll 62s linear infinite; }
   .banner-item { width: 330px; height: 440px; padding: 0.35rem; }
 
   footer { padding: 2rem 1.5rem max(2rem, env(safe-area-inset-bottom, 0px)); flex-direction: column; text-align: center; gap: 1.5rem; }
