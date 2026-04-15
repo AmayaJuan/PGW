@@ -65,6 +65,9 @@ const WP_SVG = `<svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.75
   // Objeto configuración paginación (8 productos por página, página actual 1)
   const PAGINATION_CONFIG = { itemsPerPage: 8, currentPage: 1 };
 
+  /** Estado del audio intro (hero); compartido para pausar al abrir catálogo o modal. */
+  const introAudioState = { started: false };
+
   // Función placeholder - Zoom controlado por modalZoom.js separado
   // Mantenida para compatibilidad futura
   function initZoomControls() {}
@@ -108,8 +111,6 @@ const WP_SVG = `<svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.75
     const audio = document.getElementById('introAudio');
     // Si audio no existe en DOM, sale tempranamente
     if (!audio) return;
-    // Flag control reproducción (evita múltiples plays)
-    let started = false;
     // Función fade out gradual volumen hasta silencio
     function stop() {
       // Intervalo fade 80ms decremental 0.05 volumen
@@ -117,33 +118,31 @@ const WP_SVG = `<svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.75
         // Reduce volumen hasta mínimo 0.05
         if (audio.volume > 0.05) audio.volume -= 0.05;
         // Cuando volumen bajo, pausa y reset
-        else { clearInterval(fade); audio.pause(); audio.volume = 0.6; started = false; }
+        else { clearInterval(fade); audio.pause(); audio.volume = 0.6; introAudioState.started = false; }
       }, 80);
     }
     // Función inicio reproducción con volumen bajo (política autoplay)
     function play() {
       // Sale si ya activo o scroll >= 100px (solo homepage visible)
-      if (started || window.scrollY >= 100) return;
+      if (introAudioState.started || window.scrollY >= 100) return;
       // Marca como activo y volumen inicial suave
-      started = true; audio.volume = 0.5;
+      introAudioState.started = true; audio.volume = 0.5;
       // Intenta reproducir (catch bloquea autoplay browsers)
-      audio.play().catch(() => { started = false; });
+      audio.play().catch(() => { introAudioState.started = false; });
     }
     // Listener scroll pasivo (performance) - controla play/stop
     window.addEventListener('scroll', () => {
       // Si scroll >=100px y activo, fade out
-      if (window.scrollY >= 100 && started) stop();
+      if (window.scrollY >= 100 && introAudioState.started) stop();
       // Si scroll <100px y inactivo, play
-      if (window.scrollY < 100 && !started) play();
+      if (window.scrollY < 100 && !introAudioState.started) play();
     }, { passive: true });
-    // Inicia inmediatamente al cargar (homepage)
+    // Intento inicial (puede fallar por autoplay del navegador)
     play();
-    // Listener click único - permite play tras interacción usuario
-    document.addEventListener('click', function f() {
-      if (window.scrollY < 100) play();
-      // Remueve listener una vez usado (evita múltiples bindings)
-      document.removeEventListener('click', f);
-    }, { once: true });
+    // Solo reintenta con clic si el clic es en el hero (inicio); no al abrir productos/modal/sidebar
+    document.addEventListener('click', function f(e) {
+      if (window.scrollY < 100 && e.target.closest('.hero')) play();
+    }, { once: true, capture: true });
   }
 
 // ========================================
@@ -864,6 +863,13 @@ function openModal(id) {
   const p = products.find(x => x.id === id);
   if (!p) return;
 
+  const intro = document.getElementById('introAudio');
+  if (intro && !intro.paused) {
+    intro.pause();
+    intro.volume = 0.6;
+    introAudioState.started = false;
+  }
+
   // Inicializar zoom del modal
   if (typeof modalZoomInit === 'function') modalZoomInit();
 
@@ -1127,7 +1133,7 @@ function toggleMobileMenu() {
 // ========================================
 const LBState = { scale: 1, x: 0, y: 0, dragging: false, lastX: 0, lastY: 0, pinchDist: 0, pinchScale: 1 };
 const LB_MIN = 1;
-const LB_MAX = 1.15;  // Usuario: límite 15% aumento lightbox
+const LB_MAX = 1.45;
 
 function lbApply() {
   const img = document.getElementById('lbImg');
