@@ -75,23 +75,27 @@
 
 <!-- Estado de filtros catálogo (sincronizado con el sidebar) -->
 <select id="catalogCategory" class="visually-hidden" aria-hidden="true" tabindex="-1" title="Categoría seleccionada"></select>
-<select id="catalogSubcategory" class="visually-hidden" aria-hidden="true" tabindex="-1" title="Subcategoría seleccionada"></select>
+<input type="hidden" id="catalogSubcategory" name="catalogSubcategory" value="" autocomplete="off"/>
 
 <!-- SIDEBAR -->
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-catalog-bar">Categorías</div>
   <nav class="sidebar-nav" aria-label="Categorías del catálogo">
-    <p class="sidebar-hint">Escritorio: pasá el mouse sobre la categoría para abrir subcategorías. Móvil: tocá la categoría; tocá de nuevo para ver todos.</p>
-    <ul id="sidebarCategories" class="sidebar-cat-list"></ul>
-    <hr class="sidebar-divider">
-    <p class="sidebar-section-label">Empresa</p>
-    <ul class="sidebar-section">
-      <li><a href="#nosotros" class="sidebar-link" onclick="handleSidebarLink(event, 'nosotros')">Nosotros</a></li>
-      <li><a href="#contacto" class="sidebar-link" onclick="handleSidebarLink(event, 'contacto')">Contacto</a></li>
-    </ul>
+    <p class="sidebar-hint">Escritorio: pasá el mouse sobre la categoría para ver subcategorías. Móvil: tocá la categoría y elegí en el panel inferior.</p>
+    <div class="sidebar-nav-scroll">
+      <ul id="sidebarCategories" class="sidebar-cat-list"></ul>
+    </div>
+    <div class="sidebar-nav-footer">
+      <hr class="sidebar-divider">
+      <p class="sidebar-section-label">Empresa</p>
+      <ul class="sidebar-section">
+        <li><a href="#nosotros" class="sidebar-link" onclick="handleSidebarLink(event, 'nosotros')">Nosotros</a></li>
+        <li><a href="#contacto" class="sidebar-link" onclick="handleSidebarLink(event, 'contacto')">Contacto</a></li>
+      </ul>
+    </div>
   </nav>
-  <div id="sidebarFlyout" class="sidebar-flyout" aria-hidden="true"></div>
 </aside>
+<div id="sidebarFlyout" class="sidebar-flyout" aria-hidden="true"></div>
 <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebarMobile()" aria-hidden="true"></div>
 
 <!-- MAIN CONTENT -->

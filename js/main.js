@@ -176,9 +176,14 @@ async function loadProducts() {
         }
       }
       
+      const nid = typeof p.id === 'number' && !Number.isNaN(p.id)
+        ? p.id
+        : (parseInt(String(p.id), 10) || 999999);
       return {
         // ID único lowercase-kebab-case desde name
         id:        p.name.toLowerCase().replace(/\s+/g, '-'),
+        // Orden estable desde JSON (id numérico)
+        nid,
         // Nombre en mayúsculas
         name:      p.name.toUpperCase(),
         // Categoría o "Parlantes" por defecto
@@ -203,6 +208,10 @@ async function loadProducts() {
         tags:      [], // Placeholder tags futuros
         doc:       p.document || null // PDF ficha técnica opcional
       };
+    });
+    products.sort((a, b) => {
+      if (a.nid !== b.nid) return a.nid - b.nid;
+      return String(a.name).localeCompare(String(b.name), 'es', { sensitivity: 'base', numeric: true });
     });
     // Renderiza banner con productos cargados
     renderBanner();
@@ -266,6 +275,9 @@ function getVideoEmbed(url) {
 // ========================================
 // FILTROS
 // ========================================
+function normFilterStr(s) {
+  return String(s || '').trim().toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '');
+}
 function getProductSearchText(p) {
   return [p.name, p.cat, p.subcat, p.desc, (p.tags||[]).join(' '), (p.apps||[]).join(' ')]
     .join(' ').toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '');
@@ -275,12 +287,12 @@ function getFilteredProducts() {
   const ce = document.getElementById('catalogCategory');
   const su = document.getElementById('catalogSubcategory');
   const q  = se?.value ? se.value.trim().toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '') : '';
-  const c  = ce?.value ? ce.value.trim().toLowerCase() : '';
-  const s  = su?.value ? su.value.trim().toLowerCase() : '';
+  const c  = ce?.value ? normFilterStr(ce.value) : '';
+  const s  = su?.value ? normFilterStr(su.value) : '';
   let list = products;
   if (c) {
-    list = list.filter(p => (p.cat || '').toLowerCase() === c);
-    if (s) list = list.filter(p => ((p.subcat || '').trim().toLowerCase()) === s);
+    list = list.filter(p => normFilterStr(p.cat) === c);
+    if (s) list = list.filter(p => normFilterStr(p.subcat) === s);
   }
   if (q) list = list.filter(p => getProductSearchText(p).includes(q));
   return list;
@@ -317,8 +329,12 @@ function fillCategorySelect() {
     return;
   }
   const validSubs = getSubcategoriesForCategory(catNow);
-  const curSub = (su.value || '').trim();
-  if (!curSub || !validSubs.some(s => s.toLowerCase() === curSub.toLowerCase())) su.value = '';
+  const curSub = normFilterStr(su.value);
+  if (!curSub || !validSubs.some(s => normFilterStr(s) === curSub)) su.value = '';
+  else {
+    const canonical = validSubs.find(s => normFilterStr(s) === curSub);
+    if (canonical) su.value = canonical;
+  }
 }
 
 function getSubcategoriesForCategory(cat) {
@@ -359,10 +375,11 @@ function hideCategoryFlyout() {
   clearSidebarFlyoutHideTimer();
   const fly = document.getElementById('sidebarFlyout');
   if (!fly) return;
-  fly.classList.remove('is-open');
+  fly.classList.remove('is-open', 'sidebar-flyout--sheet');
   fly.removeAttribute('data-open-cat');
   fly.setAttribute('aria-hidden', 'true');
   fly.innerHTML = '';
+  fly.style.left = fly.style.top = fly.style.right = fly.style.bottom = fly.style.transform = fly.style.maxHeight = '';
 }
 
 function showCategoryFlyout(anchorBtn) {
@@ -387,19 +404,31 @@ function showCategoryFlyout(anchorBtn) {
       </button>`;
   }).join('')}
     </div>`;
-  const ar = anchorBtn.getBoundingClientRect();
-  const fw = 272;
-  const pad = 10;
-  let left = ar.right + 6;
-  if (left + fw > window.innerWidth - pad) left = Math.max(pad, ar.left - fw - 6);
-  fly.style.left = `${left}px`;
-  let top = ar.top;
-  const maxH = Math.min(window.innerHeight - pad * 2, 440);
-  fly.style.maxHeight = `${maxH}px`;
-  const estH = 48 + subs.length * 44;
-  if (top + estH > window.innerHeight - pad) top = Math.max(pad, window.innerHeight - estH - pad);
-  if (top < pad) top = pad;
-  fly.style.top = `${top}px`;
+  const isMobile = window.innerWidth <= 1024;
+  if (isMobile) {
+    fly.classList.add('sidebar-flyout--sheet');
+    fly.style.left = '50%';
+    fly.style.right = 'auto';
+    fly.style.transform = 'translateX(-50%)';
+    fly.style.top = 'auto';
+    fly.style.bottom = 'max(12px, env(safe-area-inset-bottom, 12px))';
+    fly.style.maxHeight = 'min(52vh, 380px)';
+  } else {
+    fly.classList.remove('sidebar-flyout--sheet');
+    const ar = anchorBtn.getBoundingClientRect();
+    const fw = 272;
+    const pad = 10;
+    let left = ar.right + 6;
+    if (left + fw > window.innerWidth - pad) left = Math.max(pad, ar.left - fw - 6);
+    fly.style.left = `${left}px`;
+    let top = ar.top;
+    const maxH = Math.min(window.innerHeight - pad * 2, 440);
+    fly.style.maxHeight = `${maxH}px`;
+    const estH = 48 + subs.length * 44;
+    if (top + estH > window.innerHeight - pad) top = Math.max(pad, window.innerHeight - estH - pad);
+    if (top < pad) top = pad;
+    fly.style.top = `${top}px`;
+  }
   fly.dataset.openCat = cat;
   fly.classList.add('is-open');
   fly.setAttribute('aria-hidden', 'false');
@@ -685,20 +714,10 @@ function setupCatalogFilters() {
         const catNow = (ce.value || '').trim();
         if (!catNow) subEl.value = '';
         else {
-          const ok = getSubcategoriesForCategory(catNow).map(s => s.toLowerCase());
-          if (!ok.includes((subEl.value || '').trim().toLowerCase())) subEl.value = '';
+          const ok = getSubcategoriesForCategory(catNow).map(s => normFilterStr(s));
+          if (!ok.includes(normFilterStr(subEl.value))) subEl.value = '';
         }
       }
-      PAGINATION_CONFIG.currentPage = 1;
-      updateSidebarCategoryActive();
-      renderProducts();
-      const p = document.getElementById('products');
-      if (p) p.scrollIntoView({ behavior: 'instant' });
-    });
-  }
-  const subSel = document.getElementById('catalogSubcategory');
-  if (subSel) {
-    subSel.addEventListener('change', () => {
       PAGINATION_CONFIG.currentPage = 1;
       updateSidebarCategoryActive();
       renderProducts();
@@ -1136,6 +1155,8 @@ document.addEventListener('DOMContentLoaded', function () {
     sidebarFlyout.addEventListener('click', e => {
       const row = e.target.closest('.sidebar-flyout-row');
       if (!row) return;
+      e.preventDefault();
+      e.stopPropagation();
       selectCatalogFilter(row.getAttribute('data-cat') || '', row.getAttribute('data-sub') || '');
     });
   }
