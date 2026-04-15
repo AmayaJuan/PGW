@@ -589,6 +589,40 @@ function selectCatalogFilter(rawCat, rawSub) {
   closeSidebarMobile();
 }
 
+/**
+ * Bloquea el scroll de la página (html + body + fixed, compatible con iOS).
+ * Varios overlays a la vez (p. ej. modal + lightbox) usan un contador: solo el primer acquire aplica estilos y solo el último release los quita.
+ */
+let _pageScrollLockDepth = 0;
+let _pageScrollLockY = 0;
+
+function acquirePageScrollLock() {
+  if (_pageScrollLockDepth === 0) {
+    _pageScrollLockY = window.scrollY || document.documentElement.scrollTop || 0;
+    document.documentElement.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden';
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${_pageScrollLockY}px`;
+    document.body.style.left = '0';
+    document.body.style.right = '0';
+    document.body.style.width = '100%';
+  }
+  _pageScrollLockDepth++;
+}
+
+function releasePageScrollLock() {
+  if (_pageScrollLockDepth <= 0) return;
+  _pageScrollLockDepth--;
+  if (_pageScrollLockDepth > 0) return;
+  document.documentElement.style.overflow = '';
+  document.body.style.overflow = '';
+  document.body.style.position = '';
+  document.body.style.top = '';
+  document.body.style.left = '';
+  document.body.style.right = '';
+  document.body.style.width = '';
+  window.scrollTo(0, _pageScrollLockY);
+}
 
 function setSidebarOpen(open) {
   const sb = document.getElementById('sidebar');
@@ -606,7 +640,8 @@ function setSidebarOpen(open) {
       btn.classList.toggle('active', open);
       btn.setAttribute('aria-expanded', open ? 'true' : 'false');
     }
-    document.body.style.overflow = open ? 'hidden' : '';
+    if (open) acquirePageScrollLock();
+    else releasePageScrollLock();
   } else {
     sb.classList.remove('open');
     if (ov) {
@@ -617,7 +652,7 @@ function setSidebarOpen(open) {
       btn.classList.remove('active');
       btn.setAttribute('aria-expanded', 'false');
     }
-    document.body.style.overflow = '';
+    releasePageScrollLock();
   }
 }
 
@@ -922,8 +957,10 @@ function openModal(id) {
   openModal._currentThumbIdx = 0;
   openModal._imgs = p.imgs;
   openModal._videos = p.videos || [];
-  document.getElementById('modalOverlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
+  const modalOv = document.getElementById('modalOverlay');
+  const modalJustOpened = !modalOv.classList.contains('open');
+  modalOv.classList.add('open');
+  if (modalJustOpened) acquirePageScrollLock();
   openModal._prev = document.activeElement;
 
   const enfocables = document.getElementById('modal').querySelectorAll('button,[href],input,select,textarea,[tabindex]:not([tabindex="-1"])');
@@ -1011,6 +1048,8 @@ function cambiarImg(src, el) {
 function cerrarModal(e) { if (e.target === document.getElementById('modalOverlay')) cerrarModalBtn(); }
 
 function cerrarModalBtn() {
+  const lbPre = document.getElementById('lightboxOverlay');
+  if (lbPre && lbPre.classList.contains('open')) cerrarLightbox();
   if (typeof modalZoomCleanup === 'function') modalZoomCleanup();
   const mainWrap = document.getElementById('modalImgMain')?.parentElement;
   if (mainWrap) {
@@ -1022,8 +1061,10 @@ function cerrarModalBtn() {
   }
   if (openModal._trap) { document.removeEventListener('keydown', openModal._trap); openModal._trap = null; }
   if (openModal._prev) { openModal._prev.focus(); openModal._prev = null; }
-  document.getElementById('modalOverlay').classList.remove('open');
-  document.body.style.overflow = '';
+  const modalOv = document.getElementById('modalOverlay');
+  const modalWasOpen = modalOv.classList.contains('open');
+  modalOv.classList.remove('open');
+  if (modalWasOpen) releasePageScrollLock();
 }
 
 document.addEventListener('keydown', e => {
@@ -1160,14 +1201,17 @@ function abrirLightbox(src, nombre) {
   const img = document.getElementById('lbImg');
   img.src = src; img.alt = nombre || '';
   img.style.transform = ''; img.style.transition = 'none'; img.style.cursor = 'grab';
+  const lbWasOpen = lb.classList.contains('open');
   lb.classList.add('open');
-  document.body.style.overflow = 'hidden';
+  if (!lbWasOpen) acquirePageScrollLock();
 }
 
 function cerrarLightbox() {
   const lb = document.getElementById('lightboxOverlay');
-  if (lb) { lb.classList.remove('open'); lbReset(); }
-  // No tocar body overflow — modal sigue abierto
+  if (!lb || !lb.classList.contains('open')) return;
+  lb.classList.remove('open');
+  lbReset();
+  releasePageScrollLock();
 }
 
 // ========================================
