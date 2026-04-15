@@ -272,11 +272,11 @@ function getBannerSlideTargetWidth() {
   const inner = wrap ? wrap.clientWidth : vw;
 
   if (vw <= 768) {
-    return Math.max(100, Math.floor(inner - 2));
+    return Math.max(100, Math.floor(inner));
   }
 
-  let slot = Math.min(600, vw - 3.5 * rem);
-  slot = Math.floor(Math.min(slot, inner - 4));
+  let slot = Math.min(820, vw - 2.75 * rem);
+  slot = Math.floor(Math.min(slot, inner - 2));
   return Math.max(100, slot);
 }
 
@@ -320,18 +320,18 @@ function relayoutAllBannerItems() {
     }
   }
 
-  const rowCap = vw <= 768 ? Math.min(vh * 0.58, 520) : Math.min(vh * 0.88, 780);
+  const rowCap = vw <= 768 ? Math.min(vh * 0.72, 640) : Math.min(vh * 0.94, 920);
   const maxH = getBannerMaxDisplayHeightForWidth(track, w);
 
   let H;
   if (maxH < 1) {
     if (vw <= 768) {
-      H = Math.round(Math.min(Math.max(vw * 0.55, 200), rowCap));
+      H = Math.round(Math.min(Math.max(vw * 0.62, 240), rowCap));
     } else {
-      H = Math.round(Math.min(280, rowCap));
+      H = Math.round(Math.min(380, rowCap));
     }
   } else {
-    H = Math.round(Math.min(Math.max(maxH, 120), rowCap));
+    H = Math.round(Math.min(Math.max(maxH, 140), rowCap));
   }
 
   track.querySelectorAll('.banner-item').forEach(item => {
