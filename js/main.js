@@ -256,6 +256,58 @@ function renderBanner() {
     <div class="banner-item" onclick="onBannerItemClick('${id}')" role="button" tabindex="0" aria-label="Ver ${escapeAttr(alt)}">
       <img src="${escapeAttr(src)}" alt="${escapeAttr(alt)}" loading="lazy"/>
     </div>`).join('');
+  initBannerItemSizing(track);
+}
+
+/** Ajusta cada .banner-item al ratio real de su imagen (sin bandas) respetando ancho CSS y tope de altura. */
+function layoutBannerItemFromImage(img) {
+  const item = img.closest('.banner-item');
+  if (!item || img.naturalWidth < 2 || img.naturalHeight < 2) return;
+  const nw = img.naturalWidth;
+  const nh = img.naturalHeight;
+  item.style.width = '';
+  item.style.height = '';
+  item.style.flex = '';
+  void item.offsetWidth;
+  let w = item.getBoundingClientRect().width;
+  if (!w || w < 48) {
+    const wrap = document.querySelector('.banner-wrap');
+    w = wrap ? Math.max(120, wrap.getBoundingClientRect().width - 16) : Math.min(600, window.innerWidth - 48);
+  }
+  const maxH = Math.min(window.innerHeight * 0.88, 760);
+  let h = (w * nh) / nw;
+  if (h > maxH) {
+    h = maxH;
+    w = (h * nw) / nh;
+  }
+  w = Math.round(Math.max(80, w));
+  h = Math.round(Math.max(60, h));
+  item.style.width = `${w}px`;
+  item.style.height = `${h}px`;
+  item.style.flex = `0 0 ${w}px`;
+}
+
+function bindBannerItemImage(img) {
+  const run = () => layoutBannerItemFromImage(img);
+  if (img.complete && img.naturalWidth > 1) run();
+  else img.addEventListener('load', run, { once: true });
+}
+
+function initBannerItemSizing(track) {
+  if (!track) return;
+  track.querySelectorAll('.banner-item img').forEach(bindBannerItemImage);
+}
+
+function relayoutAllBannerItems() {
+  document.querySelectorAll('#bannerTrack .banner-item img').forEach(img => {
+    if (img.naturalWidth > 1) layoutBannerItemFromImage(img);
+  });
+}
+
+let _bannerResizeT = null;
+function scheduleBannerRelayout() {
+  clearTimeout(_bannerResizeT);
+  _bannerResizeT = setTimeout(relayoutAllBannerItems, 100);
 }
 
 // ========================================
@@ -1421,6 +1473,7 @@ document.addEventListener('DOMContentLoaded', function () {
       document.getElementById('mainNavbar')?.classList.remove('nav-search-open');
       document.getElementById('navMobileSearchToggle')?.setAttribute('aria-expanded', 'false');
     }
+    scheduleBannerRelayout();
   });
 
   document.getElementById('sidebarCloseBtn')?.addEventListener('click', () => closeSidebarMobile());
