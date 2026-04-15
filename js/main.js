@@ -820,9 +820,15 @@ function selectCatalogFilter(rawCat, rawSub) {
   renderProducts();
   updateSidebarCategoryActive();
   document.querySelectorAll('.sidebar-section .sidebar-link').forEach(a => a.classList.remove('active'));
-  const sec = document.getElementById('products');
-  if (sec) sec.scrollIntoView({ behavior: 'instant', block: 'start' });
   closeSidebarMobile();
+  const sec = document.getElementById('products');
+  if (sec) {
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        sec.scrollIntoView({ behavior: 'instant', block: 'start' });
+      });
+    });
+  }
 }
 if (typeof window !== 'undefined') window.selectCatalogFilter = selectCatalogFilter;
 
