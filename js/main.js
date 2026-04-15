@@ -300,7 +300,7 @@ function getBannerMaxDisplayHeightForWidth(track, w) {
 
 /**
  * Misma altura H para todos los slides + altura explícita del #bannerTrack (evita hueco negro enorme en móvil).
- * H = altura al ancho w de la imagen más alta; el resto se centra con object-fit: contain en ese marco.
+ * H = altura al ancho w de la imagen más alta; el resto rellena el marco con object-fit: cover (sin bandas).
  * Sin imágenes cargadas aún: fallback compacto en móvil.
  */
 function relayoutAllBannerItems() {
