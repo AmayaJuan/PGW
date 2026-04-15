@@ -63,6 +63,10 @@ body { background: var(--bg); color: var(--texto); font-family: 'Nunito', sans-s
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.22);
   backdrop-filter: none;
 }
+/* Escritorio: el botón menú no se usa (sidebar fijo); si no se oculta, se ve un cuadrado junto al logo */
+#mainNavbar .nav-sidebar-toggle {
+  display: none;
+}
 .nav-links a:active, .nav-links a:focus { background: transparent !important; outline: none; }
 .nav-logo { flex-shrink: 0; }
 .nav-logo img { height: 48px; object-fit: contain; }
@@ -176,25 +180,44 @@ body { background: var(--bg); color: var(--texto); font-family: 'Nunito', sans-s
 
 /* Escritorio: mismo tono que navbar + cabecera roja */
 @media (min-width: 1025px) {
+  /* Misma altura que el navbar (padding + logo) para que la franja roja y la barra queden alineadas */
+  :root {
+    --topbar-unified-h: calc(0.8rem + 0.8rem + 44px);
+  }
+  #mainNavbar {
+    min-height: var(--topbar-unified-h);
+    box-sizing: border-box;
+    /* Solapa 1px el borde del sidebar y evita la “costura” clara entre rojo y barra */
+    left: calc(var(--sidebar-w) - 1px);
+    box-shadow: 0 6px 22px rgba(0, 0, 0, 0.16);
+  }
   .sidebar-close-btn {
     display: none !important;
   }
   .sidebar {
-    padding: 1.15rem 0.85rem 0.85rem;
+    padding: 0 0.85rem 0.85rem;
     background: linear-gradient(168deg, #141f33 0%, var(--titulo) 48%, #0a121f 100%);
     border-right: 2px solid var(--rojo);
     box-shadow: 6px 0 28px rgba(0, 0, 0, 0.28);
   }
   .sidebar-panel-header {
-    margin: -1.15rem -0.85rem 0.85rem -0.85rem;
+    margin: 0 -0.85rem 0.85rem -0.85rem;
     background: var(--rojo);
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
+    /* Sin sombra hacia la derecha: unifica visualmente con el navbar */
+    box-shadow: none;
+    padding: 0 1rem;
+    min-height: var(--topbar-unified-h);
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.12);
   }
   .sidebar-panel-title {
     color: #fff;
-  }
-  .sidebar-hint {
-    color: rgba(255, 255, 255, 0.52);
+    font-size: clamp(1.1rem, 2.4vw, 1.5rem);
+    letter-spacing: 0.12em;
+    line-height: 1.05;
   }
   .sidebar-section-label {
     color: rgba(255, 255, 255, 0.75);
@@ -323,10 +346,6 @@ body { background: var(--bg); color: var(--texto); font-family: 'Nunito', sans-s
 .sidebar-nav-footer .sidebar-divider {
   height: 1px; background: var(--borde); margin: 0 0 0.75rem 0;
   border: none;
-}
-.sidebar-hint {
-  font-size: 0.68rem; color: var(--muted); line-height: 1.45;
-  margin: 0 0 0.75rem; padding: 0 0.15rem;
 }
 .sidebar-section-label {
   font-family: 'Rajdhani', sans-serif;
@@ -1001,9 +1020,6 @@ footer p { font-size: 0.72rem; color: var(--muted); }
   }
   /* Cierre con la X del navbar; lista empieza en “Todas las categorías” */
   .sidebar-panel-header {
-    display: none;
-  }
-  .sidebar-hint {
     display: none;
   }
   .sidebar-nav {

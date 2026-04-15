@@ -379,8 +379,29 @@ function scheduleSidebarFlyoutHide() {
   sidebarFlyoutHideT = setTimeout(() => hideCategoryFlyout(), 200);
 }
 
+function suppressTodasActiveWhileFlyoutOpen() {
+  const sb = document.getElementById('sidebar');
+  const allBtn = document.querySelector('#sidebarCategories .sidebar-cat--all');
+  if (!sb || !allBtn) return;
+  if (allBtn.classList.contains('active')) {
+    sb.dataset.todasActiveSuppressed = '1';
+    allBtn.classList.remove('active');
+  }
+}
+
+function restoreTodasActiveAfterFlyoutClose() {
+  const sb = document.getElementById('sidebar');
+  const allBtn = document.querySelector('#sidebarCategories .sidebar-cat--all');
+  if (!sb || !allBtn || sb.dataset.todasActiveSuppressed !== '1') return;
+  const curCat = (document.getElementById('catalogCategory')?.value || '').trim();
+  const curSub = (document.getElementById('catalogSubcategory')?.value || '').trim();
+  if (!curCat && !curSub) allBtn.classList.add('active');
+  delete sb.dataset.todasActiveSuppressed;
+}
+
 function hideCategoryFlyout() {
   clearSidebarFlyoutHideTimer();
+  restoreTodasActiveAfterFlyoutClose();
   document.getElementById('sidebar')?.classList.remove('sidebar--flyout-preview');
   document.querySelectorAll('.sidebar-cat--parent.is-flyout-open').forEach(el => el.classList.remove('is-flyout-open'));
   const fly = document.getElementById('sidebarFlyout');
@@ -397,6 +418,7 @@ function showCategoryFlyout(anchorBtn) {
   if (!cat) return;
   const subs = getSubcategoriesForCategory(cat);
   if (!subs.length) return;
+  suppressTodasActiveWhileFlyoutOpen();
   const fly = document.getElementById('sidebarFlyout');
   const countAll = products.filter(p => (p.cat || '').toLowerCase() === cat.toLowerCase()).length;
   const isMobile = window.innerWidth <= 1024;
@@ -536,8 +558,10 @@ function updateSidebarCategoryActive() {
     const c = (btn.getAttribute('data-cat') || '').trim();
     const s = (btn.getAttribute('data-sub') || '').trim();
     let on = false;
-    if (!c && !s) on = !curCat && !curSub;
-    else if (c && !s) on = curCat === c && !curSub;
+    if (!c && !s) {
+      on = !curCat && !curSub;
+      if (document.getElementById('sidebar')?.dataset.todasActiveSuppressed === '1') on = false;
+    } else if (c && !s) on = curCat === c && !curSub;
     else on = curCat === c && curSub === s;
     btn.classList.toggle('active', on);
   });
