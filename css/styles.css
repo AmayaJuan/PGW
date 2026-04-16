@@ -937,6 +937,7 @@ body { background: var(--bg); color: var(--texto); font-family: 'Nunito', sans-s
 .con-lbl { font-size: 0.68rem; color: var(--muted); text-transform: uppercase; letter-spacing: .1em; }
 .con-val { font-size: 0.9rem; color: var(--titulo); font-weight: 500; }
 .con-map-block { margin: 1rem 0 0; }
+.con-map-stack { display: flex; flex-direction: column; gap: 0.65rem; }
 .con-map-card {
   display: flex;
   align-items: center;
@@ -957,14 +958,42 @@ body { background: var(--bg); color: var(--texto); font-family: 'Nunito', sans-s
   box-shadow: 0 4px 16px rgba(13, 27, 42, 0.08);
   transform: translateY(-1px);
 }
+.con-map-card:focus-visible {
+  outline: 2px solid var(--rojo);
+  outline-offset: 3px;
+}
+.con-map-card--waze:focus-visible {
+  outline-color: #0ea5e9;
+}
 .con-map-card-pin { font-size: 1.35rem; line-height: 1; flex-shrink: 0; }
 .con-map-card-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 0.2rem; }
 .con-map-card-title { font-family: 'Rajdhani', sans-serif; font-size: 0.95rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--titulo); }
 .con-map-card-sub { font-size: 0.8rem; color: var(--muted); line-height: 1.35; }
 .con-map-card-arrow { font-size: 1.1rem; color: var(--rojo); flex-shrink: 0; font-weight: 700; }
-.con-map-links { font-size: 0.78rem; margin: 0.5rem 0 0; }
-.con-map-links a { color: var(--rojo); font-weight: 600; text-decoration: none; }
-.con-map-links a:hover { text-decoration: underline; }
+.con-map-card--waze:hover {
+  border-color: rgba(14, 165, 233, 0.45);
+  box-shadow: 0 4px 18px rgba(14, 165, 233, 0.12);
+}
+.con-map-card-brand {
+  width: 2.35rem;
+  height: 2.35rem;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+.con-map-card-brand--waze {
+  background: linear-gradient(145deg, #33ccff 0%, #0099cc 100%);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(14, 165, 233, 0.35);
+}
+.con-map-card-arrow--waze { color: #0891b2; }
 .con-card { background: #fefdfb; border: 1px solid var(--borde); border-radius: 14px; padding: 2rem; box-shadow: var(--shadow-sm); }
 .btn-wp-grande { display: flex; align-items: center; justify-content: center; gap: .75rem; padding: 1.1rem 2rem; background: var(--wp); color: white; border: none; border-radius: 8px; font-family: 'Rajdhani', sans-serif; font-size: 1.1rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; text-decoration: none; transition: all .25s; margin-top: 2rem; width: 100%; }
 .btn-wp-grande:hover { background: #1e6b35; box-shadow: 0 0 28px rgba(45,140,78,0.4); transform: translateY(-2px); }
