@@ -936,6 +936,11 @@ body { background: var(--bg); color: var(--texto); font-family: 'Nunito', sans-s
 .con-ico { width: 44px; height: 44px; border-radius: 8px; background: rgba(196,30,58,0.06); border: 1px solid rgba(196,30,58,0.2); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
 .con-lbl { font-size: 0.68rem; color: var(--muted); text-transform: uppercase; letter-spacing: .1em; }
 .con-val { font-size: 0.9rem; color: var(--titulo); font-weight: 500; }
+.con-map-block { margin: 1rem 0 0; }
+.con-map-embed { width: 100%; height: 250px; border: 0; border-radius: 12px; display: block; box-sizing: border-box; }
+.con-map-links { font-size: 0.78rem; margin: 0.4rem 0 0; }
+.con-map-links a { color: var(--rojo); font-weight: 600; text-decoration: none; }
+.con-map-links a:hover { text-decoration: underline; }
 .con-card { background: #fefdfb; border: 1px solid var(--borde); border-radius: 14px; padding: 2rem; box-shadow: var(--shadow-sm); }
 .btn-wp-grande { display: flex; align-items: center; justify-content: center; gap: .75rem; padding: 1.1rem 2rem; background: var(--wp); color: white; border: none; border-radius: 8px; font-family: 'Rajdhani', sans-serif; font-size: 1.1rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; text-decoration: none; transition: all .25s; margin-top: 2rem; width: 100%; }
 .btn-wp-grande:hover { background: #1e6b35; box-shadow: 0 0 28px rgba(45,140,78,0.4); transform: translateY(-2px); }
@@ -1577,7 +1582,8 @@ footer p { font-size: 0.72rem; color: var(--muted); }
     bottom: max(0.5rem, env(safe-area-inset-bottom, 0px));
   }
 
-  .con-grid iframe { max-width: 100%; box-sizing: border-box; }
+  .con-grid iframe,
+  .con-map-embed { max-width: 100%; box-sizing: border-box; }
 }
 
 @media (max-width: 480px) {
