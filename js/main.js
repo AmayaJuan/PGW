@@ -1571,6 +1571,7 @@ function abrirLightbox(src, nombre, galleryUrls, startIdx) {
     img.addEventListener('dblclick', lbReset);
 
     wrap.addEventListener('mousedown', e => {
+      if (e.target.closest('.lb-nav')) return;
       LBState.dragging = true; LBState.lastX = e.clientX; LBState.lastY = e.clientY;
       img.style.cursor = 'grabbing'; e.preventDefault();
     });
@@ -1584,6 +1585,7 @@ function abrirLightbox(src, nombre, galleryUrls, startIdx) {
     wrap.addEventListener('wheel', e => { e.preventDefault(); lbZoom(e.deltaY < 0 ? 0.2 : -0.2); }, { passive: false });
 
     wrap.addEventListener('touchstart', e => {
+      if (e.target.closest('.lb-nav')) return;
       if (e.touches.length === 1) {
         LBState.lastX = e.touches[0].clientX; LBState.lastY = e.touches[0].clientY;
       } else if (e.touches.length === 2) {
