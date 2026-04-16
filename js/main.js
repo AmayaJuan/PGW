@@ -1232,7 +1232,11 @@ function openModal(id) {
   mainImg.removeAttribute('srcset');
   mainImg.removeAttribute('sizes');
   mainImg.style.cursor = 'zoom-in';
-  mainImg.onclick = (e) => { e.stopPropagation(); abrirLightbox(mainImg.src, p.name); };
+  mainImg.onclick = (e) => {
+    e.stopPropagation();
+    const ix = Math.max(0, p.imgs.indexOf(mainImg.src));
+    abrirLightbox(mainImg.src, p.name, p.imgs, ix);
+  };
 
   mainWrap.querySelectorAll('.modal-nav-arrow').forEach(a => a.remove());
   // ✅ Show arrows if total media > 1 (imgs + videos)
@@ -1255,6 +1259,9 @@ function openModal(id) {
   const numVideos = (p.videos || []).length;
   const hasVideo  = numVideos > 0;
   const totalItems = p.imgs.length + numVideos;
+
+  const galleryHint = document.getElementById('modalGalleryHint');
+  if (galleryHint) galleryHint.hidden = totalItems <= 1;
 
   if (totalItems > 1) {
     let thumbsHTML = p.imgs.map((img, i) => `
@@ -1283,6 +1290,7 @@ function openModal(id) {
   } else {
     thumbsEl.innerHTML = '';
     thumbsEl.style.display = 'none';
+    if (galleryHint) galleryHint.hidden = true;
   }
 
   document.getElementById('modalInfo').innerHTML = `
@@ -1497,7 +1505,7 @@ function abrirLightbox(src, nombre) {
         <button class="lb-ctrl-btn" onclick="lbZoom(0.3)" title="Acercar">&#65291;</button>
         <button class="lb-ctrl-btn" onclick="lbZoom(-0.3)" title="Alejar">&#65293;</button>
         <button class="lb-ctrl-btn" onclick="lbReset()" title="Restablecer">&#8635;</button>
-        <span class="lb-hint">Arrastra · Pellizca · Doble tap para resetear</span>
+        <span class="lb-hint">Más fotos: cierra el zoom (✕ o fondo) y usa las flechas del modal, las miniaturas o las teclas ← →. Aquí: arrastra · pellizca · doble tap para resetear.</span>
       </div>`;
     document.body.appendChild(lb);
 
