@@ -722,12 +722,50 @@ body { background: var(--bg); color: var(--texto); font-family: 'Nunito', sans-s
 .hero-tag::before { content: '●'; font-size: 0.45rem; animation: blink 2s infinite; }
 .hero-titulo { font-family: 'Rajdhani', sans-serif; font-size: clamp(2.8rem,7vw,6rem); font-weight: 700; line-height: 0.95; text-transform: uppercase; color: var(--titulo); margin-bottom: 1.25rem; }
 .hero-titulo .linea2 { color: var(--rojo); display: block; }
-.hero-sub { font-size: 0.95rem; line-height: 1.75; color: var(--muted); max-width: 480px; margin-bottom: 2.5rem; }
-.hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+.hero-intro {
+  max-width: 520px;
+  margin-bottom: 2.25rem;
+  padding: 1.1rem 1.25rem 1.15rem;
+  border-radius: 12px;
+  background: linear-gradient(105deg, rgba(255, 255, 255, 0.92) 0%, rgba(255, 255, 255, 0.72) 55%, rgba(255, 255, 255, 0.35) 100%);
+  border: 1px solid rgba(209, 217, 230, 0.75);
+  box-shadow: 0 8px 28px rgba(13, 27, 42, 0.07);
+}
+.hero-sub { font-size: 0.95rem; line-height: 1.7; color: var(--titulo); max-width: 100%; margin: 0; }
+.hero-sub .hero-sub-line { display: block; }
+.hero-sub .hero-sub-line + .hero-sub-line { margin-top: 0.4rem; color: var(--muted); }
+.hero-sub strong { color: var(--titulo); font-weight: 600; }
+.hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; align-items: stretch; }
 .btn-rojo { display: inline-flex; align-items: center; padding: 0.8rem 2rem; background: var(--rojo); color: white; border: none; border-radius: 6px; font-family: 'Rajdhani', sans-serif; font-size: 0.95rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; transition: all .25s; }
 .btn-rojo:hover { background: var(--rojo2); box-shadow: 0 0 28px rgba(196,30,58,0.3); transform: translateY(-2px); }
 .btn-outline { display: inline-flex; align-items: center; padding: 0.8rem 2rem; background: transparent; color: var(--texto); border: 1px solid var(--borde); border-radius: 6px; font-family: 'Rajdhani', sans-serif; font-size: 0.95rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; transition: all .25s; }
 .btn-outline:hover { border-color: var(--rojo); color: var(--rojo); }
+.btn-hero-wp {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  padding: 0.8rem 1.65rem;
+  background: var(--wp);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: all 0.25s;
+  box-shadow: 0 2px 14px rgba(45, 140, 78, 0.35);
+}
+.btn-hero-wp:hover {
+  background: #1e6b35;
+  color: #fff;
+  box-shadow: 0 0 26px rgba(45, 140, 78, 0.45);
+  transform: translateY(-2px);
+}
+.btn-hero-wp .btn-hero-wp-ico { width: 1.15rem; height: 1.15rem; flex-shrink: 0; fill: #fff; }
 
 /* ── MARCAS ── */
 .marcas-wrap { background: var(--bg2); border-top: 1px solid var(--borde); border-bottom: 1px solid var(--borde); padding: 1.25rem 0; overflow: hidden; }
@@ -1441,7 +1479,7 @@ footer p { font-size: 0.72rem; color: var(--muted); }
   .hero-tag { font-size: 0.6rem; padding: 0.25rem 0.75rem; }
   .sec-titulo { font-size: 1.6rem; margin-bottom: 1.5rem; }
   .nos-titulo, .con-titulo { font-size: 1.6rem; }
-  .btn-rojo, .btn-outline { padding: 0.7rem 1.5rem; font-size: 0.85rem; }
+  .btn-rojo, .btn-outline, .btn-hero-wp { padding: 0.7rem 1.5rem; font-size: 0.85rem; }
 
   /* Modal móvil */
   .modal { max-width: 100%; border-radius: 12px; max-height: 92vh; margin-top: 0; padding-bottom: 1.5rem; }
