@@ -1484,11 +1484,39 @@ function toggleMobileMenu() {
 }
 
 // ========================================
-// LIGHTBOX — min 1x, max 4x, pan libre
+// LIGHTBOX — min 1x, max 4x, pan libre + galería de fotos del producto
 // ========================================
 const LBState = { scale: 1, x: 0, y: 0, dragging: false, lastX: 0, lastY: 0, pinchDist: 0, pinchScale: 1 };
 const LB_MIN = 1;
 const LB_MAX = 1.45;
+/** URLs solo de imágenes del producto abierto en el modal (para ◀ ▶ en el zoom). */
+const LB_Gallery = { urls: [], idx: 0, productName: '' };
+
+function lbUpdateLightboxNav() {
+  const prev = document.getElementById('lbPrev');
+  const next = document.getElementById('lbNext');
+  const counter = document.getElementById('lbCounter');
+  const multi = LB_Gallery.urls.length > 1;
+  const show = multi ? 'flex' : 'none';
+  if (prev) { prev.style.display = show; prev.disabled = !multi; }
+  if (next) { next.style.display = show; next.disabled = !multi; }
+  if (counter) {
+    counter.style.display = multi ? 'block' : 'none';
+    counter.textContent = multi ? `${LB_Gallery.idx + 1} / ${LB_Gallery.urls.length}` : '';
+  }
+}
+
+function lbNav(dir) {
+  if (LB_Gallery.urls.length < 2) return;
+  LB_Gallery.idx = (LB_Gallery.idx + dir + LB_Gallery.urls.length) % LB_Gallery.urls.length;
+  lbReset();
+  const img = document.getElementById('lbImg');
+  if (!img) return;
+  img.src = LB_Gallery.urls[LB_Gallery.idx];
+  const base = LB_Gallery.productName || '';
+  img.alt = base ? `${base} — foto ${LB_Gallery.idx + 1}` : `Foto ${LB_Gallery.idx + 1}`;
+  lbUpdateLightboxNav();
+}
 
 function lbApply() {
   const img = document.getElementById('lbImg');
@@ -1504,21 +1532,35 @@ function lbZoom(delta) {
   lbApply();
 }
 
-function abrirLightbox(src, nombre) {
+function abrirLightbox(src, nombre, galleryUrls, startIdx) {
+  if (nombre) LB_Gallery.productName = nombre;
+  if (galleryUrls && galleryUrls.length > 0) {
+    LB_Gallery.urls = galleryUrls.slice();
+    let ix = typeof startIdx === 'number' ? startIdx : LB_Gallery.urls.indexOf(src);
+    if (ix < 0) ix = 0;
+    LB_Gallery.idx = Math.min(Math.max(0, ix), LB_Gallery.urls.length - 1);
+  } else {
+    LB_Gallery.urls = [src];
+    LB_Gallery.idx = 0;
+  }
+
   let lb = document.getElementById('lightboxOverlay');
   if (!lb) {
     lb = document.createElement('div');
     lb.id = 'lightboxOverlay';
     lb.innerHTML = `
-      <button class="lb-close" onclick="cerrarLightbox()" aria-label="Cerrar">&#10005;</button>
+      <button type="button" class="lb-close" onclick="cerrarLightbox()" aria-label="Cerrar">&#10005;</button>
       <div class="lb-img-wrap" id="lbWrap">
+        <button type="button" class="lb-nav lb-nav--prev" id="lbPrev" onclick="event.stopPropagation();lbNav(-1)" aria-label="Foto anterior">&#8249;</button>
         <img id="lbImg" src="" alt="" draggable="false"/>
+        <button type="button" class="lb-nav lb-nav--next" id="lbNext" onclick="event.stopPropagation();lbNav(1)" aria-label="Foto siguiente">&#8250;</button>
+        <span id="lbCounter" class="lb-counter" aria-live="polite"></span>
       </div>
       <div class="lb-controls">
-        <button class="lb-ctrl-btn" onclick="lbZoom(0.3)" title="Acercar">&#65291;</button>
-        <button class="lb-ctrl-btn" onclick="lbZoom(-0.3)" title="Alejar">&#65293;</button>
-        <button class="lb-ctrl-btn" onclick="lbReset()" title="Restablecer">&#8635;</button>
-        <span class="lb-hint">Más fotos: cierra el zoom (✕ o fondo) y usa las flechas del modal, las miniaturas o las teclas ← →. Aquí: arrastra · pellizca · doble tap para resetear.</span>
+        <button type="button" class="lb-ctrl-btn" onclick="lbZoom(0.3)" title="Acercar">&#65291;</button>
+        <button type="button" class="lb-ctrl-btn" onclick="lbZoom(-0.3)" title="Alejar">&#65293;</button>
+        <button type="button" class="lb-ctrl-btn" onclick="lbReset()" title="Restablecer">&#8635;</button>
+        <span class="lb-hint">Con varias fotos: botones laterales o teclas ← →. Arrastra · pellizca · doble tap para resetear.</span>
       </div>`;
     document.body.appendChild(lb);
 
@@ -1567,8 +1609,12 @@ function abrirLightbox(src, nombre) {
   // Reset al abrir — siempre empieza en 1x
   LBState.scale = 1; LBState.x = 0; LBState.y = 0; LBState.dragging = false;
   const img = document.getElementById('lbImg');
-  img.src = src; img.alt = nombre || '';
+  const cur = LB_Gallery.urls[LB_Gallery.idx] || src;
+  img.src = cur;
+  const base = LB_Gallery.productName || nombre || '';
+  img.alt = base ? `${base} — foto ${LB_Gallery.idx + 1}` : `Foto ${LB_Gallery.idx + 1}`;
   img.style.transform = ''; img.style.transition = 'none'; img.style.cursor = 'grab';
+  lbUpdateLightboxNav();
   const lbWasOpen = lb.classList.contains('open');
   lb.classList.add('open');
   if (!lbWasOpen) acquirePageScrollLock();
@@ -1580,6 +1626,12 @@ function cerrarLightbox() {
   lb.classList.remove('open');
   lbReset();
   releasePageScrollLock();
+  // Mantener el modal alineado con la última foto vista en el zoom
+  const modalOv = document.getElementById('modalOverlay');
+  if (!modalOv?.classList.contains('open') || LB_Gallery.urls.length < 2) return;
+  const thumbs = document.querySelectorAll('.modal-thumb');
+  const t = thumbs[LB_Gallery.idx];
+  if (t && t.getAttribute('data-type') === 'img') t.click();
 }
 
 // ========================================
