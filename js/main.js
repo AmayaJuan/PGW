@@ -1311,6 +1311,7 @@ function openModal(id) {
   // ✅ Init gallery state for mixed media
   openModal._currentThumbIdx = 0;
   openModal._imgs = p.imgs;
+  openModal._productName = p.name;
   openModal._videos = p.videos || [];
   const modalOv = document.getElementById('modalOverlay');
   const modalJustOpened = !modalOv.classList.contains('open');
@@ -1321,6 +1322,13 @@ function openModal(id) {
   const enfocables = document.getElementById('modal').querySelectorAll('button,[href],input,select,textarea,[tabindex]:not([tabindex="-1"])');
   const first = enfocables[0], last = enfocables[enfocables.length - 1];
   function trap(e) {
+    const lbOpen = document.getElementById('lightboxOverlay')?.classList.contains('open');
+    if (lbOpen && (e.key === 'ArrowRight' || e.key === 'ArrowLeft')) {
+      e.preventDefault();
+      if (e.key === 'ArrowRight') lbNav(1);
+      else lbNav(-1);
+      return;
+    }
     if (e.key === 'ArrowRight') { if (typeof modalZoomCleanup==='function') modalZoomCleanup(); navegarGaleria(1); return; }
     if (e.key === 'ArrowLeft')  { if (typeof modalZoomCleanup==='function') modalZoomCleanup(); navegarGaleria(-1); return; }
     if (e.key !== 'Tab') return;
@@ -1388,7 +1396,12 @@ function cambiarImg(src, el) {
     mainImg.removeAttribute('srcset');
     mainImg.style.opacity = '1';
     mainImg.style.cursor  = 'zoom-in';
-    mainImg.onclick = (e) => { e.stopPropagation(); abrirLightbox(src, ''); };
+    mainImg.onclick = (e) => {
+      e.stopPropagation();
+      const imgs = openModal._imgs || [];
+      const ix = Math.max(0, imgs.indexOf(src));
+      abrirLightbox(src, openModal._productName || '', imgs, ix);
+    };
     // Reinicializar zoom para la nueva imagen
     if (typeof modalZoomInit === 'function') modalZoomInit();
   }, 150);
