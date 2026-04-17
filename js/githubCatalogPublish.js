@@ -24,11 +24,27 @@
    * @param {string} p.jsonText  cuerpo UTF-8 del JSON
    * @param {string} [p.message]
    */
+  function normRepoPart(s) {
+    return String(s || '')
+      .trim()
+      .replace(/^\/+|\/+$/g, '')
+      .replace(/\.git$/i, '');
+  }
+
+  async function readJsonBody(res) {
+    const t = await res.text();
+    try {
+      return JSON.parse(t);
+    } catch (_) {
+      return { message: t || res.statusText };
+    }
+  }
+
   async function putProductsJson(p) {
-    const owner = String(p.owner || '').trim();
-    const repo = String(p.repo || '').trim();
-    const branch = String(p.branch || 'main').trim();
-    const path = String(p.path || 'data/products.json').trim().replace(/^\/+/, '');
+    const owner = normRepoPart(p.owner);
+    const repo = normRepoPart(p.repo);
+    const branch = normRepoPart(p.branch) || 'main';
+    const path = normRepoPart(p.path) || 'data/products.json';
     const token = String(p.token || '').trim();
     const jsonText = p.jsonText;
     const message = String(p.message || 'Update products.json (Pacoustic web)').trim();
@@ -43,8 +59,24 @@
       'Content-Type': 'application/json'
     };
 
+    const repoApi = `${API}/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}`;
+    const repoRes = await fetch(repoApi, { method: 'GET', headers });
+    if (!repoRes.ok) {
+      const j = await readJsonBody(repoRes);
+      const gh = j && j.message ? String(j.message) : '';
+      if (repoRes.status === 404) {
+        throw new Error(
+          'GitHub no encuentra el repositorio o tu token no tiene acceso (a veces también responde 404 por privacidad). ' +
+            'Revisa: 1) Propietario = usuario u org exacto de la URL. 2) Nombre del repo sin .git. 3) Token classic con scope «repo»/«public_repo» o fine-grained con acceso a ESE repositorio y permiso Contents. ' +
+            (gh ? `Detalle: ${gh}` : '')
+        );
+      }
+      throw new Error(gh || `No se pudo comprobar el repo (${repoRes.status}).`);
+    }
+
     const pathEnc = path
       .split('/')
+      .filter(Boolean)
       .map(seg => encodeURIComponent(seg))
       .join('/');
     const baseUrl = `${API}/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/contents/${pathEnc}`;
@@ -55,14 +87,20 @@
     if (getRes.status === 200) {
       const meta = await getRes.json();
       sha = meta.sha || null;
-    } else if (getRes.status !== 404) {
-      const errText = await getRes.text();
-      let msg = `GitHub GET ${getRes.status}`;
-      try {
-        const j = JSON.parse(errText);
-        if (j.message) msg = j.message;
-      } catch (_) {}
-      throw new Error(msg);
+    } else if (getRes.status === 404) {
+      // Archivo o rama inexistente en GET: puede ser rama mal escrita, o ruta distinta dentro del mono-repo.
+      const repoMeta = await readJsonBody(
+        await fetch(`${repoApi}/branches/${encodeURIComponent(branch)}`, { method: 'GET', headers })
+      );
+      if (repoMeta && repoMeta.message && String(repoMeta.message).toLowerCase().includes('not found')) {
+        throw new Error(
+          `La rama «${branch}» no existe en ${owner}/${repo} o el nombre no coincide (prueba «main» o «master»). ` +
+            `Si el sitio está en una subcarpeta del repo, la ruta del JSON no es data/products.json sino por ejemplo Pacoustic/data/products.json.`
+        );
+      }
+    } else {
+      const j = await readJsonBody(getRes);
+      throw new Error(j.message || `Error al leer el archivo (${getRes.status}).`);
     }
 
     const body = {
@@ -73,20 +111,16 @@
     if (sha) body.sha = sha;
 
     const putRes = await fetch(baseUrl, { method: 'PUT', headers, body: JSON.stringify(body) });
-    const putText = await putRes.text();
+    const putJ = await readJsonBody(putRes);
     if (!putRes.ok) {
-      let msg = `GitHub PUT ${putRes.status}`;
-      try {
-        const j = JSON.parse(putText);
-        if (j.message) msg = j.message;
-      } catch (_) {}
+      let msg = putJ.message || `GitHub PUT ${putRes.status}`;
+      if (putRes.status === 404 || String(msg).toLowerCase() === 'not found') {
+        msg +=
+          ' — Suele ser ruta del archivo dentro del repo incorrecta (ej. si GitHub tiene la carpeta Pacoustic arriba: Pacoustic/data/products.json) o rama incorrecta.';
+      }
       throw new Error(msg);
     }
-    try {
-      return JSON.parse(putText);
-    } catch (_) {
-      return { ok: true };
-    }
+    return putJ && typeof putJ === 'object' ? putJ : { ok: true };
   }
 
   global.PAcousticGithubPublish = { putProductsJson };

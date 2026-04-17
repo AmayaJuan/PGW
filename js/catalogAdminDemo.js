@@ -208,7 +208,8 @@
       html += '<div class="pac-admin-demo-field"><label for="gh-owner">Propietario del repo (usuario u organización)</label><input id="gh-owner" value="' + go + '" autocomplete="organization" /></div>';
       html += '<div class="pac-admin-demo-field"><label for="gh-repo">Nombre del repositorio</label><input id="gh-repo" value="' + gr + '" autocomplete="off" /></div>';
       html += '<div class="pac-admin-demo-field"><label for="gh-branch">Rama</label><input id="gh-branch" value="' + gb + '" autocomplete="off" /></div>';
-      html += '<div class="pac-admin-demo-field"><label for="gh-path">Ruta del JSON en el repo</label><input id="gh-path" value="' + gp + '" autocomplete="off" /></div>';
+      html +=
+        '<div class="pac-admin-demo-field"><label for="gh-path">Ruta del JSON dentro del repo</label><input id="gh-path" value="' + gp + '" autocomplete="off" placeholder="data/products.json o Pacoustic/data/products.json" /></div>';
       html += '<div class="pac-admin-demo-field"><label for="gh-token">Token (PAT)</label><input id="gh-token" type="password" autocomplete="off" placeholder="ghp_… o fine-grained" /></div>';
       html +=
         '<label class="pac-admin-demo-check"><input type="checkbox" id="gh-remember-pat" /> Recordar token solo en esta pestaña (sessionStorage)</label>';
