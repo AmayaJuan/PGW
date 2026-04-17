@@ -8,18 +8,58 @@ const WP = 'https://wa.me/573053402732';
 const WP_SVG = `<svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>`;
 
 /** Sube en 1 cuando cambies categorías/productos en data/products.json (rompe caché en GitHub Pages y móviles). */
-const CATALOG_JSON_VERSION = 3;
+const CATALOG_JSON_VERSION = 4;
+
+const LS_BASE_HIDDEN_NIDS = 'pacoustic_catalog_hidden_base';
+
+function readHiddenBaseNids() {
+  try {
+    const a = JSON.parse(localStorage.getItem(LS_BASE_HIDDEN_NIDS) || '[]');
+    return Array.isArray(a) ? a.filter(n => typeof n === 'number' && Number.isFinite(n)) : [];
+  } catch (_) {
+    return [];
+  }
+}
+
+function writeHiddenBaseNids(arr) {
+  try {
+    localStorage.setItem(LS_BASE_HIDDEN_NIDS, JSON.stringify(arr));
+  } catch (_) {}
+}
+
+function getHiddenBaseNidSet() {
+  return new Set(readHiddenBaseNids());
+}
+
+/** Quita del merge los ítems del JSON base marcados como ocultos (solo este navegador hasta publicar). */
+function filterBaseCatalog(base) {
+  const hide = getHiddenBaseNidSet();
+  if (!hide.size) return base;
+  return base.filter(p => {
+    const nid =
+      typeof p.id === 'number' && !Number.isNaN(p.id) ? p.id : parseInt(String(p.id || ''), 10);
+    if (!Number.isFinite(nid)) return true;
+    return !hide.has(nid);
+  });
+}
+
+if (typeof window !== 'undefined') {
+  window.PAcousticFilteredBaseCatalog = function (baseArr) {
+    return filterBaseCatalog(Array.isArray(baseArr) ? baseArr.slice() : []);
+  };
+}
 
 /** Catálogo base (solo `data/products.json`). Sirve para exportar JSON en la prueba de panel admin. */
 function mergeLocalCatalogJson(base) {
+  const filtered = filterBaseCatalog(base);
   try {
     const raw = localStorage.getItem('pacoustic_local_products');
-    if (!raw) return base;
+    if (!raw) return filtered;
     const extra = JSON.parse(raw);
-    if (!Array.isArray(extra) || extra.length === 0) return base;
-    return base.concat(extra.map((item, i) => ({ ...item, __pacousticLocalIndex: i })));
+    if (!Array.isArray(extra) || extra.length === 0) return filtered;
+    return filtered.concat(extra.map((item, i) => ({ ...item, __pacousticLocalIndex: i })));
   } catch (_) {
-    return base;
+    return filtered;
   }
 }
 
@@ -60,6 +100,27 @@ function removePacousticLocalProductFromCard(ev, localIndex) {
 if (typeof window !== 'undefined') {
   window.removePacousticLocalProductFromCard = removePacousticLocalProductFromCard;
 }
+
+/** Oculta un producto del JSON base en este navegador (al subir a GitHub el array ya no lo incluye). */
+function hidePacousticBaseProductByNid(ev, nid) {
+  if (ev) {
+    ev.preventDefault();
+    ev.stopPropagation();
+  }
+  const n = Number(nid);
+  if (!Number.isFinite(n)) return;
+  if (
+    !window.confirm(
+      '¿Quitar este producto del catálogo? Deja de mostrarse aquí. Si después pulsas «Subir catálogo a GitHub», el JSON en el repo quedará sin este ítem. Puedes deshacerlo en el panel (Deshacer) antes de publicar.'
+    )
+  )
+    return;
+  const cur = readHiddenBaseNids();
+  if (!cur.includes(n)) cur.push(n);
+  writeHiddenBaseNids(cur);
+  window.location.reload();
+}
+if (typeof window !== 'undefined') window.hidePacousticBaseProductByNid = hidePacousticBaseProductByNid;
 
 // ========================================
   // CACHE DOM - Optimización rendimiento
@@ -1083,8 +1144,16 @@ function renderProducts() {
         const delBtn = showDel
           ? `<button type="button" class="prod-card-delete" onclick="removePacousticLocalProductFromCard(event, ${p.localStorageIndex})" aria-label="Quitar producto de prueba del navegador" title="Quitar de prueba (solo este navegador)">🗑</button>`
           : '';
+        const showHideBase =
+          isPacousticAdminDemoSession() &&
+          (p.localStorageIndex == null || !Number.isInteger(p.localStorageIndex)) &&
+          Number.isFinite(p.nid);
+        const hideBaseBtn = showHideBase
+          ? `<button type="button" class="prod-card-delete prod-card-delete--hide-base" onclick="hidePacousticBaseProductByNid(event, ${p.nid})" aria-label="Quitar del catálogo (JSON base)" title="Quitar del catálogo (se refleja al subir a GitHub)">✕</button>`
+          : '';
         html += `
           <div class="prod-card" style="--card-delay:${delay*0.07}s" onclick="openModal('${p.id}')">
+            ${hideBaseBtn}
             ${delBtn}
             <div class="prod-img-wrap">
               <img src="${escapeAttr(p.imgs[0])}" alt="${escapeAttr(p.name)}" loading="lazy"/>
@@ -1384,6 +1453,13 @@ function openModal(id) {
     ${
       isPacousticAdminDemoSession() && p.localStorageIndex != null && Number.isInteger(p.localStorageIndex)
         ? `<button type="button" class="modal-delete-local-btn" onclick="event.stopPropagation();removePacousticLocalProductFromCard(event, ${p.localStorageIndex})">Quitar producto de prueba</button>`
+        : ''
+    }
+    ${
+      isPacousticAdminDemoSession() &&
+      (p.localStorageIndex == null || !Number.isInteger(p.localStorageIndex)) &&
+      Number.isFinite(p.nid)
+        ? `<button type="button" class="modal-delete-base-btn" onclick="event.stopPropagation();hidePacousticBaseProductByNid(event, ${p.nid})">Quitar del catálogo (JSON base)</button>`
         : ''
     }`;
 

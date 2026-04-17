@@ -805,6 +805,29 @@ body { background: var(--bg); color: var(--texto); font-family: 'Nunito', sans-s
 }
 .prod-card-delete:hover { background: var(--rojo); color: #fff; }
 .prod-card-delete:focus-visible { outline: 2px solid var(--rojo); outline-offset: 2px; }
+.prod-card-delete--hide-base {
+  left: 10px;
+  right: auto;
+  background: rgba(90, 106, 122, 0.92);
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+.prod-card-delete--hide-base:hover { background: var(--titulo); color: #fff; }
+.modal-delete-base-btn {
+  display: block;
+  width: 100%;
+  margin-top: 0.65rem;
+  padding: 0.55rem 1rem;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  border-radius: 10px;
+  border: 1px solid var(--borde);
+  background: var(--bg3);
+  color: var(--titulo);
+  cursor: pointer;
+}
+.modal-delete-base-btn:hover { border-color: var(--titulo); background: #fff; }
 .modal-delete-local-btn {
   display: block;
   width: 100%;

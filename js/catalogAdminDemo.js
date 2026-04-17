@@ -76,9 +76,13 @@
   }
 
   function getMergedCatalogForExport() {
-    const base = Array.isArray(window.__PACOUSTIC_CATALOG_JSON_BASE)
+    const rawBase = Array.isArray(window.__PACOUSTIC_CATALOG_JSON_BASE)
       ? window.__PACOUSTIC_CATALOG_JSON_BASE.slice()
       : [];
+    const base =
+      typeof window.PAcousticFilteredBaseCatalog === 'function'
+        ? window.PAcousticFilteredBaseCatalog(rawBase)
+        : rawBase;
     const extra = readLocalProducts();
     return base.concat(extra);
   }
@@ -110,9 +114,13 @@
       : [];
     let idNum = parseInt(get('f-id'), 10);
     if (!Number.isFinite(idNum) || idNum < 1) {
-      const base = window.__PACOUSTIC_CATALOG_JSON_BASE;
+      const rawBase = Array.isArray(window.__PACOUSTIC_CATALOG_JSON_BASE) ? window.__PACOUSTIC_CATALOG_JSON_BASE : [];
+      const base =
+        typeof window.PAcousticFilteredBaseCatalog === 'function'
+          ? window.PAcousticFilteredBaseCatalog(rawBase.slice())
+          : rawBase.slice();
       const local = readLocalProducts();
-      const all = [...(Array.isArray(base) ? base : []), ...local];
+      const all = [...base, ...local];
       const maxId = all.reduce((m, p) => {
         const n = typeof p.id === 'number' ? p.id : parseInt(String(p.id), 10);
         return Number.isFinite(n) && n > m ? n : m;
@@ -188,12 +196,14 @@
 
       html += '<h3 class="pac-admin-demo-subtit">Deshacer cambios locales</h3>';
       html +=
-        '<p class="pac-admin-demo-note">Si no te gustó cómo quedó la prueba <strong>en este navegador</strong>, borra los productos añadidos aquí: el catálogo vuelve a coincidir con el <code>data/products.json</code> del sitio (sin tocar Git hasta que subas algo). Si ya hiciste <strong>push</strong> a GitHub y quieres deshacerlo, usa el historial del repositorio en GitHub (esta página no puede borrar commits).</p>';
+        '<p class="pac-admin-demo-note">Con la sesión admin activa verás <strong>✕</strong> en las tarjetas (o «Quitar del catálogo» en el detalle) para <strong>ocultar productos del JSON base</strong>: dejan de mostrarse y al «Subir catálogo a GitHub» el archivo queda sin esos ítems. Los productos solo de prueba se quitan con 🗑 o aquí abajo. Puedes <strong>mostrar de nuevo</strong> los ocultos con el botón correspondiente antes de publicar. Los commits ya hechos se revierten en GitHub.</p>';
       html += '<div class="pac-admin-demo-actions">';
       html +=
         '<button type="button" class="pac-admin-demo-btn pac-admin-demo-btn--danger" data-act="clear-all-local">Borrar todos los productos de prueba del navegador</button>';
       html +=
         '<button type="button" class="pac-admin-demo-btn" data-act="clear-gh-stored">Olvidar repo guardado y token (esta pestaña)</button>';
+      html +=
+        '<button type="button" class="pac-admin-demo-btn" data-act="clear-hidden-base">Mostrar de nuevo productos ocultos del JSON base</button>';
       html += '</div>';
 
       const gh = loadGhMeta();
@@ -396,6 +406,27 @@
         msg.className = 'pac-admin-demo-msg pac-admin-demo-msg--ok';
         msg.textContent = 'Datos de GitHub guardados en el navegador eliminados.';
       }
+    });
+
+    root.querySelector('[data-act="clear-hidden-base"]')?.addEventListener('click', () => {
+      let n = 0;
+      try {
+        const a = JSON.parse(localStorage.getItem('pacoustic_catalog_hidden_base') || '[]');
+        n = Array.isArray(a) ? a.length : 0;
+      } catch (_) {}
+      if (n === 0) {
+        const msg = root.querySelector('#pac-ad-msg');
+        if (msg) {
+          msg.className = 'pac-admin-demo-msg pac-admin-demo-msg--err';
+          msg.textContent = 'No hay productos del JSON base marcados como ocultos.';
+        }
+        return;
+      }
+      if (!window.confirm(`¿Dejar de ocultar ${n} producto(s) del JSON base en este navegador?`)) return;
+      try {
+        localStorage.removeItem('pacoustic_catalog_hidden_base');
+      } catch (_) {}
+      window.location.reload();
     });
 
     root.querySelector('[data-act="gh-push"]')?.addEventListener('click', async () => {
