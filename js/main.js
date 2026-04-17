@@ -17,10 +17,48 @@ function mergeLocalCatalogJson(base) {
     if (!raw) return base;
     const extra = JSON.parse(raw);
     if (!Array.isArray(extra) || extra.length === 0) return base;
-    return base.concat(extra);
+    return base.concat(extra.map((item, i) => ({ ...item, __pacousticLocalIndex: i })));
   } catch (_) {
     return base;
   }
+}
+
+/** Misma clave que `catalogAdminDemo.js` — sesión del panel de prueba. */
+function isPacousticAdminDemoSession() {
+  try {
+    return sessionStorage.getItem('pacoustic_admin_demo_session') === '1';
+  } catch (_) {
+    return false;
+  }
+}
+
+function removePacousticLocalProductAtIndex(index) {
+  const key = 'pacoustic_local_products';
+  try {
+    const raw = localStorage.getItem(key);
+    const arr = raw ? JSON.parse(raw) : [];
+    if (!Array.isArray(arr) || index < 0 || index >= arr.length) return false;
+    arr.splice(index, 1);
+    localStorage.setItem(key, JSON.stringify(arr));
+    return true;
+  } catch (_) {
+    return false;
+  }
+}
+
+/** Llamado desde HTML: quita un producto solo-guardado-en-navegador y recarga. */
+function removePacousticLocalProductFromCard(ev, localIndex) {
+  if (ev) {
+    ev.preventDefault();
+    ev.stopPropagation();
+  }
+  const n = Number(localIndex);
+  if (!Number.isInteger(n) || n < 0) return;
+  if (!window.confirm('¿Quitar este producto de prueba solo de este navegador?')) return;
+  if (removePacousticLocalProductAtIndex(n)) window.location.reload();
+}
+if (typeof window !== 'undefined') {
+  window.removePacousticLocalProductFromCard = removePacousticLocalProductFromCard;
 }
 
 // ========================================
@@ -196,6 +234,7 @@ async function loadProducts() {
       // ✅ Multi-video support: collect video, video2, video3+, etc.
       const videos = [];
       for (let key of Object.keys(p)) {
+        if (key.startsWith('__')) continue;
         if (key.startsWith('video') && p[key]) {
           videos.push(p[key]);
         }
@@ -204,6 +243,10 @@ async function loadProducts() {
       const nid = typeof p.id === 'number' && !Number.isNaN(p.id)
         ? p.id
         : (parseInt(String(p.id), 10) || 999999);
+      const localStorageIndex =
+        typeof p.__pacousticLocalIndex === 'number' && !Number.isNaN(p.__pacousticLocalIndex)
+          ? p.__pacousticLocalIndex
+          : null;
       return {
         // ID único lowercase-kebab-case desde name
         id:        p.name.toLowerCase().replace(/\s+/g, '-'),
@@ -231,7 +274,9 @@ async function loadProducts() {
                        : p.specs.aplicaciones) // Ya array
                    : [],
         tags:      [], // Placeholder tags futuros
-        doc:       p.document || null // PDF ficha técnica opcional
+        doc:       p.document || null, // PDF ficha técnica opcional
+        /** Índice en localStorage `pacoustic_local_products`; null si viene del JSON del sitio. */
+        localStorageIndex
       };
     });
     products.sort(compareProductsCatalog);
@@ -1033,8 +1078,14 @@ function renderProducts() {
         const hasMedia  = p.imgs.length > 1 || numVideos > 0;
         const mediaCount = p.imgs.length + numVideos;
         const mediaIcon = numVideos > 0 ? '🎬' : (p.imgs.length > 1 ? '📷' : '');
+        const showDel =
+          isPacousticAdminDemoSession() && p.localStorageIndex != null && Number.isInteger(p.localStorageIndex);
+        const delBtn = showDel
+          ? `<button type="button" class="prod-card-delete" onclick="removePacousticLocalProductFromCard(event, ${p.localStorageIndex})" aria-label="Quitar producto de prueba del navegador" title="Quitar de prueba (solo este navegador)">🗑</button>`
+          : '';
         html += `
           <div class="prod-card" style="--card-delay:${delay*0.07}s" onclick="openModal('${p.id}')">
+            ${delBtn}
             <div class="prod-img-wrap">
               <img src="${escapeAttr(p.imgs[0])}" alt="${escapeAttr(p.name)}" loading="lazy"/>
               ${p.watermark ? `<img src="${escapeAttr(p.watermark)}" alt="" class="prod-watermark"/>` : ''}
@@ -1055,6 +1106,17 @@ function renderProducts() {
   grid.innerHTML = html;
   renderPaginationControls(tp, PAGINATION_CONFIG.currentPage);
 }
+
+/** Tras entrar/salir del modo prueba admin: actualiza tarjetas (botón quitar) sin recargar toda la página. */
+function refreshPacousticCatalogUi() {
+  try {
+    renderBanner();
+    fillCategorySelect();
+    renderSidebarCategories();
+    renderProducts();
+  } catch (_) {}
+}
+if (typeof window !== 'undefined') window.PAcousticRefreshCatalogUi = refreshPacousticCatalogUi;
 
 function renderPaginationControls(totalPages, currentPage) {
   let pg = document.getElementById('paginationControls');
@@ -1318,7 +1380,12 @@ function openModal(id) {
     </div>
     ${p.doc ? `<button class="modal-pdf-btn" onclick="event.stopPropagation();abrirPDF('${escapeAttr(p.doc)}','${escapeAttr(p.name)}')">&#128196; Ver Ficha Técnica ${escapeHtml(p.name)}</button>` : ''}
     <a href="${WP}?text=${encodeURIComponent('Hola, me interesa el '+p.name+'. ¿Pueden darme información y precio?')}"
-       target="_blank" rel="noopener noreferrer" class="modal-wp">${WP_SVG} Consultar por WhatsApp</a>`;
+       target="_blank" rel="noopener noreferrer" class="modal-wp">${WP_SVG} Consultar por WhatsApp</a>
+    ${
+      isPacousticAdminDemoSession() && p.localStorageIndex != null && Number.isInteger(p.localStorageIndex)
+        ? `<button type="button" class="modal-delete-local-btn" onclick="event.stopPropagation();removePacousticLocalProductFromCard(event, ${p.localStorageIndex})">Quitar producto de prueba</button>`
+        : ''
+    }`;
 
   // ✅ Init gallery state for mixed media
   openModal._currentThumbIdx = 0;

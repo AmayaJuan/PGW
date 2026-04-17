@@ -234,6 +234,9 @@
       if (u === DEMO_USER && p === DEMO_PASS) {
         setAdminSession(true);
         renderPanel(root, state);
+        try {
+          if (typeof window.PAcousticRefreshCatalogUi === 'function') window.PAcousticRefreshCatalogUi();
+        } catch (_) {}
       } else {
         let err = root.querySelector('.pac-admin-demo-msg--err');
         if (!err) {
@@ -249,6 +252,9 @@
       setAdminSession(false);
       try {
         sessionStorage.removeItem(SS_GH_PAT);
+      } catch (_) {}
+      try {
+        if (typeof window.PAcousticRefreshCatalogUi === 'function') window.PAcousticRefreshCatalogUi();
       } catch (_) {}
       renderPanel(root, state);
     });
