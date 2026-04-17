@@ -212,6 +212,33 @@
   color: var(--rojo, #c41e3a);
   background: #fff;
 }
+.pac-admin-demo-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.pac-admin-demo-hr {
+  border: none;
+  border-top: 1px solid var(--borde, #d1d9e6);
+  margin: 1rem 0;
+}
+.pac-admin-demo-subtit {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--titulo, #0d1b2a);
+  margin: 0 0 0.35rem;
+}
+.pac-admin-demo-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.45rem;
+  font-size: 0.8rem;
+  color: var(--muted, #5a6a7a);
+  cursor: pointer;
+}
+.pac-admin-demo-check input {
+  margin-top: 0.15rem;
+}
 
 .pac-admin-demo-msg {
   font-size: 0.82rem;
