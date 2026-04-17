@@ -10,6 +10,19 @@ const WP_SVG = `<svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.75
 /** Sube en 1 cuando cambies categorías/productos en data/products.json (rompe caché en GitHub Pages y móviles). */
 const CATALOG_JSON_VERSION = 3;
 
+/** Catálogo base (solo `data/products.json`). Sirve para exportar JSON en la prueba de panel admin. */
+function mergeLocalCatalogJson(base) {
+  try {
+    const raw = localStorage.getItem('pacoustic_local_products');
+    if (!raw) return base;
+    const extra = JSON.parse(raw);
+    if (!Array.isArray(extra) || extra.length === 0) return base;
+    return base.concat(extra);
+  } catch (_) {
+    return base;
+  }
+}
+
 // ========================================
   // CACHE DOM - Optimización rendimiento
   // ========================================
@@ -164,10 +177,13 @@ async function loadProducts() {
   try {
     // Fetch asíncrono archivo JSON productos
     const response = await fetch(`data/products.json?v=${CATALOG_JSON_VERSION}`, { cache: 'no-store' });
-    // Parsea JSON respuesta a objeto data
     const data = await response.json();
-    // Transforma array raw → formato interno normalizado
-    products = data.map(p => {
+    const baseArr = Array.isArray(data) ? data : [];
+    if (typeof window !== 'undefined') {
+      window.__PACOUSTIC_CATALOG_JSON_BASE = baseArr.slice();
+    }
+    const merged = mergeLocalCatalogJson(baseArr);
+    products = merged.map(p => {
       // Extrae imagen principal o cadena vacía si no existe
       const mainImg    = p.images?.main || "";
       // Obtiene array gallery raw del producto

@@ -1,0 +1,253 @@
+/* Panel prueba: login + productos locales (GitHub Pages). No usar como seguridad real. */
+
+/* Barra visible: el botón flotante solo se perdía sobre el hero / z-index del sitio */
+.pac-admin-demo-bar {
+  position: fixed;
+  z-index: 12000;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem 1rem;
+  padding: max(10px, env(safe-area-inset-bottom, 10px)) max(14px, env(safe-area-inset-right)) max(10px, env(safe-area-inset-left));
+  background: linear-gradient(168deg, #141f33 0%, #0d1b2a 100%);
+  border-top: 3px solid var(--rojo, #c41e3a);
+  box-shadow: 0 -8px 28px rgba(0, 0, 0, 0.35);
+  font-family: inherit;
+  font-size: 0.8rem;
+  line-height: 1.35;
+  color: #f0f5f9;
+}
+@media (min-width: 1025px) {
+  .pac-admin-demo-bar {
+    left: var(--sidebar-w, 250px);
+  }
+}
+.pac-admin-demo-bar-text {
+  max-width: 52ch;
+  text-align: center;
+}
+.pac-admin-demo-bar-text strong {
+  color: #fff;
+}
+.pac-admin-demo-bar-btn {
+  flex-shrink: 0;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  padding: 0.55rem 1rem;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  color: #fff;
+  background: var(--rojo-grad, linear-gradient(135deg, #c41e3a 0%, #e63950 100%));
+  box-shadow: 0 4px 14px rgba(196, 30, 58, 0.45);
+}
+.pac-admin-demo-bar-btn:hover {
+  filter: brightness(1.06);
+}
+.pac-admin-demo-bar-btn:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+.pac-admin-demo-launcher {
+  position: fixed;
+  bottom: max(72px, calc(env(safe-area-inset-bottom, 12px) + 56px));
+  right: max(12px, env(safe-area-inset-right, 12px));
+  z-index: 12001;
+  font-family: inherit;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  padding: 0.45rem 0.65rem;
+  border-radius: 10px;
+  border: 1px solid var(--borde, #d1d9e6);
+  background: var(--bg2, #fff);
+  color: var(--titulo, #0d1b2a);
+  box-shadow: var(--shadow-md, 0 4px 12px rgba(13, 27, 42, 0.12));
+  cursor: pointer;
+}
+.pac-admin-demo-launcher:hover {
+  border-color: var(--rojo, #c41e3a);
+  color: var(--rojo, #c41e3a);
+}
+
+.pac-admin-demo-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 13000;
+  background: rgba(13, 27, 42, 0.55);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-left));
+}
+@media (min-width: 720px) {
+  .pac-admin-demo-backdrop {
+    align-items: center;
+  }
+}
+
+.pac-admin-demo-panel {
+  width: min(100%, 520px);
+  max-height: min(88vh, 720px);
+  overflow: auto;
+  background: var(--bg2, #fff);
+  color: var(--texto, #1a1a2e);
+  border-radius: 14px 14px 0 0;
+  border: 1px solid var(--borde, #d1d9e6);
+  box-shadow: var(--shadow-lg, 0 8px 24px rgba(13, 27, 42, 0.18));
+}
+@media (min-width: 720px) {
+  .pac-admin-demo-panel {
+    border-radius: 14px;
+  }
+}
+
+.pac-admin-demo-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 1rem 1rem 0.75rem;
+  border-bottom: 1px solid var(--borde, #d1d9e6);
+  position: sticky;
+  top: 0;
+  background: var(--bg2, #fff);
+  z-index: 1;
+}
+.pac-admin-demo-head h2 {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--titulo, #0d1b2a);
+  line-height: 1.25;
+}
+.pac-admin-demo-close {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 1px solid var(--borde, #d1d9e6);
+  background: transparent;
+  cursor: pointer;
+  font-size: 1.1rem;
+  line-height: 1;
+  color: var(--muted, #5a6a7a);
+}
+.pac-admin-demo-close:hover {
+  border-color: var(--rojo, #c41e3a);
+  color: var(--rojo, #c41e3a);
+}
+
+.pac-admin-demo-body {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.pac-admin-demo-note {
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: var(--muted, #5a6a7a);
+  background: var(--bg3, #fefdfb);
+  border: 1px dashed var(--borde, #d1d9e6);
+  border-radius: 10px;
+  padding: 0.65rem 0.75rem;
+}
+
+.pac-admin-demo-field label {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--titulo, #0d1b2a);
+  margin-bottom: 0.25rem;
+}
+.pac-admin-demo-field input,
+.pac-admin-demo-field textarea,
+.pac-admin-demo-field select {
+  width: 100%;
+  font: inherit;
+  font-size: 0.88rem;
+  padding: 0.45rem 0.55rem;
+  border-radius: 8px;
+  border: 1px solid var(--borde, #d1d9e6);
+  background: #fff;
+  color: var(--texto, #1a1a2e);
+}
+.pac-admin-demo-field textarea {
+  min-height: 72px;
+  resize: vertical;
+}
+
+.pac-admin-demo-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.pac-admin-demo-btn {
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  padding: 0.5rem 0.75rem;
+  border-radius: 9px;
+  border: 1px solid var(--borde, #d1d9e6);
+  background: var(--bg, #f0f5f9);
+  color: var(--titulo, #0d1b2a);
+  cursor: pointer;
+}
+.pac-admin-demo-btn--primary {
+  border-color: transparent;
+  background: var(--rojo-grad, linear-gradient(135deg, #c41e3a 0%, #e63950 100%));
+  color: #fff;
+}
+.pac-admin-demo-btn--danger {
+  border-color: rgba(196, 30, 58, 0.35);
+  color: var(--rojo, #c41e3a);
+  background: #fff;
+}
+
+.pac-admin-demo-msg {
+  font-size: 0.82rem;
+  padding: 0.5rem 0.6rem;
+  border-radius: 8px;
+}
+.pac-admin-demo-msg--err {
+  background: rgba(196, 30, 58, 0.08);
+  color: var(--rojo, #c41e3a);
+  border: 1px solid rgba(196, 30, 58, 0.2);
+}
+.pac-admin-demo-msg--ok {
+  background: rgba(45, 140, 78, 0.1);
+  color: #1b5e2a;
+  border: 1px solid rgba(45, 140, 78, 0.25);
+}
+
+.pac-admin-demo-list {
+  font-size: 0.8rem;
+  border-top: 1px solid var(--borde, #d1d9e6);
+  padding-top: 0.75rem;
+}
+.pac-admin-demo-list ul {
+  list-style: none;
+  margin: 0.35rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+.pac-admin-demo-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.35rem 0.45rem;
+  border-radius: 8px;
+  background: var(--bg, #f0f5f9);
+}
