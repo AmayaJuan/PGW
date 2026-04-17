@@ -31,6 +31,19 @@
       .replace(/\.git$/i, '');
   }
 
+  /** Si pegaron la URL completa en «propietario» o mezclado, saca usuario y repo. */
+  function parseOwnerRepoFromInput(ownerIn, repoIn) {
+    let owner = normRepoPart(ownerIn);
+    let repo = normRepoPart(repoIn);
+    const blob = `${ownerIn || ''} ${repoIn || ''}`;
+    const m = blob.match(/github\.com\/([^/\s?#]+)\/([^/\s?#]+)/i);
+    if (m) {
+      owner = normRepoPart(m[1]);
+      repo = normRepoPart(m[2]);
+    }
+    return { owner, repo };
+  }
+
   async function readJsonBody(res) {
     const t = await res.text();
     try {
@@ -41,8 +54,9 @@
   }
 
   async function putProductsJson(p) {
-    const owner = normRepoPart(p.owner);
-    const repo = normRepoPart(p.repo);
+    const parsed = parseOwnerRepoFromInput(p.owner, p.repo);
+    const owner = parsed.owner;
+    const repo = parsed.repo;
     const branch = normRepoPart(p.branch) || 'main';
     const path = normRepoPart(p.path) || 'data/products.json';
     const token = String(p.token || '').trim();
