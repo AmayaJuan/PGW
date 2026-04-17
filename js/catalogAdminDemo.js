@@ -211,7 +211,7 @@
       html += '<hr class="pac-admin-demo-hr" />';
       html += '<h3 class="pac-admin-demo-subtit">Publicar en GitHub (commit en el repo)</h3>';
       html +=
-        '<p class="pac-admin-demo-note">Crea un <strong>Personal Access Token</strong> en GitHub (classic: scope <code>public_repo</code> o <code>repo</code>; o fine-grained con permiso «Contents» lectura y escritura en este repo). Pégalo abajo. La contraseña de tu cuenta de GitHub <strong>no sirve</strong> aquí. No compartas el token. <a href="https://github.com/settings/tokens" target="_blank" rel="noopener noreferrer">github.com/settings/tokens</a></p>';
+        '<p class="pac-admin-demo-note">Crea un <strong>Personal Access Token</strong> en GitHub. <strong>Classic:</strong> scope <code>repo</code> (repo privado) o <code>public_repo</code> (público). <strong>Fine-grained:</strong> recurso «Only select repositories» y elige <strong>este</strong> repo; permiso <strong>Contents → Read and write</strong> (si está solo lectura, sale «Resource not accessible…»). Org con SSO: en la lista de tokens, «Configure» al lado del token. <a href="https://github.com/settings/tokens" target="_blank" rel="noopener noreferrer">github.com/settings/tokens</a></p>';
       html +=
         '<div class="pac-admin-demo-field"><label for="gh-owner">Propietario del repo (usuario u organización)</label><input id="gh-owner" value="' + go + '" autocomplete="organization" placeholder="Ej. AmayaJuan (no pegues https://…)" /></div>';
       html +=

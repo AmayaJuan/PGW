@@ -5,6 +5,15 @@
 (function (global) {
   const API = 'https://api.github.com';
 
+  const HINT_PAT_NOT_ACCESSIBLE =
+    ' Revisa el token: si es fine-grained, en «Repository access» debe estar seleccionado ESTE repositorio y en permisos «Contents» = Read and write (no solo lectura). Si es classic, activa el scope «repo» (privado) o «public_repo» (público). Si el repo es de una organización con SSO, en github.com/settings/tokens autoriza el token con «Configure SSO».';
+
+  function withPatAccessHint(msg) {
+    const m = String(msg || '');
+    if (/resource not accessible|not accessible by personal access token/i.test(m)) return m + HINT_PAT_NOT_ACCESSIBLE;
+    return m;
+  }
+
   function utf8ToBase64(str) {
     const bytes = new TextEncoder().encode(str);
     let bin = '';
@@ -85,7 +94,7 @@
             (gh ? `Detalle: ${gh}` : '')
         );
       }
-      throw new Error(gh || `No se pudo comprobar el repo (${repoRes.status}).`);
+      throw new Error(withPatAccessHint(gh || `No se pudo comprobar el repo (${repoRes.status}).`));
     }
 
     const pathEnc = path
@@ -114,7 +123,7 @@
       }
     } else {
       const j = await readJsonBody(getRes);
-      throw new Error(j.message || `Error al leer el archivo (${getRes.status}).`);
+      throw new Error(withPatAccessHint(j.message || `Error al leer el archivo (${getRes.status}).`));
     }
 
     const body = {
@@ -132,7 +141,7 @@
         msg +=
           ' — Suele ser ruta del archivo dentro del repo incorrecta (ej. si GitHub tiene la carpeta Pacoustic arriba: Pacoustic/data/products.json) o rama incorrecta.';
       }
-      throw new Error(msg);
+      throw new Error(withPatAccessHint(msg));
     }
     return putJ && typeof putJ === 'object' ? putJ : { ok: true };
   }
