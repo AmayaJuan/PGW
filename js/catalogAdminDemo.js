@@ -11,6 +11,8 @@
   const URL_FLAG = 'demoAdmin';
   const LS_GH_META = 'pacoustic_github_meta';
   const SS_GH_PAT = 'pacoustic_github_pat';
+  /** Misma clave que en main.js — IDs del JSON base a excluir al fusionar / subir. */
+  const LS_BASE_HIDDEN_NIDS = 'pacoustic_catalog_hidden_base';
 
   function readLocalProducts() {
     try {
@@ -23,6 +25,15 @@
 
   function writeLocalProducts(arr) {
     localStorage.setItem(LS_PRODUCTS, JSON.stringify(arr));
+  }
+
+  function readHiddenBaseIds() {
+    try {
+      const a = JSON.parse(localStorage.getItem(LS_BASE_HIDDEN_NIDS) || '[]');
+      return Array.isArray(a) ? a.filter(n => typeof n === 'number' && Number.isFinite(n) && n > 0) : [];
+    } catch (_) {
+      return [];
+    }
   }
 
   function isAdminSession() {
@@ -204,6 +215,21 @@
         '<button type="button" class="pac-admin-demo-btn" data-act="clear-gh-stored">Olvidar repo guardado y token (esta pestaña)</button>';
       html +=
         '<button type="button" class="pac-admin-demo-btn" data-act="clear-hidden-base">Mostrar de nuevo productos ocultos del JSON base</button>';
+      html += '</div>';
+
+      const hiddenIdsList = readHiddenBaseIds();
+      const hiddenIdsText = esc(hiddenIdsList.join('\n'));
+      html += '<hr class="pac-admin-demo-hr" />';
+      html += '<h3 class="pac-admin-demo-subtit">Eliminar del JSON por ID</h3>';
+      html +=
+        '<p class="pac-admin-demo-note">Indica los <strong>id numéricos</strong> de cada objeto en <code>data/products.json</code> (ej. <code>"id": 12</code>). Uno por línea o separados por coma o espacio. Pulsa <strong>Aplicar lista de IDs</strong> y luego <strong>Subir catálogo a GitHub</strong>: el archivo subido quedará <strong>sin</strong> esos productos. Coincide con lo que hace el ✕ en la tarjeta (puedes combinar ambos).</p>';
+      html +=
+        '<div class="pac-admin-demo-field"><label for="pac-delete-ids">IDs a excluir del próximo JSON</label><textarea id="pac-delete-ids" rows="7" placeholder="12&#10;15&#10;22">' +
+        hiddenIdsText +
+        '</textarea></div>';
+      html += '<div class="pac-admin-demo-actions">';
+      html +=
+        '<button type="button" class="pac-admin-demo-btn pac-admin-demo-btn--primary" data-act="apply-delete-ids">Aplicar lista de IDs</button>';
       html += '</div>';
 
       const gh = loadGhMeta();
@@ -411,7 +437,7 @@
     root.querySelector('[data-act="clear-hidden-base"]')?.addEventListener('click', () => {
       let n = 0;
       try {
-        const a = JSON.parse(localStorage.getItem('pacoustic_catalog_hidden_base') || '[]');
+        const a = JSON.parse(localStorage.getItem(LS_BASE_HIDDEN_NIDS) || '[]');
         n = Array.isArray(a) ? a.length : 0;
       } catch (_) {}
       if (n === 0) {
@@ -424,9 +450,29 @@
       }
       if (!window.confirm(`¿Dejar de ocultar ${n} producto(s) del JSON base en este navegador?`)) return;
       try {
-        localStorage.removeItem('pacoustic_catalog_hidden_base');
+        localStorage.removeItem(LS_BASE_HIDDEN_NIDS);
       } catch (_) {}
       window.location.reload();
+    });
+
+    root.querySelector('[data-act="apply-delete-ids"]')?.addEventListener('click', () => {
+      const ta = root.querySelector('#pac-delete-ids');
+      const raw = ta?.value || '';
+      const parts = raw.split(/[\n,;\s]+/).map(s => s.trim()).filter(Boolean);
+      const ids = [...new Set(parts.map(s => parseInt(s, 10)).filter(n => Number.isFinite(n) && n > 0))];
+      try {
+        if (ids.length === 0) localStorage.removeItem(LS_BASE_HIDDEN_NIDS);
+        else localStorage.setItem(LS_BASE_HIDDEN_NIDS, JSON.stringify(ids));
+      } catch (_) {}
+      const msg = root.querySelector('#pac-ad-msg');
+      if (msg) {
+        msg.className = 'pac-admin-demo-msg pac-admin-demo-msg--ok';
+        msg.textContent =
+          ids.length === 0
+            ? 'Lista vacía: no se excluye ningún ID. Recargando…'
+            : `Guardados ${ids.length} ID(s) a excluir. Recargando catálogo…`;
+      }
+      setTimeout(() => window.location.reload(), 350);
     });
 
     root.querySelector('[data-act="gh-push"]')?.addEventListener('click', async () => {
