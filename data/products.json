@@ -798,18 +798,5 @@
       "Peso neto": "",
       "aplicaciones": "Sistemas con subwoofer, bi-amping pasivo, refuerzo en vivo, instalaciones fijas"
     }
-  },
-  {
-    "id": 27,
-    "name": "Crossover para woofer",
-    "category": "Crossover",
-    "subcategory": "Pasivo",
-    "description": "fgfgggggggggggggg",
-    "images": {
-      "main": "https://res.cloudinary.com/djlr3wszq/image/upload/v1776286511/18LW2420_jizt7v.png",
-      "gallery": [
-        "gfffffffffffffffffffffff"
-      ]
-    }
   }
 ]
