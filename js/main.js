@@ -450,12 +450,14 @@ function getBannerMaxDisplayHeightForWidth(track, w) {
 function relayoutAllBannerItems() {
   const track = document.getElementById('bannerTrack');
   if (!track) return;
+
   const vw = window.innerWidth || document.documentElement.clientWidth || 400;
   const vh = Math.max(
     window.innerHeight || 0,
     window.visualViewport?.height || 0,
     document.documentElement?.clientHeight || 0
   ) || 600;
+
   let w = getBannerSlideTargetWidth();
   if (vw > 768) {
     const probe = track.querySelector('.banner-item');
@@ -471,13 +473,24 @@ function relayoutAllBannerItems() {
   const rowCap = vw <= 768 ? Math.min(vh * 0.82, 780) : Math.min(vh * 0.94, 920);
   const maxH = getBannerMaxDisplayHeightForWidth(track, w);
 
+  // Anti frame-negro: si aún no hay natural dims (o maxH se queda en 0),
+  // reintentamos luego (sin romper el layout actual).
+  if (maxH < 1) {
+    const imgs = track.querySelectorAll('.banner-item img');
+    const hasAny = Array.from(imgs).some(img => img && img.naturalWidth > 1 && img.naturalHeight > 1);
+    if (!hasAny && !track.dataset.bannerRelayoutRetrying) {
+      track.dataset.bannerRelayoutRetrying = '1';
+      setTimeout(() => {
+        delete track.dataset.bannerRelayoutRetrying;
+        relayoutAllBannerItems();
+      }, 180);
+    }
+  }
+
   let H;
   if (maxH < 1) {
-    if (vw <= 768) {
-      H = Math.round(Math.min(Math.max(vw * 0.72, 280), rowCap));
-    } else {
-      H = Math.round(Math.min(380, rowCap));
-    }
+    if (vw <= 768) H = Math.round(Math.min(Math.max(vw * 0.72, 280), rowCap));
+    else H = Math.round(Math.min(380, rowCap));
   } else {
     H = Math.round(Math.min(Math.max(maxH, vw <= 768 ? 160 : 140), rowCap));
   }
@@ -485,6 +498,7 @@ function relayoutAllBannerItems() {
   const wrap = track.parentElement?.classList?.contains('banner-wrap')
     ? track.parentElement
     : document.querySelector('.banner-wrap');
+
   if (wrap) {
     if (vw <= 768) wrap.style.setProperty('--banner-slide-w', `${Math.round(w)}px`);
     else wrap.style.removeProperty('--banner-slide-w');
@@ -501,6 +515,7 @@ function relayoutAllBannerItems() {
   track.style.minHeight = '0';
   track.style.overflow = 'hidden';
 }
+
 
 function bindBannerItemImage(img) {
   const run = () => relayoutAllBannerItems();

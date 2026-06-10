@@ -914,7 +914,8 @@ body { background: var(--bg); color: var(--texto); font-family: 'Nunito', sans-s
 .banner-wrap {
   width: 100%;
   overflow: hidden;
-  background: #000;
+  /* Evita que el banner se vea negro mientras las imágenes cargan / relayout aún no ajusta alturas */
+  background: linear-gradient(135deg, #0f172a 0%, #1f2937 40%, #111827 100%);
   border-top: 1px solid #1a1a1a;
   border-bottom: 1px solid var(--borde);
   padding: 0.85rem clamp(0.5rem, 2.5vw, 1.75rem);
@@ -933,7 +934,8 @@ body { background: var(--bg); color: var(--texto); font-family: 'Nunito', sans-s
 .banner-item {
   width: min(820px, calc(100vw - 2.5rem));
   height: auto;
-  background: #000;
+  /* Si el <img> todavía no terminó de cargar, que el fondo no sea “negro puro” */
+  background: linear-gradient(145deg, #0b1220 0%, #111827 65%, #0a0f1a 100%);
   border: 1px solid #1a1a1a;
   border-radius: 16px;
   display: block;
