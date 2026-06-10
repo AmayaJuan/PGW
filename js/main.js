@@ -489,11 +489,18 @@ function relayoutAllBannerItems() {
 
   let H;
   if (maxH < 1) {
-    if (vw <= 768) H = Math.round(Math.min(Math.max(vw * 0.72, 280), rowCap));
-    else H = Math.round(Math.min(380, rowCap));
+    // Fallback estable aunque naturalWidth/naturalHeight aún no esté disponible.
+    // Evita que quede “negro”/con altura casi 0 en móvil.
+    if (vw <= 768) {
+      const fallback = Math.min(Math.max(vw * 0.62, 220), rowCap);
+      H = Math.round(Math.max(fallback, 260));
+    } else {
+      H = Math.round(Math.min(380, Math.max(rowCap, 260)));
+    }
   } else {
     H = Math.round(Math.min(Math.max(maxH, vw <= 768 ? 160 : 140), rowCap));
   }
+
 
   const wrap = track.parentElement?.classList?.contains('banner-wrap')
     ? track.parentElement
@@ -518,13 +525,17 @@ function relayoutAllBannerItems() {
 
 
 function bindBannerItemImage(img) {
-  const run = () => relayoutAllBannerItems();
+  const run = () => {
+    // Timing más estable en móvil: re-layout en el próximo frame
+    requestAnimationFrame(() => relayoutAllBannerItems());
+  };
   if (img.complete && img.naturalWidth > 1) run();
   else {
     img.addEventListener('load', run, { once: true });
     img.addEventListener('error', run, { once: true });
   }
 }
+
 
 function initBannerItemSizing(track) {
   if (!track) return;
